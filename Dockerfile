@@ -44,8 +44,7 @@ RUN git clone --recursive -b fastmapmatch https://github.com/HSLdevcom/gtfs_shap
 # Dependencies installed, next do build
 ADD . ${WORK}
 
-RUN chmod +x ./build-routers.sh && \
-  ./build-routers.sh ${MATKA_PASSWORD} ${HSL_PASSWORD}
+RUN bash build-routers.sh ${MATKA_PASSWORD} ${HSL_PASSWORD}
 
 # Zip routers
 RUN mkdir ${WEBROOT} && \
@@ -55,8 +54,8 @@ RUN mkdir ${WEBROOT} && \
 
 EXPOSE 8080
 
-#RUN chown -R 9999:9999 ${WORK}
-#USER 9999
+RUN chown -R 9999:9999 ${WORK}
+USER 9999
 
 CMD cd ${WEBROOT} && \
   python -m SimpleHTTPServer 8080
