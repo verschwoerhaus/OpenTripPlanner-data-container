@@ -4,6 +4,7 @@ OpenTripPlanner data container
 ## What does this image provide?
 
 It:
+
 1. Fetches HSL, Liikennevirasto, and 3rd party city GTFS data
 2. Alters, and transforms that data
 3. Forms OpenTripPlanner router zip files from the data
