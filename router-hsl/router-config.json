@@ -28,7 +28,7 @@
     {
       "type": "bike-rental",
       "sourceType": "kml",
-      "file:///opt/opentripplanner/graphs/dfinland/citybikes.kml",
+      "url": "file:///opt/opentripplanner/graphs/hsl/citybikes.kml",
       "frequencySec": -1
     }
   ]
