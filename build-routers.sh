@@ -151,11 +151,11 @@ EOT
 }
 
 # Here we go
-retrieveOSMFinland
-retrieveOSMHSL
+#retrieveOSMFinland
+#retrieveOSMHSL
 retrieveTampere
 retrieveJyvaskyla
 retrieveOulu
-retrieveLauttaNet
+#retrieveLauttaNet
 retrieveHsl
 retrieveKoontikanta

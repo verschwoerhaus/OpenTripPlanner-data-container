@@ -41,6 +41,9 @@ RUN git clone --recursive -b fastmapmatch https://github.com/HSLdevcom/gtfs_shap
   make -C pymapmatch && \
   cd ..
 
+ADD http://download.geofabrik.de/europe/finland-latest.osm.pbf ${WORK}/router-finland/finland-latest.osm.pbf
+ADD https://s3.amazonaws.com/metro-extracts.mapzen.com/helsinki_finland.osm.pbf ${WORK}/router-hsl/helsinki_finland.osm.pbf
+
 # Dependencies installed, next do build
 ADD . ${WORK}
 
