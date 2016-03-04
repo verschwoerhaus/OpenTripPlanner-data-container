@@ -14,21 +14,21 @@
       "type": "stop-time-updater",
       "frequencySec": 60,
       "sourceType": "gtfs-http",
-      "url": "http://siri2gtfsrt:{{siri2gtfsrt_exposed_port}}/HSL",
+      "url": "http://siri2gtfsrt:8080/HSL",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },
     {
       "type": "real-time-alerts",
       "frequencySec": 30,
-      "url": "http://hslalert:{{hsl_alert_exposed_port}}/",
+      "url": "http://hslalert:8080/",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },
     {
       "type": "bike-rental",
       "sourceType": "kml",
-      "url": "http://routeserver:{{route_server_exposed_port}}/citybikes.kml",
+      "file:///opt/opentripplanner/graphs/dfinland/citybikes.kml",
       "frequencySec": -1
     }
   ]

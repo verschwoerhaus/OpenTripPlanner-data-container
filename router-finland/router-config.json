@@ -16,14 +16,14 @@
       "type": "stop-time-updater",
       "frequencySec": 60,
       "sourceType": "gtfs-http",
-      "url": "http://siri2gtfsrt:{{siri2gtfsrt_exposed_port}}/HSL",
+      "url": "http://siri2gtfsrt:8080/HSL",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },
     {
       "type": "real-time-alerts",
       "frequencySec": 30,
-      "url": "http://hslalert:{{hsl_alert_exposed_port}}/",
+      "url": "http://hslalert:8080/",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },
@@ -31,21 +31,21 @@
       "type": "stop-time-updater",
       "frequencySec": 60,
       "sourceType": "gtfs-http",
-      "url": "http://siri2gtfsrt:{{siri2gtfsrt_exposed_port}}/JOLI",
+      "url": "http://siri2gtfsrt:8080/JOLI",
       "feedId": "JOLI",
       "fuzzyTripMatching": true
     },
     {
       "type": "bike-rental",
       "sourceType": "kml",
-      "url": "http://routeserver:{{route_server_exposed_port}}/citybikes.kml",
+      "url": "file:///opt/opentripplanner/graphs/hsl/citybikes.kml",
       "frequencySec": -1
     },
     {
       "type": "stop-time-updater",
       "frequencySec": 60,
       "sourceType": "gtfs-http",
-      "url": "http://raildigitraffic2gtfsrt:{{raildigitraffic2gtfsrt_exposed_port}}/national",
+      "url": "http://raildigitraffic2gtfsrt:8080/national",
       "feedId": "MATKA",
       "fuzzyTripMatching": true
     },
@@ -53,14 +53,14 @@
       "type": "stop-time-updater",
       "frequencySec": 60,
       "sourceType": "gtfs-http",
-      "url": "{{oulu_gtfsrt_url}}/trip-updates",
+      "url": "http://92.62.36.215:8080/gtfs-rt/trip-updates",
       "feedId": "7317",
       "fuzzyTripMatching": true
     },
     {
       "type": "real-time-alerts",
       "frequencySec": 30,
-      "url": "{{oulu_gtfsrt_url}}/service-alerts",
+      "url": "http://92.62.36.215:8080/gtfs-rt/service-alerts",
       "feedId": "7317",
       "fuzzyTripMatching": true
     }
