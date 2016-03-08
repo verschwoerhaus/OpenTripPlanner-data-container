@@ -77,6 +77,7 @@ function retrieveHsl() {
   $FIT_GTFS $ROUTER_FINLAND/finland-latest.osm.pbf +init=epsg:3067 hsl.zip hsl_fitted.zip 2>&1 | tee hsl.fit.log.txt
   echo "Mapfit ready."
   mv hsl_fitted.zip hsl.zip
+  cp hsl.zip $ROUTER_FINLAND
   add_feed_id hsl.zip HSL
 }
 
