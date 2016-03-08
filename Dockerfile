@@ -4,6 +4,7 @@ MAINTAINER Digitransit version: 0.1
 
 ENV WORK=/opt/opentripplanner-data-container
 ENV WEBROOT=${WORK}/webroot
+ENV PORT=8080
 
 ARG MATKA_PASSWORD
 ARG HSL_PASSWORD
@@ -51,14 +52,15 @@ RUN bash build-routers.sh ${MATKA_PASSWORD} ${HSL_PASSWORD}
 
 # Zip routers
 RUN mkdir ${WEBROOT} && \
-  zip -r ${WEBROOT}/router-hsl.zip router-hsl && \
-  zip -r ${WEBROOT}/router-finland.zip router-finland && \
+  zip -D ${WEBROOT}/router-hsl.zip router-hsl/*  && \
+  zip -D ${WEBROOT}/router-finland.zip router-finland/* && \
   cp routers.txt ${WEBROOT}
 
-EXPOSE 8080
+EXPOSE ${PORT}
 
-RUN chown -R 9999:9999 ${WORK}
-USER 9999
+RUN groupadd -r digitransit && useradd -r -g digitransit digitransit
+RUN chown -R digitransit:digitransit ${WORK}
+USER digitransit
 
 CMD cd ${WEBROOT} && \
-  python -m SimpleHTTPServer 8080
+  python -m SimpleHTTPServer ${PORT}
