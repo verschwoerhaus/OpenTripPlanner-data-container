@@ -58,9 +58,8 @@ RUN mkdir ${WEBROOT} && \
 
 EXPOSE ${PORT}
 
-RUN groupadd -r digitransit && useradd -r -g digitransit digitransit
-RUN chown -R digitransit:digitransit ${WORK}
-USER digitransit
+RUN chown -R 9999:9999 ${WORK}
+USER 9999
 
 CMD cd ${WEBROOT} && \
   python -m SimpleHTTPServer ${PORT}
