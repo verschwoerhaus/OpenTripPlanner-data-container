@@ -157,6 +157,6 @@ EOT
 retrieveTampere
 retrieveJyvaskyla
 retrieveOulu
-#retrieveLauttaNet
+retrieveLauttaNet
 retrieveHsl
 retrieveKoontikanta
