@@ -23,7 +23,7 @@
     {
       "type": "real-time-alerts",
       "frequencySec": 30,
-      "url": "http://hslalert:5000/",
+      "url": "http://hslalert:8080/",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },
