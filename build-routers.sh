@@ -12,10 +12,6 @@ ROUTER_HSL=$ROOT/router-hsl
 FIT_GTFS=$ROOT/gtfs_shape_mapfit/fit_gtfs.bash
 OBA_GTFS=$ROOT/one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar
 
-# Credentials
-MATKA_PASS=$1
-HSL_PASS=$2
-
 function retrieveOSMFinland() {
   echo "Retrieving Finland OSM data..."
   cd $ROUTER_FINLAND
@@ -61,7 +57,7 @@ function retrieveLauttaNet() {
 function retrieveHsl() {
   echo "Retrieving HSL data..."
   cd $ROUTER_HSL
-  curl -sS --user $HSL_PASS "http://api.reittiopas.fi/data/google_transit.zip" -o hsl.zip
+  curl -sS "http://dev.hsl.fi/gtfs/hsl.zip" -o hsl.zip
 
   unzip -o hsl.zip stop_times.txt
   # TODO: Check that the line is in expected format
@@ -86,7 +82,7 @@ function retrieveKoontikanta() {
   echo "Retrieving Koontikanta data..."
   cd $ROUTER_FINLAND
 
-  curl -sS -u "$MATKA_PASS" "http://api.matka.fi/data/gtfs.zip" -o matka.zip
+  curl -sS "http://dev.hsl.fi/gtfs.matka/matka.zip" -o matka.zip
 
   rm -rf koontikanta
   mkdir -p koontikanta
