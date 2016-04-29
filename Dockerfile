@@ -6,9 +6,6 @@ ENV WORK=/opt/opentripplanner-data-container
 ENV WEBROOT=${WORK}/webroot
 ENV PORT=8080
 
-ARG MATKA_PASSWORD
-ARG HSL_PASSWORD
-
 RUN mkdir -p ${WORK}
 
 WORKDIR ${WORK}
@@ -48,7 +45,7 @@ ADD https://s3.amazonaws.com/metro-extracts.mapzen.com/helsinki_finland.osm.pbf 
 # Dependencies installed, next do build
 ADD . ${WORK}
 
-RUN bash build-routers.sh ${MATKA_PASSWORD} ${HSL_PASSWORD}
+RUN bash build-routers.sh
 
 # Zip routers
 RUN mkdir ${WEBROOT} && \
