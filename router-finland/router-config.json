@@ -37,9 +37,9 @@
     },
     {
       "type": "bike-rental",
-      "sourceType": "kml",
-      "url": "file:///opt/opentripplanner/graphs/finland/citybikes.kml",
-      "frequencySec": -1
+      "sourceType": "smoove",
+      "url": "http://helsinki-fi.smoove.pro/api-public/stations",
+      "frequencySec": 10
     },
     {
       "type": "stop-time-updater",
