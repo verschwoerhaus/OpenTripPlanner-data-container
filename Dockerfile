@@ -51,6 +51,7 @@ RUN bash build-routers.sh
 RUN mkdir ${WEBROOT} && \
   zip -D ${WEBROOT}/router-hsl.zip router-hsl/*  && \
   zip -D ${WEBROOT}/router-finland.zip router-finland/* && \
+  zip -D ${WEBROOT}/router-joensuu.zip router-joensuu/* && \
   cp routers.txt ${WEBROOT}
 
 EXPOSE ${PORT}

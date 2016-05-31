@@ -7,22 +7,11 @@ set -o pipefail
 ROOT=/opt/opentripplanner-data-container
 ROUTER_FINLAND=$ROOT/router-finland
 ROUTER_HSL=$ROOT/router-hsl
+ROUTER_JOENSUU=$ROOT/router-joensuu
 
 # Tools
 FIT_GTFS=$ROOT/gtfs_shape_mapfit/fit_gtfs.bash
 OBA_GTFS=$ROOT/one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar
-
-function retrieveOSMFinland() {
-  echo "Retrieving Finland OSM data..."
-  cd $ROUTER_FINLAND
-  curl -sS "http://download.geofabrik.de/europe/finland-latest.osm.pbf" -o finland-latest.osm.pbf
-}
-
-function retrieveOSMHSL() {
-  echo "Retrieving Helsinki OSM data..."
-  cd $ROUTER_HSL
-  curl -sS "https://s3.amazonaws.com/metro-extracts.mapzen.com/helsinki_finland.osm.pbf" -o helsinki_finland.osm.pbf
-}
 
 function retrieveTampere() {
   echo "Retrieving Tampere data..."
@@ -77,6 +66,23 @@ function retrieveHsl() {
   # HSL data is also needed in national graph
   cp hsl.zip $ROUTER_FINLAND
 }
+
+function retrieveJoensuu() {
+  echo "Retrieving Joensuu data..."
+  cd $ROUTER_JOENSUU
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/joensuu.zip" -o joensuu.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/posjoe.zip" -o posjoe.zip
+
+  # Note! we use finland OSM graph
+  cp $ROUTER_FINLAND/finland-latest.osm.pbf .
+#  echo "Note! Next mapfit requires lot of memory. If it fails mysteriously, try adding more."
+#  $FIT_GTFS $ROUTER_JOENSUU/finland-latest.osm.pbf +init=epsg:3067 posjoe.zip posjoe_fitted.zip 2>&1 | tee posjoe.fit.log.txt
+#  echo "Mapfit ready."
+#  mv posjoe_fitted.zip joensuu.zip
+  add_feed_id joensuu.zip JOE
+  add_feed_id posjoe.zip POSJOE
+}
+
 
 function retrieveKoontikanta() {
   echo "Retrieving Koontikanta data..."
@@ -149,11 +155,10 @@ EOT
 }
 
 # Here we go
-#retrieveOSMFinland
-#retrieveOSMHSL
 retrieveTampere
 retrieveJyvaskyla
 retrieveOulu
 retrieveLauttaNet
 retrieveHsl
 retrieveKoontikanta
+retrieveJoensuu
