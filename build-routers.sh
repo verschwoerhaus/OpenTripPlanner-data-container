@@ -15,13 +15,13 @@ OBA_GTFS=$ROOT/one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar
 function retrieveOSMFinland() {
   echo "Retrieving Finland OSM data..."
   cd $ROUTER_FINLAND
-  curl -sS "http://download.geofabrik.de/europe/finland-latest.osm.pbf" -o finland-latest.osm.pbf
+  curl -sS "http://dev.hsl.fi/osm.finland/finland.osm.pbf" -o finland-latest.osm.pbf
 }
 
 function retrieveOSMHSL() {
   echo "Retrieving Helsinki OSM data..."
   cd $ROUTER_HSL
-  curl -sS "https://s3.amazonaws.com/metro-extracts.mapzen.com/helsinki_finland.osm.pbf" -o helsinki_finland.osm.pbf
+  curl -sS "http://dev.hsl.fi/osm.hsl/hsl.osm.pbf" -o helsinki_finland.osm.pbf
 }
 
 function retrieveTampere() {
