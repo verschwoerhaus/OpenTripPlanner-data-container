@@ -7,7 +7,7 @@ set -o pipefail
 ROOT=/opt/opentripplanner-data-container
 ROUTER_FINLAND=$ROOT/router-finland
 ROUTER_HSL=$ROOT/router-hsl
-ROUTER_JOENSUU=$ROOT/router-joensuu
+ROUTER_WALTTI=$ROOT/router-waltti
 
 # Tools
 FIT_GTFS=$ROOT/gtfs_shape_mapfit/fit_gtfs.bash
@@ -79,20 +79,17 @@ function retrieveHsl() {
   cp hsl.zip $ROUTER_FINLAND
 }
 
-function retrieveJoensuu() {
-  echo "Retrieving Joensuu data..."
-  cd $ROUTER_JOENSUU
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/207.zip" -o joensuu.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/183.zip" -o posjoe.zip
+function retrieveWaltti() {
+  echo "Retrieving Waltti data..."
+  cd $ROUTER_WALTTI
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/207.zip" -o 207.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/183.zip" -o 183.zip
 
   # Note! we use finland OSM graph
   cp $ROUTER_FINLAND/finland-latest.osm.pbf .
-#  echo "Note! Next mapfit requires lot of memory. If it fails mysteriously, try adding more."
-#  $FIT_GTFS $ROUTER_JOENSUU/finland-latest.osm.pbf +init=epsg:3067 posjoe.zip posjoe_fitted.zip 2>&1 | tee posjoe.fit.log.txt
-#  echo "Mapfit ready."
-#  mv posjoe_fitted.zip joensuu.zip
-  add_feed_id joensuu.zip JOE
-  add_feed_id posjoe.zip POSJOE
+
+  add_feed_id 207.zip JOE
+  add_feed_id 183.zip POSJOE
 }
 
 
@@ -173,4 +170,4 @@ retrieveOulu
 retrieveLauttaNet
 retrieveHsl
 retrieveKoontikanta
-retrieveJoensuu
+retrieveWaltti
