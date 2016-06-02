@@ -13,6 +13,18 @@ ROUTER_JOENSUU=$ROOT/router-joensuu
 FIT_GTFS=$ROOT/gtfs_shape_mapfit/fit_gtfs.bash
 OBA_GTFS=$ROOT/one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar
 
+function retrieveOSMFinland() {
+  echo "Retrieving Finland OSM data..."
+  cd $ROUTER_FINLAND
+  curl -sS "http://dev.hsl.fi/osm.finland/finland.osm.pbf" -o finland-latest.osm.pbf
+}
+
+function retrieveOSMHSL() {
+  echo "Retrieving Helsinki OSM data..."
+  cd $ROUTER_HSL
+  curl -sS "http://dev.hsl.fi/osm.hsl/hsl.osm.pbf" -o helsinki_finland.osm.pbf
+}
+
 function retrieveTampere() {
   echo "Retrieving Tampere data..."
   cd $ROUTER_FINLAND
