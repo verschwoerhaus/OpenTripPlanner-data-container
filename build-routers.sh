@@ -82,8 +82,8 @@ function retrieveHsl() {
 function retrieveJoensuu() {
   echo "Retrieving Joensuu data..."
   cd $ROUTER_JOENSUU
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/joensuu.zip" -o joensuu.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/posjoe.zip" -o posjoe.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/207.zip" -o joensuu.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/183.zip" -o posjoe.zip
 
   # Note! we use finland OSM graph
   cp $ROUTER_FINLAND/finland-latest.osm.pbf .
