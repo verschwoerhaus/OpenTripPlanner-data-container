@@ -7,6 +7,7 @@ set -o pipefail
 ROOT=/opt/opentripplanner-data-container
 ROUTER_FINLAND=$ROOT/router-finland
 ROUTER_HSL=$ROOT/router-hsl
+ROUTER_WALTTI=$ROOT/router-waltti
 
 # Tools
 FIT_GTFS=$ROOT/gtfs_shape_mapfit/fit_gtfs.bash
@@ -77,6 +78,20 @@ function retrieveHsl() {
   # HSL data is also needed in national graph
   cp hsl.zip $ROUTER_FINLAND
 }
+
+function retrieveWaltti() {
+  echo "Retrieving Waltti data..."
+  cd $ROUTER_WALTTI
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/207.zip" -o 207.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/183.zip" -o 183.zip
+
+  # Note! we use finland OSM graph
+  cp $ROUTER_FINLAND/finland-latest.osm.pbf .
+
+  add_feed_id 207.zip JOE
+  add_feed_id 183.zip POSJOE
+}
+
 
 function retrieveKoontikanta() {
   echo "Retrieving Koontikanta data..."
@@ -149,11 +164,10 @@ EOT
 }
 
 # Here we go
-#retrieveOSMFinland
-#retrieveOSMHSL
 retrieveTampere
 retrieveJyvaskyla
 retrieveOulu
 retrieveLauttaNet
 retrieveHsl
 retrieveKoontikanta
+retrieveWaltti
