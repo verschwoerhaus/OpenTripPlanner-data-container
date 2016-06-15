@@ -28,7 +28,7 @@ function retrieveOSMHSL() {
 function retrieveTampere() {
   echo "Retrieving Tampere data..."
   cd $ROUTER_FINLAND
-  curl -sS "http://data.itsfactory.fi/files/tampere_gtfs_latest.zip" -o tampere.zip
+  curl -sS "http://data.itsfactory.fi/journeys/files/gtfs/latest/gtfs_tampere.zip" -o tampere.zip
   $FIT_GTFS finland-latest.osm.pbf +init=epsg:3067 tampere.zip tampere_fitted.zip 2>&1 | tee tampere.fit.log.txt
   mv tampere_fitted.zip tampere.zip
   add_feed_id tampere.zip JOLI
