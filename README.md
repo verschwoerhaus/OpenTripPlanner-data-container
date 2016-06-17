@@ -1,5 +1,5 @@
 # OpenTripPlanner-data-container
-OpenTripPlanner data container
+[![Build Status](https://snap-ci.com/HSLdevcom/OpenTripPlanner-data-container/branch/master/build_image)](https://snap-ci.com/HSLdevcom/OpenTripPlanner-data-container/branch/master)
 
 ## What does this image provide?
 
