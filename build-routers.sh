@@ -159,7 +159,7 @@ EOT
   fi
 
   # add feed_info to zip
-  zip -u $filename feed_info.txt
+  zip $filename feed_info.txt
   set -o pipefail
 }
 
