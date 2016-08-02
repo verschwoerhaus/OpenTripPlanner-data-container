@@ -30,6 +30,18 @@
       "sourceType": "smoove",
       "url": "http://helsinki-fi.smoove.pro/api-public/stations",
       "frequencySec": 10
+    },
+    {
+      "type": "bike-park",
+      "sourceType": "hsl-parkandride",
+      "url": "https://p.hsl.fi/api/v1/facilities.json?limit=-1",
+      "frequencySec": 600
+    },
+    {
+      "type": "car-park",
+      "sourceType": "hsl-parkandride",
+      "url": "https://p.hsl.fi/api/v1/facilities.json?limit=-1",
+      "frequencySec": 600
     }
   ]
 }
