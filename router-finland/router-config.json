@@ -63,6 +63,12 @@
       "url": "http://92.62.36.215:8080/gtfs-rt/service-alerts",
       "feedId": "7317",
       "fuzzyTripMatching": true
+    },
+    {
+      "type": "bike-rental",
+      "sourceType": "smoove",
+      "url": "http://helsinki-fi.smoove.pro/api-public/stations",
+      "frequencySec": 10
     }
   ],
   "boardTimes": {
