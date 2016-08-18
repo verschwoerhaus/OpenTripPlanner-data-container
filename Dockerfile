@@ -59,5 +59,5 @@ EXPOSE ${PORT}
 RUN chown -R 9999:9999 ${WORK}
 USER 9999
 
-CMD cd ${WEBROOT} && \
-  python -m SimpleHTTPServer ${PORT}
+ENTRYPOINT cd ${WEBROOT} && \
+  exec python -m SimpleHTTPServer ${PORT}
