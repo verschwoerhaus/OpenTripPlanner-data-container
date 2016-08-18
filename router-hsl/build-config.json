@@ -1,4 +1,5 @@
 {
   "areaVisibility": true,
+  "staticParkAndRide": false,
   "parentStopLinking": true
 }
