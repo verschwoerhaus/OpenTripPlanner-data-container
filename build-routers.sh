@@ -92,6 +92,14 @@ function retrieveWaltti() {
   add_feed_id 183.zip POSJOE
 }
 
+function retrieveTurku() {
+  echo "Retrieving Turku/Foli data..."
+  cd $ROUTER_WALTTI
+  curl -sS "http://data.foli.fi/gtfs/gtfs.zip" -o foli.zip
+
+  add_feed_id foli.zip FOLI
+}
+
 
 function retrieveKoontikanta() {
   echo "Retrieving Koontikanta data..."
@@ -164,10 +172,13 @@ EOT
 }
 
 # Here we go
+retrieveHsl
+
 retrieveTampere
 retrieveJyvaskyla
 retrieveOulu
 retrieveLauttaNet
-retrieveHsl
 retrieveKoontikanta
+
 retrieveWaltti
+retrieveTurku
