@@ -95,7 +95,7 @@ function retrieveWaltti() {
 function retrieveTurku() {
   echo "Retrieving Turku/Foli data..."
   cd $ROUTER_WALTTI
-  curl -sS "http://data.foli.fi/gtfs/gtfs.zip" -o foli.zip
+  curl -sS "http://dev.hsl.fi/gtfs.foli/foli.zip" -o foli.zip
 
   add_feed_id foli.zip FOLI
 }
