@@ -10,5 +10,13 @@
       "walkBoardCost": 540
   },
   "updaters": [
+    {
+      "type": "stop-time-updater",
+      "frequencySec": 60,
+      "sourceType": "gtfs-http",
+      "url": "http://siri2gtfsrt:8080/FOLI",
+      "feedId": "FOLI",
+      "fuzzyTripMatching": true
+    }
   ]
 }
