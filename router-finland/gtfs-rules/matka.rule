@@ -32,4 +32,11 @@
 {"op":"remove", "match":{"file":"agency.txt", "agency_id":"220896"}}
 {"op":"remove", "match":{"file":"agency.txt", "agency_id":"220897"}}
 # Jyväskylä
-{"op":"remove", "match":{"file":"agency.txt", "agency_id":"182986"}}
+{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220968"}}
+{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220969"}}
+{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220970"}}
+{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220971"}}
+{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220972"}}
+{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220973"}}
+{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220968"}}
+{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220968"}}
