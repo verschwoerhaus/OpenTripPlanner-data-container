@@ -2,6 +2,7 @@
 {"op":"remove", "match":{"file":"stops.txt","stop_lon":"20.142573"}}
 # Local trains with route letter
 {"op":"remove", "match":{"file":"routes.txt", "agency_id":"4", "route_short_name":"A"}}
+{"op":"remove", "match":{"file":"routes.txt", "agency_id":"4", "route_short_name":"D"}}
 {"op":"remove", "match":{"file":"routes.txt", "agency_id":"4", "route_short_name":"E"}}
 {"op":"remove", "match":{"file":"routes.txt", "agency_id":"4", "route_short_name":"H"}}
 {"op":"remove", "match":{"file":"routes.txt", "agency_id":"4", "route_short_name":"I"}}
@@ -14,6 +15,7 @@
 {"op":"remove", "match":{"file":"routes.txt", "agency_id":"4", "route_short_name":"S"}}
 {"op":"remove", "match":{"file":"routes.txt", "agency_id":"4", "route_short_name":"T"}}
 {"op":"remove", "match":{"file":"routes.txt", "agency_id":"4", "route_short_name":"U"}}
+{"op":"remove", "match":{"file":"routes.txt", "agency_id":"4", "route_short_name":"X"}}
 {"op":"remove", "match":{"file":"routes.txt", "agency_id":"4", "route_short_name":"Y"}}
 {"op":"remove", "match":{"file":"routes.txt", "agency_id":"4", "route_short_name":"Z"}}
 # HSL
