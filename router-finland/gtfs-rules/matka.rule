@@ -22,6 +22,8 @@
 {"op":"remove", "match":{"file":"agency.txt", "agency_id":"2"}}
 # Tampere
 {"op":"remove", "match":{"file":"agency.txt", "agency_id":"3"}}
+# Tampere
+{"op":"remove", "match":{"file":"agency.txt", "agency_id":"14"}}
 # Oulu
 {"op":"remove", "match":{"file":"agency.txt", "agency_id":"220890"}}
 {"op":"remove", "match":{"file":"agency.txt", "agency_id":"220891"}}
