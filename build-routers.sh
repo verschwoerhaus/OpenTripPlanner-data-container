@@ -98,8 +98,6 @@ function retrieveTurku() {
   curl -sS "http://dev.hsl.fi/gtfs.foli/foli.zip" -o foli.zip
 
   add_feed_id foli.zip FOLI
-
-  cp foli.zip $ROUTER_FINLAND/
 }
 
 
