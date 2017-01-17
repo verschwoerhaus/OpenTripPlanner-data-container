@@ -7,7 +7,7 @@ set -o pipefail
 # This is too small, and causes GTFS shape mapfit to
 # log info, which then breaks the build
 # Therefore, we increase this value
-TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=2147483648
+export TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=2147483648
 
 # Base locations
 ROOT=/opt/opentripplanner-data-container
