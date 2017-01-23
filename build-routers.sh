@@ -51,7 +51,9 @@ function retrieveOulu() {
   echo "Retrieving Oulu data..."
   cd $ROUTER_FINLAND
   curl -sS "http://www.transitdata.fi/oulu/google_transit.zip" -o oulu.zip
-  add_feed_id oulu.zip 7317
+  add_feed_id oulu.zip OULU
+
+  cp oulu.zip $ROUTER_WALTTI
 }
 
 function retrieveLauttaNet() {
