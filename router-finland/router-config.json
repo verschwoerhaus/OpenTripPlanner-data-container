@@ -53,16 +53,16 @@
       "type": "stop-time-updater",
       "frequencySec": 60,
       "sourceType": "gtfs-http",
-      "url": "http://92.62.36.215:8080/gtfs-rt/trip-updates",
-      "feedId": "7317",
-      "fuzzyTripMatching": true
+      "url": "http://92.62.36.215/RTIX/trip-updates",
+      "feedId": "OULU",
+      "fuzzyTripMatching": false
     },
     {
       "type": "real-time-alerts",
       "frequencySec": 30,
-      "url": "http://92.62.36.215:8080/gtfs-rt/service-alerts",
-      "feedId": "7317",
-      "fuzzyTripMatching": true
+      "url": "http://92.62.36.215/RTIX/service-alerts",
+      "feedId": "OULU",
+      "fuzzyTripMatching": false
     },
     {
       "type": "bike-rental",

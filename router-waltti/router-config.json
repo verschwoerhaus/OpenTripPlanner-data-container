@@ -17,6 +17,21 @@
       "url": "http://siri2gtfsrt:8080/FOLI",
       "feedId": "FOLI",
       "fuzzyTripMatching": true
+    },
+    {
+      "type": "stop-time-updater",
+      "frequencySec": 60,
+      "sourceType": "gtfs-http",
+      "url": "http://92.62.36.215/RTIX/trip-updates",
+      "feedId": "OULU",
+      "fuzzyTripMatching": false
+    },
+    {
+      "type": "real-time-alerts",
+      "frequencySec": 30,
+      "url": "http://92.62.36.215/RTIX/service-alerts",
+      "feedId": "OULU",
+      "fuzzyTripMatching": false
     }
   ]
 }
