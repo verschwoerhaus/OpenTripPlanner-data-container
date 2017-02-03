@@ -45,6 +45,8 @@ function retrieveJyvaskyla() {
   cd $ROUTER_FINLAND
   curl -sS "http://data.jyvaskyla.fi/tiedostot/linkkidata.zip" -o jyvaskyla.zip
   add_feed_id jyvaskyla.zip LINKKI
+
+  cp jyvaskyla.zip $ROUTER_WALTTI
 }
 
 function retrieveOulu() {
@@ -90,14 +92,42 @@ function retrieveHsl() {
 function retrieveWaltti() {
   echo "Retrieving Waltti data..."
   cd $ROUTER_WALTTI
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/207.zip" -o 207.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/183.zip" -o 183.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/hameenlinna-newest.zip" -o hameenlinna.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/joensuu-newest.zip" -o joensuu.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/kajaani-newest.zip" -o kajaani.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/keski-suomen_ely-newest.zip" -o keski-suomen_ely.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/kotka-newest.zip" -o kotka.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/kuopio-newest.zip" -o kuopio.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/kvl-newest.zip" -o kvl.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/lahti-newest.zip" -o lahti.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/lappeenranta-newest.zip" -o lappeenranta.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/mikkeli-newest.zip" -o mikkeli.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/pohjois-pohjanmaan_ely-newest.zip" -o pohjois-pohjanmaan_ely.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_iisalmi-newest.zip" -o posely_iisalmi.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_joensuu-newest.zip" -o posely_joensuu.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_kuopio-newest.zip" -o posely_kuopio.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_mikkeli-newest.zip" -o posely_mikkeli.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/vaasa-newest.zip" -o vaasa.zip
 
   # Note! we use finland OSM graph
   cp $ROUTER_FINLAND/finland-latest.osm.pbf .
 
-  add_feed_id 207.zip JOE
-  add_feed_id 183.zip POSJOE
+  add_feed_id hameenlinna.zip Hameenlinna
+  add_feed_id joensuu.zip Joensuu
+  add_feed_id kajaani.zip Kajaani
+  add_feed_id keski-suomen_ely.zip KeskiSuomenEly
+  add_feed_id kotka.zip Kotka
+  add_feed_id kuopio.zip Kuopio
+  add_feed_id kvl.zip Kouvola
+  add_feed_id lahti.zip Lahti
+  add_feed_id lappeenranta.zip Lappeenranta
+  add_feed_id mikkeli.zip Mikkeli
+  add_feed_id pohjois-pohjanmaan_ely.zip PohjoisPohjanmaanEly
+  add_feed_id posely_iisalmi.zip IisalmiEly
+  add_feed_id posely_joensuu.zip JoensuuEly
+  add_feed_id posely_kuopio.zip KuopioEly
+  add_feed_id posely_mikkeli.zip MikkeliEly
+  add_feed_id vaasa.zip Vaasa
 }
 
 function retrieveTurku() {
