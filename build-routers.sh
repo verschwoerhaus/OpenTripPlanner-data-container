@@ -92,22 +92,22 @@ function retrieveHsl() {
 function retrieveWaltti() {
   echo "Retrieving Waltti data..."
   cd $ROUTER_WALTTI
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/hameenlinna-newest.zip" -o hameenlinna.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/joensuu-newest.zip" -o joensuu.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/kajaani-newest.zip" -o kajaani.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/keski-suomen_ely-newest.zip" -o keski-suomen_ely.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/kotka-newest.zip" -o kotka.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/kuopio-newest.zip" -o kuopio.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/kvl-newest.zip" -o kvl.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/lahti-newest.zip" -o lahti.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/lappeenranta-newest.zip" -o lappeenranta.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/mikkeli-newest.zip" -o mikkeli.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/pohjois-pohjanmaan_ely-newest.zip" -o pohjois-pohjanmaan_ely.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_iisalmi-newest.zip" -o posely_iisalmi.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_joensuu-newest.zip" -o posely_joensuu.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_kuopio-newest.zip" -o posely_kuopio.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_mikkeli-newest.zip" -o posely_mikkeli.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/vaasa-newest.zip" -o vaasa.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/hameenlinna.zip" -o hameenlinna.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/joensuu.zip" -o joensuu.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/kajaani.zip" -o kajaani.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/keski-suomen_ely.zip" -o keski-suomen_ely.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/kotka.zip" -o kotka.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/kuopio.zip" -o kuopio.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/kvl.zip" -o kvl.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/lahti.zip" -o lahti.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/lappeenranta.zip" -o lappeenranta.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/mikkeli.zip" -o mikkeli.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/pohjois-pohjanmaan_ely.zip" -o pohjois-pohjanmaan_ely.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_iisalmi.zip" -o posely_iisalmi.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip" -o posely_joensuu.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_kuopio.zip" -o posely_kuopio.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_mikkeli.zip" -o posely_mikkeli.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/vaasa.zip" -o vaasa.zip
 
   # Note! we use finland OSM graph
   cp $ROUTER_FINLAND/finland-latest.osm.pbf .
