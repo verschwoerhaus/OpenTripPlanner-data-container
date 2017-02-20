@@ -3,9 +3,6 @@ FROM maven:3-jdk-8
 MAINTAINER Digitransit version: 0.1
 
 ENV WORK=/opt/opentripplanner-data-container
-VOLUME /opt/opentripplanner-data-container/input
-VOLUME /opt/opentripplanner-data-container/webroot
-ENV WEBROOT=${WORK}/webroot
 ENV WEBROOT=${WORK}/webroot
 ENV PORT=8080
 
@@ -42,6 +39,10 @@ RUN git clone --recursive -b fastmapmatch https://github.com/HSLdevcom/gtfs_shap
   make -C pymapmatch && \
   cd ..
 
-ADD build-routers.sh
+ADD http://dev.hsl.fi/osm.finland/finland.osm.pbf ${WORK}/router-finland/finland-latest.osm.pbf
+ADD http://dev.hsl.fi/osm.hsl/hsl.osm.pbf ${WORK}/router-hsl/helsinki_finland.osm.pbf
 
-ENTRYPOINT build-routers.sh
+# Dependencies installed, next do build
+ADD . ${WORK}
+
+RUN bash build-routers.sh
