@@ -12,7 +12,7 @@ DOCKER_IMAGE=opentripplanner-data-container
 # Build image
 docker build --tag="$ORG/$DOCKER_IMAGE:builder" -f Dockerfile.builder .
 mkdir target
-docker run --rm --entrypoint tar hsldevcom/opentripplanner-data-container -c /opt/opentripplanner-data-container/webroot|tar x -C target .
+docker run --rm --entrypoint tar hsldevcom/opentripplanner-data-container:builder -c /opt/opentripplanner-data-container/webroot|tar x -C target 
 docker build --tag="$ORG/$DOCKER_IMAGE:$DOCKER_TAG" -f Dockerfile .
 docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_AUTH
 docker push $ORG/$DOCKER_IMAGE:$DOCKER_TAG
