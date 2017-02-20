@@ -1,8 +1,20 @@
 #!/bin/bash
+
+URL=${URL:-http://127.0.0.1:10000/otp/routers/default/plan?fromPlace=60.44638185995603%2C22.244396209716797&toPlace=60.45053041945487%2C22.313575744628906&time=3%3A51pm&date=02-20-2017&mode=TRANSIT%2CWALK&maxWalkDistance=804.672&arriveBy=false&wheelchair=false&locale=en}
+#URL=${URL:-http://127.0.0.1:10000/otp/routers/default/plan?fromPlace=60.17078422953281%2C24.941625595092773&toPlace=60.21918441389899%2C24.811420440673828&time=2%3A03pm&date=02-20-2017&mode=TRANSIT%2CWALK&maxWalkDistance=804.672&arriveBy=false&wheelchair=false&locale=en"}
+
 MAX_WAIT=${MAX_WAIT:-5}
 ROUTER_NAME=${ROUTER_NAME:-hsl}
-docker run -d --name otp-data hsldevcom/opentripplanner-data-container
 
+function shutdown() {
+  docker stop otp-data
+  docker stop otp
+  docker rm otp-data
+  docker rm otp
+echo shutting down
+}
+
+docker run -d --name otp-data hsldevcom/opentripplanner-data-container
 docker run -d --name otp -p 10000:8080 -e ROUTER_NAME=$ROUTER_NAME -e ROUTER_DATA_CONTAINER_URL=http://otp-data/ --link otp-data:otp-data hsldevcom/opentripplanner:prod
 
 ITERATIONS=$(($MAX_WAIT * 6))
@@ -13,20 +25,14 @@ for (( c=1; c<=$ITERATIONS; c++ ));do
 
   if [ $STATUS_CODE = 200 ]; then
     echo "OTP started"
-    curl -s "http://127.0.0.1:10000/otp/routers/default/plan?fromPlace=60.17078422953281%2C24.941625595092773&toPlace=60.21918441389899%2C24.811420440673828&time=2%3A03pm&date=02-20-2017&mode=TRANSIT%2CWALK&maxWalkDistance=804.672&arriveBy=false&wheelchair=false&locale=en"|grep error
+    curl -s "$URL"|grep error
     if [ $? = 1 ]; then #grep finds no error
 	echo "OK"
-	docker stop otp-data
-        docker stop otp
-	docker rm otp-data
-	docker rm otp
+	shutdown
 	exit 0;
     else
 	echo "ERROR"
-	docker stop otp-data
-        docker stop otp
-	docker rm otp-data
-	docker rm otp
+	shutdown
 	exit 1;
     fi
   else
@@ -34,10 +40,7 @@ for (( c=1; c<=$ITERATIONS; c++ ));do
     sleep 10
   fi
 done
-docker stop otp-data
-docker stop otp
-docker rm otp-data
-docker rm otp
+shutdown
 
 exit 1;
 
