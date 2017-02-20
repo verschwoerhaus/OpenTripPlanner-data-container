@@ -1,4 +1,4 @@
-FROM python:2
+FROM maven:3-jdk-8
 
 MAINTAINER Digitransit version: 0.1
 
