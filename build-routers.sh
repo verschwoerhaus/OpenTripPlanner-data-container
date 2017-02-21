@@ -223,7 +223,8 @@ retrieveTurku
 
 # build zip packages
 mkdir ${WEBROOT}
-zip -D ${WEBROOT}/router-hsl.zip $ROOT/router-hsl/*
-zip -D ${WEBROOT}/router-finland.zip $ROOT/router-finland/*
-zip -D ${WEBROOT}/router-waltti.zip $ROOT/router-waltti/*
+cd $ROOT
+zip -D ${WEBROOT}/router-hsl.zip router-hsl/*
+zip -D ${WEBROOT}/router-finland.zip router-finland/*
+zip -D ${WEBROOT}/router-waltti.zip router-waltti/*
 cp ${WORK}/routers.txt ${WEBROOT}
