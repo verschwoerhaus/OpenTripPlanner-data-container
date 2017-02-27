@@ -1,7 +1,7 @@
 #!/bin/bash
 
-URL=${URL:-http://127.0.0.1:10000/otp/routers/default/plan?fromPlace=60.44638185995603%2C22.244396209716797&toPlace=60.45053041945487%2C22.313575744628906&time=3%3A51pm&date=02-20-2017&mode=TRANSIT%2CWALK&maxWalkDistance=804.672&arriveBy=false&wheelchair=false&locale=en}
-#URL=${URL:-http://127.0.0.1:10000/otp/routers/default/plan?fromPlace=60.17078422953281%2C24.941625595092773&toPlace=60.21918441389899%2C24.811420440673828&time=2%3A03pm&date=02-20-2017&mode=TRANSIT%2CWALK&maxWalkDistance=804.672&arriveBy=false&wheelchair=false&locale=en"}
+URL=${URL:-http://127.0.0.1:10000/otp/routers/default/plan?fromPlace=60.44638185995603%2C22.244396209716797&toPlace=60.45053041945487%2C22.313575744628906}
+#URL=${URL:-http://127.0.0.1:10000/otp/routers/default/plan?fromPlace=60.17078422953281%2C24.941625595092773&toPlace=60.21918441389899%2C24.811420440673828}
 
 MAX_WAIT=${MAX_WAIT:-5}
 ROUTER_NAME=${ROUTER_NAME:-hsl}
