@@ -99,7 +99,6 @@ function retrieveWaltti() {
   curl -sS "http://dev.hsl.fi/gtfs.waltti/kotka.zip" -o kotka.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/kuopio.zip" -o kuopio.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/kvl.zip" -o kvl.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/lahti.zip" -o lahti.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/lappeenranta.zip" -o lappeenranta.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/mikkeli.zip" -o mikkeli.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/pohjois-pohjanmaan_ely.zip" -o pohjois-pohjanmaan_ely.zip
@@ -119,7 +118,6 @@ function retrieveWaltti() {
   add_feed_id kotka.zip Kotka
   add_feed_id kuopio.zip Kuopio
   add_feed_id kvl.zip Kouvola
-  add_feed_id lahti.zip Lahti
   add_feed_id lappeenranta.zip Lappeenranta
   add_feed_id mikkeli.zip Mikkeli
   add_feed_id pohjois-pohjanmaan_ely.zip PohjoisPohjanmaanEly
@@ -138,6 +136,13 @@ function retrieveTurku() {
   add_feed_id foli.zip FOLI
 }
 
+function retrieveLahti() {
+  echo "Retrieving Lahti data..."
+  cd $ROUTER_WALTTI
+  curl -sS "http://dev.hsl.fi/gtfs.lahti/lahti.zip" -o lahti.zip
+
+  add_feed_id lahti.zip Lahti
+}
 
 function retrieveKoontikanta() {
   echo "Retrieving Koontikanta data..."
@@ -220,6 +225,7 @@ retrieveKoontikanta
 
 retrieveWaltti
 retrieveTurku
+retrieveLahti
 
 # build zip packages
 mkdir ${WEBROOT}
