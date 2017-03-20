@@ -1,0 +1,2 @@
+# Joensuu - remove route_type 6 = gondola
+{"op":"remove", "match":{"file":"routes.txt", "route_type":"6"}}

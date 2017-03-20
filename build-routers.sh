@@ -93,7 +93,6 @@ function retrieveWaltti() {
   echo "Retrieving Waltti data..."
   cd $ROUTER_WALTTI
   curl -sS "http://dev.hsl.fi/gtfs.waltti/hameenlinna.zip" -o hameenlinna.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/joensuu.zip" -o joensuu.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/kajaani.zip" -o kajaani.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/keski-suomen_ely.zip" -o keski-suomen_ely.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/kotka.zip" -o kotka.zip
@@ -103,7 +102,6 @@ function retrieveWaltti() {
   curl -sS "http://dev.hsl.fi/gtfs.waltti/mikkeli.zip" -o mikkeli.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/pohjois-pohjanmaan_ely.zip" -o pohjois-pohjanmaan_ely.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_iisalmi.zip" -o posely_iisalmi.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip" -o posely_joensuu.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_kuopio.zip" -o posely_kuopio.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_mikkeli.zip" -o posely_mikkeli.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/vaasa.zip" -o vaasa.zip
@@ -112,7 +110,6 @@ function retrieveWaltti() {
   cp $ROUTER_FINLAND/finland-latest.osm.pbf .
 
   add_feed_id hameenlinna.zip Hameenlinna
-  add_feed_id joensuu.zip Joensuu
   add_feed_id kajaani.zip Kajaani
   add_feed_id keski-suomen_ely.zip KeskiSuomenEly
   add_feed_id kotka.zip Kotka
@@ -122,11 +119,30 @@ function retrieveWaltti() {
   add_feed_id mikkeli.zip Mikkeli
   add_feed_id pohjois-pohjanmaan_ely.zip PohjoisPohjanmaanEly
   add_feed_id posely_iisalmi.zip IisalmiEly
-  add_feed_id posely_joensuu.zip JoensuuEly
   add_feed_id posely_kuopio.zip KuopioEly
   add_feed_id posely_mikkeli.zip MikkeliEly
   add_feed_id vaasa.zip Vaasa
 }
+
+function retrieveJoensuu() {
+  echo "Retrieving Joensuu data..."
+  cd $ROUTER_WALTTI
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/joensuu.zip" -o joensuu.zip
+  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip" -o posely_joensuu.zip
+
+  rm -rf joensuu
+
+  transformGTFS "java -server -Xmx8G -jar $OBA_GTFS --transform=$ROUTER_WALTTI/gtfs-rules/waltti.rule joensuu.zip joensuu"
+
+  rm joensuu.zip
+  cd joensuu
+  zip ../joensuu.zip *
+  cd ..
+
+  add_feed_id joensuu.zip Joensuu
+  add_feed_id posely_joensuu.zip JoensuuEly
+}
+
 
 function retrieveTurku() {
   echo "Retrieving Turku/Foli data..."
@@ -153,9 +169,9 @@ function retrieveKoontikanta() {
   rm -rf koontikanta
   mkdir -p koontikanta
 
-  transformKoontikantaPart "java -server -Xmx8G -jar $OBA_GTFS --transform=$ROUTER_FINLAND/gtfs-rules/matka.rule matka.zip koontikanta/matka.tmp"
+  transformGTFS "java -server -Xmx8G -jar $OBA_GTFS --transform=$ROUTER_FINLAND/gtfs-rules/matka.rule matka.zip koontikanta/matka.tmp"
   # rename id's as a separate pass to avoid nondeterminism
-  transformKoontikantaPart "java -server -Xmx8G -jar $OBA_GTFS --transform=$ROUTER_FINLAND/gtfs-rules/matka-id.rule koontikanta/matka.tmp koontikanta/matka"
+  transformGTFS "java -server -Xmx8G -jar $OBA_GTFS --transform=$ROUTER_FINLAND/gtfs-rules/matka-id.rule koontikanta/matka.tmp koontikanta/matka"
   sed -i -e '1 a''MATKA,matka.fi,http://www.matka.fi/,Europe/Helsinki,' koontikanta/matka/agency.txt
 
   cd koontikanta/matka
@@ -168,10 +184,10 @@ function retrieveKoontikanta() {
 }
 
 # One Bus away transform does not end terminate with a correct error code. Check that here and fail if configuration is set
-function transformKoontikantaPart() {
+function transformGTFS() {
   if (! $1 2>&1) | grep "Exception"
   then
-    echo "Failed to transform koontikanta part"
+    echo "Failed to transform GTFS data"
     exit 1
   fi
 }
@@ -224,6 +240,7 @@ retrieveLauttaNet
 retrieveKoontikanta
 
 retrieveWaltti
+retrieveJoensuu
 retrieveTurku
 retrieveLahti
 
