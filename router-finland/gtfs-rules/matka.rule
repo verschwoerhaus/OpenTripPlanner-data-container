@@ -40,3 +40,7 @@
 {"op":"remove", "match":{"file":"agency.txt", "agency_id":"220973"}}
 {"op":"remove", "match":{"file":"agency.txt", "agency_id":"220968"}}
 {"op":"remove", "match":{"file":"agency.txt", "agency_id":"220968"}}
+
+# Waltti demand responsive transport
+{"op":"remove", "match":{"file":"routes.txt", "route_type":"6"}}
+{"op":"remove", "match":{"file":"routes.txt", "route_type":"715"}}
