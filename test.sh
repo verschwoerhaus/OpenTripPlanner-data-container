@@ -14,8 +14,8 @@ function shutdown() {
 echo shutting down
 }
 
-docker run -d --name otp-data hsldevcom/opentripplanner-data-container
-docker run -d --name otp -p 10000:8080 -e ROUTER_NAME=$ROUTER_NAME -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data:otp-data hsldevcom/opentripplanner:prod
+docker run --name otp-data hsldevcom/opentripplanner-data-container &
+docker run --name otp -p 10000:8080 -e ROUTER_NAME=$ROUTER_NAME -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data:otp-data hsldevcom/opentripplanner:prod &
 
 ITERATIONS=$(($MAX_WAIT * 6))
 echo "max wait (minutes): $MAX_WAIT"
