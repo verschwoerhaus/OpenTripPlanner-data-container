@@ -153,9 +153,9 @@ function retrieveKoontikanta() {
   rm -rf koontikanta
   mkdir -p koontikanta
 
-  transformKoontikantaPart "java -server -Xmx8G -jar $OBA_GTFS --transform=$ROUTER_FINLAND/gtfs-rules/matka.rule matka.zip koontikanta/matka.tmp"
+  transformGTFS "java -server -Xmx8G -jar $OBA_GTFS --transform=$ROUTER_FINLAND/gtfs-rules/matka.rule matka.zip koontikanta/matka.tmp"
   # rename id's as a separate pass to avoid nondeterminism
-  transformKoontikantaPart "java -server -Xmx8G -jar $OBA_GTFS --transform=$ROUTER_FINLAND/gtfs-rules/matka-id.rule koontikanta/matka.tmp koontikanta/matka"
+  transformGTFS "java -server -Xmx8G -jar $OBA_GTFS --transform=$ROUTER_FINLAND/gtfs-rules/matka-id.rule koontikanta/matka.tmp koontikanta/matka"
   sed -i -e '1 a''MATKA,matka.fi,http://www.matka.fi/,Europe/Helsinki,' koontikanta/matka/agency.txt
 
   cd koontikanta/matka
@@ -168,10 +168,10 @@ function retrieveKoontikanta() {
 }
 
 # One Bus away transform does not end terminate with a correct error code. Check that here and fail if configuration is set
-function transformKoontikantaPart() {
+function transformGTFS() {
   if (! $1 2>&1) | grep "Exception"
   then
-    echo "Failed to transform koontikanta part"
+    echo "Failed to transform GTFS data"
     exit 1
   fi
 }
