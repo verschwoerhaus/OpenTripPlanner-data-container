@@ -1,3 +1,4 @@
+
 #!/bin/bash
 set -e
 set -x
@@ -172,7 +173,7 @@ function retrieveKoontikanta() {
   transformGTFS "java -server -Xmx8G -jar $OBA_GTFS --transform=$ROUTER_FINLAND/gtfs-rules/matka.rule matka.zip koontikanta/matka.tmp"
   # rename id's as a separate pass to avoid nondeterminism
   transformGTFS "java -server -Xmx8G -jar $OBA_GTFS --transform=$ROUTER_FINLAND/gtfs-rules/matka-id.rule koontikanta/matka.tmp koontikanta/matka"
-  sed -i -e '1 a''MATKA,matka.fi,http://www.matka.fi/,Europe/Helsinki,' koontikanta/matka/agency.txt
+  # sed -i -e '1 a''MATKA,matka.fi,http://www.matka.fi/,Europe/Helsinki,' koontikanta/matka/agency.txt
 
   cd koontikanta/matka
   zip ../../matka.filtered.zip *
