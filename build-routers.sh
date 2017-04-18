@@ -97,13 +97,11 @@ function retrieveWaltti() {
   curl -sS "http://dev.hsl.fi/gtfs.waltti/kajaani.zip" -o kajaani.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/keski-suomen_ely.zip" -o keski-suomen_ely.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/kotka.zip" -o kotka.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/kuopio.zip" -o kuopio.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/kvl.zip" -o kvl.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/lappeenranta.zip" -o lappeenranta.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/mikkeli.zip" -o mikkeli.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/pohjois-pohjanmaan_ely.zip" -o pohjois-pohjanmaan_ely.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_iisalmi.zip" -o posely_iisalmi.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_kuopio.zip" -o posely_kuopio.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_mikkeli.zip" -o posely_mikkeli.zip
   curl -sS "http://dev.hsl.fi/gtfs.waltti/vaasa.zip" -o vaasa.zip
 
@@ -114,13 +112,11 @@ function retrieveWaltti() {
   add_feed_id kajaani.zip Kajaani
   add_feed_id keski-suomen_ely.zip KeskiSuomenEly
   add_feed_id kotka.zip Kotka
-  add_feed_id kuopio.zip Kuopio
   add_feed_id kvl.zip Kouvola
   add_feed_id lappeenranta.zip Lappeenranta
   add_feed_id mikkeli.zip Mikkeli
   add_feed_id pohjois-pohjanmaan_ely.zip PohjoisPohjanmaanEly
   add_feed_id posely_iisalmi.zip IisalmiEly
-  add_feed_id posely_kuopio.zip KuopioEly
   add_feed_id posely_mikkeli.zip MikkeliEly
   add_feed_id vaasa.zip Vaasa
 }
@@ -159,6 +155,14 @@ function retrieveLahti() {
   curl -sS "http://dev.hsl.fi/gtfs.lahti/lahti.zip" -o lahti.zip
 
   add_feed_id lahti.zip Lahti
+}
+
+function retrieveKuopio() {
+  echo "Retrieving Kuopio data..."
+  cd $ROUTER_WALTTI
+  curl -sS "http://dev.hsl.fi/gtfs.kuopio/kuopio.zip" -o kuopio.zip
+
+  add_feed_id kuopio.zip Kuopio
 }
 
 function retrieveKoontikanta() {
@@ -244,6 +248,7 @@ retrieveWaltti
 retrieveJoensuu
 retrieveTurku
 retrieveLahti
+retrieveKuopio
 
 # build zip packages
 mkdir ${WEBROOT}
