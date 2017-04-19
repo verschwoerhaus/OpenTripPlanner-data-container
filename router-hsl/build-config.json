@@ -1,5 +1,6 @@
 {
   "areaVisibility": true,
   "staticParkAndRide": false,
-  "parentStopLinking": true
+  "parentStopLinking": true,
+  "subwayAccessTime": 0,
 }
