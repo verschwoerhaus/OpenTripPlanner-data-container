@@ -219,7 +219,7 @@ EOT
     if [ "$count" -ne "1" ]; then
       echo "adding feed_id column"
       #no feed_id in feed_info.txt, append
-      awk -vc="feed_id" -vd="$id" 'NR==1{$0=c","$0}NR!=1{$0=d","$0}1' feed_info.txt > feed_info_new.txt
+      awk -vc="feed_id" -vd="$id" 'NR==1{$0=$0","c}NR!=1{$0=$0","d}1' feed_info.txt > feed_info_new.txt
     else
       echo "changing existing id"
       #existing feed_id, replace it
