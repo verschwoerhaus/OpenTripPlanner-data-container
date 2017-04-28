@@ -45,14 +45,6 @@
       "type": "stop-time-updater",
       "frequencySec": 60,
       "sourceType": "gtfs-http",
-      "url": "http://raildigitraffic2gtfsrt:8080/national",
-      "feedId": "MATKA",
-      "fuzzyTripMatching": true
-    },
-    {
-      "type": "stop-time-updater",
-      "frequencySec": 60,
-      "sourceType": "gtfs-http",
       "url": "http://beta.liikennevirasto.fi/joukkoliikenne/manual_gtfsrt/api/gtfsrt/updates",
       "feedId": "MATKA",
       "fuzzyTripMatching": true
