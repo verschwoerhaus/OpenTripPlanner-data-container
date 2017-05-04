@@ -14,5 +14,6 @@ ENV PORT="8080"
 EXPOSE 8080
 
 ADD target/opt/opentripplanner-data-container/webroot /var/www/localhost/htdocs
+ADD build/*.zip /var/www/localhost/htdocs/
 
 ENTRYPOINT ["/usr/sbin/startlighttpd" ]

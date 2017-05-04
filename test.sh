@@ -15,6 +15,7 @@ echo shutting down
 }
 
 docker run --name otp-data hsldevcom/opentripplanner-data-container &
+sleep 2
 docker run --name otp -p 10000:8080 -e ROUTER_NAME=$ROUTER_NAME -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data:otp-data hsldevcom/opentripplanner:prod &
 
 ITERATIONS=$(($MAX_WAIT * 6))
