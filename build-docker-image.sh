@@ -22,7 +22,7 @@ function prebuild () {
   NAME=$1
   mkdir build/$NAME
   unzip -j target/opt/opentripplanner-data-container/webroot/router-$NAME.zip  -d build/$NAME/
-  VERSION=`docker run --rm --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -jar otp-*-shaded.jar --version"|grep commit|cut -d' ' -f2`
+  VERSION=`docker run --rm --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -jar otp-shaded.jar --version"|grep commit|cut -d' ' -f2`
   docker run -v `pwd`/build:/opt/opentripplanner/graphs --rm --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -Xmx6g -jar otp-*-shaded.jar --build graphs/$NAME"
   cd build/
   zip graph-$NAME-$VERSION.zip $NAME/router-config.json $NAME/Graph.obj
