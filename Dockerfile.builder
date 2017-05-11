@@ -3,7 +3,7 @@ FROM maven:3-jdk-8
 MAINTAINER Digitransit version: 0.1
 
 #need build-arg NAME here
-ARG NAME=waltti
+ARG NAME
 
 ENV WORK=/opt/opentripplanner-data-container
 ENV WEBROOT=${WORK}/webroot

@@ -20,7 +20,7 @@ export DOCKER_TAGGED_IMAGE=$DOCKER_IMAGE:$DOCKER_TAG
 
 # Build data with builder
 rm -rf target build
-docker build --build-arg NAME="$NAME" --tag=$DOCKER_BUILDER_IMAGE -f Dockerfile.builder .
+docker build --build-arg NAME="$ROUTER_NAME" --tag=$DOCKER_BUILDER_IMAGE -f Dockerfile.builder .
 mkdir target
 docker run --rm --entrypoint tar $DOCKER_BUILDER_IMAGE -c /opt/$CONTAINER/webroot|tar x -C target
 
