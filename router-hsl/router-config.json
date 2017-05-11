@@ -1,4 +1,7 @@
 {
+  "modeWeight": {
+      "BUS": 1.2
+  },
   "routingDefaults": {
       "walkSpeed": 1.3,
       "transferSlack": 120,
