@@ -16,7 +16,7 @@ install:
  - true
 
 script:
- - build-docker-image.sh
+ - ./build-docker-image.sh
 
 before_deploy:
  - echo "start deploying ..."
