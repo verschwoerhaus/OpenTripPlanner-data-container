@@ -4,6 +4,8 @@ branches:
   only:
     - master
 
+language: python
+
 env:
  - ROUTER_NAME=hsl
  - ROUTER_NAME=waltti
