@@ -18,7 +18,7 @@ export DOCKER_TAGGED_IMAGE=$DOCKER_IMAGE:$DOCKER_TAG
 
 # Build data with builder
 rm -rf target build
-docker build --tag=$DOCKER_BUILDER_IMAGE --build-arg ROUTER_NAME=$ROUTER_NAME HTTP_PROXY=ht -f Dockerfile.builder .
+docker build --tag=$DOCKER_BUILDER_IMAGE --build-arg ROUTER_NAME=$ROUTER_NAME -f Dockerfile.builder .
 mkdir target
 docker run --rm --entrypoint tar $DOCKER_BUILDER_IMAGE -c /opt/$CONTAINER/webroot|tar x -C target
 
