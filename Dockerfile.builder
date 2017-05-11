@@ -2,12 +2,14 @@ FROM maven:3-jdk-8
 
 MAINTAINER Digitransit version: 0.1
 
-#note: we need build-arg ROUTER_NAME here
+#need build-arg NAME here
+ARG NAME=waltti
 
 ENV WORK=/opt/opentripplanner-data-container
 ENV WEBROOT=${WORK}/webroot
 ENV PORT=8080
-ENV ROUTER_NAME=$ROUTER_NAME
+
+RUN env
 
 RUN mkdir -p ${WORK}
 
@@ -42,8 +44,9 @@ RUN git clone --recursive -b fastmapmatch https://github.com/HSLdevcom/gtfs_shap
   make -C pymapmatch && \
   cd ..
 
-ADD http://dev.hsl.fi/osm.hsl/hsl.osm.pbf ${WORK}/router-hsl/helsinki_finland.osm.pbf
+
 ADD http://dev.hsl.fi/osm.finland/finland.osm.pbf ${WORK}/router-finland/finland-latest.osm.pbf
+ADD http://dev.hsl.fi/osm.hsl/hsl.osm.pbf ${WORK}/router-hsl/helsinki_finland.osm.pbf
 
 # Dependencies installed, next do build
 ADD . ${WORK}

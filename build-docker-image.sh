@@ -7,6 +7,8 @@
 
 set -e
 
+echo "Building for" $ROUTER_NAME
+
 ORG=hsldevcom
 CONTAINER=opentripplanner-data-container
 DOCKER_TAG=${TRAVIS_COMMIT:-$TRAVIS_BUILD_ID}
@@ -18,7 +20,7 @@ export DOCKER_TAGGED_IMAGE=$DOCKER_IMAGE:$DOCKER_TAG
 
 # Build data with builder
 rm -rf target build
-docker build --tag=$DOCKER_BUILDER_IMAGE --build-arg ROUTER_NAME=$ROUTER_NAME -f Dockerfile.builder .
+docker build --build-arg NAME="$NAME" --tag=$DOCKER_BUILDER_IMAGE -f Dockerfile.builder .
 mkdir target
 docker run --rm --entrypoint tar $DOCKER_BUILDER_IMAGE -c /opt/$CONTAINER/webroot|tar x -C target
 
