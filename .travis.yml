@@ -1,0 +1,22 @@
+sudo: required
+
+branches:
+  only:
+    - master
+
+env:
+ - ROUTER_NAME=hsl
+ - ROUTER_NAME=waltti
+ - ROUTER_NAME=finland
+
+services:
+ - docker
+
+install:
+ - true
+
+script:
+ - build-docker-image.sh
+
+before_deploy:
+ - echo "start deploying ..."
