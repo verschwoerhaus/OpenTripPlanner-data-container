@@ -1,4 +1,3 @@
-
 #!/bin/bash
 set -e
 set -x
@@ -12,6 +11,8 @@ export TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=2147483648
 
 # Base locations
 ROOT=/opt/opentripplanner-data-container
+
+# router alternatives
 ROUTER_FINLAND=$ROOT/router-finland
 ROUTER_HSL=$ROOT/router-hsl
 ROUTER_WALTTI=$ROOT/router-waltti
@@ -20,17 +21,6 @@ ROUTER_WALTTI=$ROOT/router-waltti
 FIT_GTFS=$ROOT/gtfs_shape_mapfit/fit_gtfs.bash
 OBA_GTFS=$ROOT/one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar
 
-function retrieveOSMFinland() {
-  echo "Retrieving Finland OSM data..."
-  cd $ROUTER_FINLAND
-  curl -sS "http://dev.hsl.fi/osm.finland/finland.osm.pbf" -o finland-latest.osm.pbf
-}
-
-function retrieveOSMHSL() {
-  echo "Retrieving Helsinki OSM data..."
-  cd $ROUTER_HSL
-  curl -sS "http://dev.hsl.fi/osm.hsl/hsl.osm.pbf" -o helsinki_finland.osm.pbf
-}
 
 function retrieveTampere() {
   echo "Retrieving Tampere data..."
@@ -236,24 +226,37 @@ EOT
 }
 
 # Here we go
-retrieveHsl
 
-retrieveTampere
-retrieveJyvaskyla
-retrieveOulu
-retrieveLauttaNet
-retrieveKoontikanta
-
-retrieveWaltti
-retrieveJoensuu
-retrieveTurku
-retrieveLahti
-retrieveKuopio
-
-# build zip packages
 mkdir ${WEBROOT}
-cd $ROOT
-zip -D ${WEBROOT}/router-hsl.zip router-hsl/*
-zip -D ${WEBROOT}/router-finland.zip router-finland/*
-zip -D ${WEBROOT}/router-waltti.zip router-waltti/*
-cp ${WORK}/routers.txt ${WEBROOT}
+
+if [ "$ROUTER_NAME" == "hsl" ]; then
+    retrieveHsl
+    cd $ROOT
+    zip -D ${WEBROOT}/router-hsl.zip router-hsl/*
+    cp ${WORK}/routers.txt ${WEBROOT}
+    echo "router-hsl.zip" > routers.txt
+
+elif [ "$ROUTER_NAME" == "waltti" ]; then
+    retrieveJyvaskyla
+    retrieveOulu
+    retrieveWaltti
+    retrieveJoensuu
+    retrieveTurku
+    retrieveLahti
+    retrieveKuopio
+    cd $ROOT
+    zip -D ${WEBROOT}/router-waltti.zip router-waltti/*
+    echo "router-waltti.zip" > routers.txt
+
+else
+    retrieveTampere
+    retrieveJyvaskyla
+    retrieveOulu
+    retrieveLauttaNet
+    retrieveHsl
+    retrieveKoontikanta
+    cd $ROOT
+    zip -D ${WEBROOT}/router-finland.zip router-finland/*
+    echo "router-finland.zip" > routers.txt
+fi
+

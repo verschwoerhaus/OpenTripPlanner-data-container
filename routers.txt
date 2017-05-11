@@ -1,3 +1,0 @@
-router-hsl.zip
-router-finland.zip
-router-waltti.zip
