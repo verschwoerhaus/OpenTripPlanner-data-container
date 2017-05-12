@@ -12,6 +12,8 @@ URL=${URL:-http://127.0.0.1:10000/otp/routers/default/plan?fromPlace=60.44638185
 MAX_WAIT=${MAX_WAIT:-5}
 ROUTER_NAME=${ROUTER_NAME:-hsl}
 
+echo -e "\n##### Testing $ROUTER_NAME #####\n"
+
 function shutdown() {
   docker stop otp-data
   docker stop otp
