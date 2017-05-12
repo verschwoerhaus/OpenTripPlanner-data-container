@@ -45,8 +45,8 @@ RUN git clone --recursive -b fastmapmatch https://github.com/HSLdevcom/gtfs_shap
   cd ..
 
 
-ADD http://dev.hsl.fi/osm.finland/finland.osm.pbf ${WORK}/router-finland/finland-latest.osm.pbf
-ADD http://dev.hsl.fi/osm.hsl/hsl.osm.pbf ${WORK}/router-hsl/helsinki_finland.osm.pbf
+ADD finland.osm.pbf ${WORK}/router-finland/finland-latest.osm.pbf
+ADD hsl.osm.pbf ${WORK}/router-hsl/helsinki_finland.osm.pbf
 
 # Dependencies installed, next do build
 ADD . ${WORK}

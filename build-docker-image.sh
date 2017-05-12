@@ -20,6 +20,11 @@ DOCKER_LATEST_IMAGE=$DOCKER_IMAGE:latest
 DOCKER_PROD_IMAGE=$DOCKER_IMAGE:prod
 export DOCKER_TAGGED_IMAGE=$DOCKER_IMAGE:$DOCKER_TAG
 
+# speed up by parallel download
+curl http://dev.hsl.fi/osm.finland/finland.osm.pbf -o finland.osm.pbf &
+curl http://dev.hsl.fi/osm.hsl/hsl.osm.pbf -o hsl.osm.pbf &
+wait
+
 # Build data with builder
 rm -rf target build
 docker build --build-arg ROUTER_NAME="$ROUTER_NAME" --tag=$DOCKER_BUILDER_IMAGE -f Dockerfile.builder .
@@ -58,10 +63,14 @@ fi
 
 ./test.sh
 
+echo "$ROUTER_NAME tests passed!"
+
 #if ok, tag and push to dev and production
 docker tag $DOCKER_TAGGED_IMAGE $DOCKER_LATEST_IMAGE
 docker push $DOCKER_LATEST_IMAGE
 
-#enable when new build is tested
+#enable when new there's good confidence in the new build
 #docker tag -f $DOCKER_TAGGED_IMAGE $DOCKER_PROD_IMAGE
 #docker push $DOCKER_PROD_IMAGE
+
+echo "$ROUTER_NAME build finished succesfully"
