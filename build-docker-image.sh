@@ -11,7 +11,7 @@ set -e
 
 echo "Building for" $ROUTER_NAME
 
-ORG=vesameskanen
+ORG=hsldevcom
 CONTAINER=opentripplanner-data-container
 DOCKER_TAG=${DOCKER_TAG:-$TRAVIS_COMMIT}
 DOCKER_IMAGE=$ORG/$CONTAINER-$ROUTER_NAME
