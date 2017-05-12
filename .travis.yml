@@ -14,6 +14,11 @@ env:
 services:
  - docker
 
+before_install:
+ - curl http://dev.hsl.fi/osm.finland/finland.osm.pbf -o finland.osm.pbf
+ - curl http://dev.hsl.fi/osm.hsl/hsl.osm.pbf -o hsl.osm.pbf
+ - docker pull hsldevcom/opentripplanner:prod
+
 install:
  - true
 
