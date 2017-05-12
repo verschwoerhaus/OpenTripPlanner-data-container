@@ -239,7 +239,6 @@ if [ "$ROUTER_NAME" == "hsl" ]; then
     retrieveHsl
     cd $ROOT
     zip -D ${WEBROOT}/router-hsl.zip router-hsl/*
-    cp ${WORK}/routers.txt ${WEBROOT}
     echo "router-hsl.zip" > routers.txt
 
 elif [ "$ROUTER_NAME" == "waltti" ]; then
