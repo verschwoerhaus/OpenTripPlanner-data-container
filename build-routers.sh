@@ -9,10 +9,11 @@ set -o pipefail
 # Therefore, we increase this value
 export TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=2147483648
 
-echo "=========================="
-echo "Building image for $ROUTER_NAME"
-echo "=========================="
-echo""
+echo ""
+echo "================================="
+echo "  Building image for $ROUTER_NAME"
+echo "================================="
+echo ""
 
 # Base locations
 ROOT=/opt/opentripplanner-data-container

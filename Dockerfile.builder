@@ -2,8 +2,8 @@ FROM maven:3-jdk-8
 
 MAINTAINER Digitransit version: 0.1
 
-#need build-arg NAME here
-ARG NAME
+#need build-arg ROUTER_NAME here
+ARG ROUTER_NAME
 
 ENV WORK=/opt/opentripplanner-data-container
 ENV WEBROOT=${WORK}/webroot
