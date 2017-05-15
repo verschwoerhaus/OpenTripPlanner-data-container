@@ -95,7 +95,7 @@ function retrieveHsl() {
   # Note! we use finland OSM graph
   echo "Note! Next mapfit requires lot of memory. If it fails mysteriously, try adding more."
   $FIT_GTFS $ROUTER_FINLAND/finland-latest.osm.pbf +init=epsg:3067 hsl.zip hsl_fitted.zip 2>&1 | tee hsl.fit.log.txt
-  echo "Mapfit ready."
+  echo "HSL mapfit ready."
   mv hsl_fitted.zip hsl.zip
   add_feed_id hsl.zip HSL
   # HSL data is also needed in national graph
@@ -224,6 +224,7 @@ function transformGTFS() {
 
 #add (or modify) feed_info.txt that contains the feed_id
 function add_feed_id() {
+  echo "Adding feed" $2
   set +o pipefail
   filename=$1
   id=$2
@@ -258,6 +259,7 @@ EOT
   # add feed_info to zip
   zip $filename feed_info.txt
   set -o pipefail
+  echo "Feed" $2 "added"
 }
 
 
@@ -314,11 +316,6 @@ elif [ "$ROUTER_NAME" == "waltti" ]; then
     echo "router-waltti.zip" > routers.txt
 
 else
-    download1 &
-    download2 &
-    download3 &
-    wait
-
     retrieve1 &
     retrieve2 &
     retrieve3 &
@@ -329,3 +326,4 @@ else
     echo "router-finland.zip" > routers.txt
 fi
 
+echo "GTFS data fetched, transformed and packed"
