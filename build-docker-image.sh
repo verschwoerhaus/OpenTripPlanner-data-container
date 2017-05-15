@@ -18,17 +18,13 @@ DOCKER_LATEST_IMAGE=$DOCKER_IMAGE:latest
 DOCKER_PROD_IMAGE=$DOCKER_IMAGE:prod
 export DOCKER_TAGGED_IMAGE=$DOCKER_IMAGE:$DOCKER_TAG
 
-curl http://dev.hsl.fi/osm.finland/finland.osm.pbf -o finland.osm.pbf &
-curl http://dev.hsl.fi/osm.hsl/hsl.osm.pbf -o hsl.osm.pbf &
-wait
 
 # Build data with builder
-echo "*** Creating builder image"
+echo "***Launching the builder"
 rm -rf target build
-docker build --build-arg ROUTER_NAME="$ROUTER_NAME" --tag=$DOCKER_BUILDER_IMAGE -f Dockerfile.builder .
 mkdir target
 docker run --rm --entrypoint tar $DOCKER_BUILDER_IMAGE -c /opt/$CONTAINER/webroot|tar x -C target
-echo "*** Builder image created and launched"
+echo "*** Builder launched"
 
 #prebuild graph
 echo "*** Prebuilding the graph"
@@ -41,7 +37,7 @@ zip graph-$ROUTER_NAME-$VERSION.zip $ROUTER_NAME/router-config.json $ROUTER_NAME
 cd ..
 
 #build docker image
-echo "*** Building the actual docker image"
+echo "*** Building the docker image"
 docker build --tag=$DOCKER_TAGGED_IMAGE -f Dockerfile .
 docker login -u $DOCKER_USER -p $DOCKER_AUTH
 docker push $DOCKER_TAGGED_IMAGE

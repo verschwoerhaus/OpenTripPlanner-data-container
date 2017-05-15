@@ -6,19 +6,27 @@ branches:
 
 language: C
 
-env:
- - ROUTER_NAME=hsl
- - ROUTER_NAME=waltti
- - ROUTER_NAME=finland
+jobs:
+  include:
+   - stage: prebuild
+     env:
+     - ROUTER_NAME=hsl
+     - ROUTER_NAME=waltti
+     - ROUTER_NAME=finland
+     script: ./prebuild.sh
+
+   - stage: build
+     env:
+     - ROUTER_NAME=hsl
+     - ROUTER_NAME=waltti
+     - ROUTER_NAME=finland
+     script: ./build-docker-image.sh
 
 services:
  - docker
 
-install:
+script:
  - true
 
-script:
- - ./build-docker-image.sh
-
-before_deploy:
- - echo "start deploying ..."
+install:
+ - true
