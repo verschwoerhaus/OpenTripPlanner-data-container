@@ -36,6 +36,9 @@ cd build/
 zip graph-$ROUTER_NAME-$VERSION.zip $ROUTER_NAME/router-config.json $ROUTER_NAME/Graph.obj
 cd ..
 
+#stop graph builder
+docker stop $(docker ps -a -q)
+
 #build docker image
 echo "*** Building the docker image"
 docker build --tag=$DOCKER_TAGGED_IMAGE -f Dockerfile .
