@@ -29,13 +29,13 @@ jobs:
      script: ./build-docker-image.sh
 
    - stage: deploy
-     env: DEPLOYR_NAME=hsl
+     env: ROUTER_NAME=hsl
      script: ./deploy.sh
    - stage: deploy
-     env: DEPLOYR_NAME=waltti
+     env: ROUTER_NAME=waltti
      script: ./deploy.sh
    - stage: deploy
-     env: DEPLOYR_NAME=finland
+     env: ROUTER_NAME=finland
      script: ./deploy.sh
 
 services:
