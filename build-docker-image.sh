@@ -5,7 +5,7 @@
 #DOCKER_USER // dockerhub credentials
 #DOCKER_AUTH
 #DOCKER_TAG or TRAVIS_COMMIT
-set -e
+set +e
 
 echo "*** Building for" $ROUTER_NAME
 

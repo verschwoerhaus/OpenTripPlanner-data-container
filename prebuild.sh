@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set +e
+
 # Set these environment variables
 #ROUTER_NAME // hsl/waltti/finland
 #DOCKER_USER // dockerhub credentials
