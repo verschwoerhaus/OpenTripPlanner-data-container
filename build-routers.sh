@@ -316,11 +316,12 @@ elif [ "$ROUTER_NAME" == "waltti" ]; then
     echo "router-waltti.zip" > routers.txt
 
 else
-    retrieve1 &
-    retrieve2 &
-    retrieve3 &
-    wait
-
+    retrieveTampere
+    retrieveHsl
+    retrieveJyvaskyla
+    retrieveOulu
+    retrieveLauttaNet
+    retrieveKoontikanta
     cd $ROOT
     zip -D ${WEBROOT}/router-finland.zip router-finland/*
     echo "router-finland.zip" > routers.txt
