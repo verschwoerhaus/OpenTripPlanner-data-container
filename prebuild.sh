@@ -11,6 +11,7 @@ echo "*** Pre-building for" $ROUTER_NAME
 
 ORG=${ORG:-hsldevcom}
 CONTAINER=opentripplanner-data-container
+DOCKER_TAG=${DOCKER_TAG:-$TRAVIS_COMMIT}
 DOCKER_IMAGE=$ORG/$CONTAINER-$ROUTER_NAME
 DOCKER_BUILDER_IMAGE=$DOCKER_IMAGE:builder
 
@@ -20,7 +21,7 @@ curl http://dev.hsl.fi/osm.hsl/hsl.osm.pbf -o hsl.osm.pbf &
 wait
 
 echo "*** Creating builder image"
-docker build --build-arg ROUTER_NAME="$ROUTER_NAME" --tag=$DOCKER_BUILDER_IMAGE -f Dockerfile.builder .
+docker build --build-arg ROUTER_NAME="$ROUTER_NAME" --build-arg DOCKER_TAG="$DOCKER_TAG" --tag=$DOCKER_BUILDER_IMAGE -f Dockerfile.builder .
 if [ $? -ne 0 ]; then
     exit 0
 fi

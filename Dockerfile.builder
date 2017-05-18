@@ -2,13 +2,15 @@ FROM maven:3-jdk-8
 
 MAINTAINER Digitransit version: 0.1
 
-#need build-arg ROUTER_NAME here
+#need build-args ROUTER_NAME and DOCKER_TAG here
 ARG ROUTER_NAME
+ARG DOCKER_TAG
 
 ENV WORK=/opt/opentripplanner-data-container
 ENV WEBROOT=${WORK}/webroot
 ENV PORT=8080
 
+#log ENV vars for debug info
 RUN env
 
 RUN mkdir -p ${WORK}
