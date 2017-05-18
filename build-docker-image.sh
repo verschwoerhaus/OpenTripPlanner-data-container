@@ -11,7 +11,7 @@ echo "*** Building for" $ROUTER_NAME
 
 ORG=${ORG:-hsldevcom}
 CONTAINER=opentripplanner-data-container
-DOCKER_TAG=${DOCKER_TAG:-$TRAVIS_COMMIT}
+export DOCKER_TAG=${DOCKER_TAG:-$TRAVIS_COMMIT}
 DOCKER_IMAGE=$ORG/$CONTAINER-$ROUTER_NAME
 DOCKER_BUILDER_IMAGE=$DOCKER_IMAGE:builder
 DOCKER_TAGGED_IMAGE=$DOCKER_IMAGE:$DOCKER_TAG
@@ -27,10 +27,20 @@ if [ $? -ne 0 ]; then
 fi
 echo "*** Builder launched"
 
+WEBROOT="target/opt/$CONTAINER/webroot"
+
+#check version
+BUILDER_TAG=$(cat ${WEBROOT}/version.txt)
+if [ $BUILDER_TAG -ne $DOCKER_TAG ]; then
+    echo "*** ERROR: builder image $BUILDER_TAG was not updated during the current build $DOCKER_TAG"
+    exit 0
+fi
+
+
 #prebuild graph
 echo "*** Prebuilding the graph"
 mkdir -p build/$ROUTER_NAME
-unzip -j target/opt/$CONTAINER/webroot/router-$ROUTER_NAME.zip -d build/$ROUTER_NAME/
+unzip -j ${WEBROOT}/router-$ROUTER_NAME.zip -d build/$ROUTER_NAME/
 if [ $? -ne 0 ]; then
     exit 0
 fi
