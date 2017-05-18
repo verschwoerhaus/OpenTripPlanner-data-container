@@ -301,7 +301,7 @@ if [ "$ROUTER_NAME" == "hsl" ]; then
     retrieveHsl
     cd $ROOT
     zip -D ${WEBROOT}/router-hsl.zip router-hsl/*
-    echo "router-hsl.zip" > routers.txt
+    echo "router-hsl.zip" > ${WEBROOT}/routers.txt
 
 elif [ "$ROUTER_NAME" == "waltti" ]; then
     retrieveJyvaskyla
@@ -313,7 +313,7 @@ elif [ "$ROUTER_NAME" == "waltti" ]; then
     retrieveKuopio
     cd $ROOT
     zip -D ${WEBROOT}/router-waltti.zip router-waltti/*
-    echo "router-waltti.zip" > routers.txt
+    echo "router-waltti.zip" > ${WEBROOT}/routers.txt
 
 else
     retrieveTampere
@@ -324,7 +324,9 @@ else
     retrieveKoontikanta
     cd $ROOT
     zip -D ${WEBROOT}/router-finland.zip router-finland/*
-    echo "router-finland.zip" > routers.txt
+    echo "router-finland.zip" > ${WEBROOT}/routers.txt
 fi
+
+echo $DOCKER_TAG > ${WEBROOT}/version.txt
 
 echo "GTFS data fetched, transformed and packed"
