@@ -8,12 +8,8 @@
 3. Forms OpenTripPlanner router zip files from the data
 4. Creates and pushes 3 docker images (hsl/waltti/finland)
 
-Each docker image runs a http server listening to port 8080. From the http server, you can get:
-- http://localhost:8080/routers.txt
+Each docker image runs a http server listening to port 8080, serving both a gtfs data bundle and a pre-built graph:
+- hsl: http://localhost:8080/router-hsl.zip and graph-hsl-<otpversion>.zip
+- waltti: http://localhost:8080/router-waltti.zip and graph-waltti-<otpversion>.zip
+- finland: http://localhost:8080/router-finland.zip and graph-finland-<otpversion>.zip
 
-That file defines the served router zip bundle:
-- hsl: http://localhost:8080/router-hsl.zip
-- waltti: http://localhost:8080/router-waltti.zip
-- finland: http://localhost:8080/router-finland.zip
-
-Each of the bundles contain also OpenStreetMap graph file, so you should be able to load them into OpenTripPlanner
