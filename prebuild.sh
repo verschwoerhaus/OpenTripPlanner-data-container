@@ -21,7 +21,16 @@ wait
 
 echo "*** Creating builder image"
 docker build --build-arg ROUTER_NAME="$ROUTER_NAME" --tag=$DOCKER_BUILDER_IMAGE -f Dockerfile.builder .
+if [ $? -ne 0 ]; then
+    exit 0
+fi
 docker login -u $DOCKER_USER -p $DOCKER_AUTH
+if [ $? -ne 0 ]; then
+    exit 0
+fi
 docker push $DOCKER_BUILDER_IMAGE
+if [ $? -ne 0 ]; then
+    exit 0
+fi
 
 echo "*** $ROUTER_NAME pre-build finished"
