@@ -42,8 +42,5 @@ jobs:
 services:
  - docker
 
-script:
- - true
-
 install:
  - true
