@@ -6,7 +6,6 @@ branches:
 
 language: C
 
-
 jobs:
   include:
    - stage: test
