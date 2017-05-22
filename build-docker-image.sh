@@ -4,17 +4,20 @@
 #ROUTER_NAME // hsl/waltti/finland
 #DOCKER_USER // dockerhub credentials
 #DOCKER_AUTH
-#DOCKER_TAG or TRAVIS_COMMIT
+#DOCKER_TAG or TRAVIS_BUILD_ID
 set +e
 
 echo "*** Building for" $ROUTER_NAME
 
 ORG=${ORG:-hsldevcom}
 CONTAINER=opentripplanner-data-container
-DOCKER_TAG=${DOCKER_TAG:-$TRAVIS_COMMIT}
+DOCKER_TAG=${DOCKER_TAG:-$TRAVIS_BUILD_ID}
 DOCKER_IMAGE=$ORG/$CONTAINER-$ROUTER_NAME
 DOCKER_BUILDER_IMAGE=$DOCKER_IMAGE:builder
 DOCKER_TAGGED_IMAGE=$DOCKER_IMAGE:$DOCKER_TAG
+
+
+echo "***Build ID:"$DOCKER_TAG
 
 # Build data with builder
 echo "***Launching the builder"
