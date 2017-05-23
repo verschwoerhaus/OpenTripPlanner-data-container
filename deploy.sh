@@ -4,13 +4,13 @@
 #ROUTER_NAME // hsl/waltti/finland
 #DOCKER_USER // dockerhub credentials
 #DOCKER_AUTH
-#DOCKER_TAG or TRAVIS_COMMIT
+#DOCKER_TAG or TRAVIS_BUILD_ID
 set -e
 
 
 ORG=${ORG:-hsldevcom}
 CONTAINER=opentripplanner-data-container
-DOCKER_TAG=${DOCKER_TAG:-$TRAVIS_COMMIT}
+DOCKER_TAG=${DOCKER_TAG:-$TRAVIS_BUILD_ID}
 DOCKER_IMAGE=$ORG/$CONTAINER-$ROUTER_NAME
 DOCKER_LATEST_IMAGE=$DOCKER_IMAGE:latest
 DOCKER_PROD_IMAGE=$DOCKER_IMAGE:prod
@@ -21,14 +21,16 @@ docker pull $DOCKER_TAGGED_IMAGE
 
 ./test.sh
 
-echo "*** Tests passed, deploying for $ROUTER_NAME"
+echo "*** $ROUTER_NAME tests passed"
 
-docker login -u $DOCKER_USER -p $DOCKER_AUTH
-docker tag $DOCKER_TAGGED_IMAGE $DOCKER_LATEST_IMAGE
-docker push $DOCKER_LATEST_IMAGE
-
-#enable when new there's good confidence in the new build
-#docker tag -f $DOCKER_TAGGED_IMAGE $DOCKER_PROD_IMAGE
-#docker push $DOCKER_PROD_IMAGE
+if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
+    echo "*** Deploying $ROUTER_NAME"
+    docker login -u $DOCKER_USER -p $DOCKER_AUTH
+    docker tag $DOCKER_TAGGED_IMAGE $DOCKER_LATEST_IMAGE
+    docker push $DOCKER_LATEST_IMAGE
+    docker tag -f $DOCKER_TAGGED_IMAGE $DOCKER_PROD_IMAGE
+    docker push $DOCKER_PROD_IMAGE
+    echo "*** Deployed $ROUTER_NAME"
+fi
 
 echo "*** $ROUTER_NAME build finished succesfully"

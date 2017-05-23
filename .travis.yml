@@ -6,7 +6,6 @@ branches:
 
 language: C
 
-
 jobs:
   include:
    - stage: test
@@ -41,9 +40,6 @@ jobs:
 
 services:
  - docker
-
-script:
- - true
 
 install:
  - true

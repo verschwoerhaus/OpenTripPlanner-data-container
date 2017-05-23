@@ -11,9 +11,11 @@ echo "*** Pre-building for" $ROUTER_NAME
 
 ORG=${ORG:-hsldevcom}
 CONTAINER=opentripplanner-data-container
-DOCKER_TAG=${DOCKER_TAG:-$TRAVIS_COMMIT}
+DOCKER_TAG=${DOCKER_TAG:-$TRAVIS_BUILD_ID}
 DOCKER_IMAGE=$ORG/$CONTAINER-$ROUTER_NAME
 DOCKER_BUILDER_IMAGE=$DOCKER_IMAGE:builder
+
+echo "***Build ID:"$DOCKER_TAG
 
 echo "*** Fetching OSM data"
 curl http://dev.hsl.fi/osm.finland/finland.osm.pbf -o finland.osm.pbf &
