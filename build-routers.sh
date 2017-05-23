@@ -95,7 +95,7 @@ function retrieveHsl() {
 
   # Note! we use finland OSM graph
   echo "Note! Next mapfit requires lot of memory. If it fails mysteriously, try adding more."
-  $FIT_GTFS $ROUTER_FINLAND/finland-latest.osm.pbf +init=epsg:3067 hsl.zip hsl_fitted.zip 2>&1 | tee hsl.fit.log.txt
+  $FIT_GTFS $ROUTER_FINLAND/finland-latest.osm.pbf +init=epsg:3067 hsl.zip hsl_fitted.zip 2>&1 > hsl.fit.log.txt
   echo "HSL mapfit ready."
   mv hsl_fitted.zip hsl.zip
   add_feed_id hsl.zip HSL
@@ -211,7 +211,7 @@ function retrieveKoontikanta() {
 
   mv matka.filtered.zip matka.zip
 
-  $FIT_GTFS_STOPS finland-latest.osm.pbf +init=epsg:3067 matka.zip matka_fitted.zip 2>&1 | tee matka.fit.log.txt
+  $FIT_GTFS_STOPS finland-latest.osm.pbf +init=epsg:3067 matka.zip matka_fitted.zip 2>&1 > matka.fit.log.txt
   mv matka_fitted.zip matka.zip
   
   add_feed_id matka.zip MATKA
