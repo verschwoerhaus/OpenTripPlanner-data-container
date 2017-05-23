@@ -23,12 +23,12 @@ RUN apt-get update && \
     build-essential python-dev protobuf-compiler libprotobuf-dev \
     make swig g++ python-dev libreadosm-dev \
     libboost-graph-dev libproj-dev libgoogle-perftools-dev \
-    osmctools unzip zip python-pyproj wget python-argh
+    osmctools unzip zip python-pyproj wget python-argh 1>/dev/null
 
 RUN wget https://bootstrap.pypa.io/get-pip.py && \
   python get-pip.py && \
   pip install imposm.parser && \
-  pip install argh
+  pip install argh 1>/dev/null
 
 RUN mkdir -p ${WORK}/one-busaway-gtfs-transformer && \
   wget -O ${WORK}/one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar "http://nexus.onebusaway.org/service/local/artifact/maven/content?r=public&g=org.onebusaway&a=onebusaway-gtfs-transformer-cli&v=1.3.4-SNAPSHOT"
@@ -37,13 +37,13 @@ RUN mkdir -p ${WORK}/one-busaway-gtfs-transformer && \
 RUN git clone https://github.com/jswhit/pyproj.git && \
   cd pyproj && \
   git checkout ec9151e8c6909f7fac72bb2eab927ff18fa4cf1d && \
-  python setup.py build && \
-  python setup.py install && \
+  python setup.py build 1>/dev/null&& \
+  python setup.py install 1>/dev/null&& \
   cd ..
 
 RUN git clone --recursive -b fastmapmatch https://github.com/HSLdevcom/gtfs_shape_mapfit.git && \
   cd gtfs_shape_mapfit && \
-  make -C pymapmatch && \
+  make -C pymapmatch 1>/dev/null&& \
   cd ..
 
 
