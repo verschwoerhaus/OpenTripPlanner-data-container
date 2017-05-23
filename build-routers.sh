@@ -211,7 +211,7 @@ function retrieveKoontikanta() {
 
   mv matka.filtered.zip matka.zip
 
-  $FIT_GTFS_STOPS finland-latest.osm.pbf +init=epsg:3067 matka.zip matka_fitted.zip 2>&1 | tee matka.fit.log.txt
+  $FIT_GTFS_STOPS finland-latest.osm.pbf +init=epsg:3067 matka.zip matka_fitted.zip 2>&1 > matka.fit.log.txt
   mv matka_fitted.zip matka.zip
   
   add_feed_id matka.zip MATKA
