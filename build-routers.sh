@@ -240,6 +240,8 @@ $id-fake-name,$id-fake-url,$id-fake-lang,$id
 EOT
   else
     unzip -o $filename feed_info.txt
+    tr -d '\r' < feed_info.txt > feed_info_new.txt
+    mv feed_info_new.txt feed_info.txt
     #see if if feed_id is already there
     count=`grep feed_id feed_info.txt|wc -l`
     if [ "$count" -ne "1" ]; then
