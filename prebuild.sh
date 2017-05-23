@@ -18,8 +18,8 @@ DOCKER_BUILDER_IMAGE=$DOCKER_IMAGE:builder
 echo "***Build ID:"$DOCKER_TAG
 
 echo "*** Fetching OSM data"
-curl http://dev.hsl.fi/osm.finland/finland.osm.pbf -o finland.osm.pbf &
-curl http://dev.hsl.fi/osm.hsl/hsl.osm.pbf -o hsl.osm.pbf &
+curl -s http://dev.hsl.fi/osm.finland/finland.osm.pbf -o finland.osm.pbf &
+curl -s http://dev.hsl.fi/osm.hsl/hsl.osm.pbf -o hsl.osm.pbf &
 wait
 
 echo "*** Creating builder image"
@@ -31,7 +31,8 @@ docker login -u $DOCKER_USER -p $DOCKER_AUTH
 if [ $? -ne 0 ]; then
     exit 0
 fi
-docker push $DOCKER_BUILDER_IMAGE
+echo "*** Pushing builder image"
+docker push $DOCKER_BUILDER_IMAGE 1>/dev/null
 if [ $? -ne 0 ]; then
     exit 0
 fi
