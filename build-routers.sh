@@ -1,4 +1,3 @@
-
 #!/bin/bash
 set -e
 set -x
@@ -10,8 +9,16 @@ set -o pipefail
 # Therefore, we increase this value
 export TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=2147483648
 
+echo ""
+echo "================================="
+echo "  Building image for $ROUTER_NAME"
+echo "================================="
+echo ""
+
 # Base locations
 ROOT=/opt/opentripplanner-data-container
+
+# router alternatives
 ROUTER_FINLAND=$ROOT/router-finland
 ROUTER_HSL=$ROOT/router-hsl
 ROUTER_WALTTI=$ROOT/router-waltti
@@ -21,57 +28,62 @@ FIT_GTFS=$ROOT/gtfs_shape_mapfit/fit_gtfs.bash
 FIT_GTFS_STOPS=$ROOT/gtfs_shape_mapfit/fit_gtfs_stops.bash
 OBA_GTFS=$ROOT/one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar
 
-function retrieveOSMFinland() {
-  echo "Retrieving Finland OSM data..."
-  cd $ROUTER_FINLAND
-  curl -sS "http://dev.hsl.fi/osm.finland/finland.osm.pbf" -o finland-latest.osm.pbf
-}
 
-function retrieveOSMHSL() {
-  echo "Retrieving Helsinki OSM data..."
-  cd $ROUTER_HSL
-  curl -sS "http://dev.hsl.fi/osm.hsl/hsl.osm.pbf" -o helsinki_finland.osm.pbf
-}
-
-function retrieveTampere() {
+function downloadTampere() {
   echo "Retrieving Tampere data..."
   cd $ROUTER_FINLAND
-  curl -sS "http://data.itsfactory.fi/journeys/files/gtfs/latest/gtfs_tampere.zip" -o tampere.zip
+  curl -sS -z tampere.zip "http://data.itsfactory.fi/journeys/files/gtfs/latest/gtfs_tampere.zip" -o tampere.zip
+}
+function retrieveTampere() {
+  downloadTampere
   $FIT_GTFS finland-latest.osm.pbf +init=epsg:3067 tampere.zip tampere_fitted.zip 2>&1 | tee tampere.fit.log.txt
   mv tampere_fitted.zip tampere.zip
   add_feed_id tampere.zip JOLI
 }
 
-function retrieveJyvaskyla() {
+function downloadJyvaskyla() {
   echo "Retrieving Jyväskylä data..."
   cd $ROUTER_FINLAND
-  curl -sS "http://data.jyvaskyla.fi/tiedostot/linkkidata.zip" -o jyvaskyla.zip
+  curl -sS -z jyvaskyla.zip "http://data.jyvaskyla.fi/tiedostot/linkkidata.zip" -o jyvaskyla.zip
+}
+function retrieveJyvaskyla() {
+  downloadJyvaskyla
   add_feed_id jyvaskyla.zip LINKKI
 
   cp jyvaskyla.zip $ROUTER_WALTTI
 }
 
-function retrieveOulu() {
+function downloadOulu() {
   echo "Retrieving Oulu data..."
   cd $ROUTER_FINLAND
-  curl -sS "http://www.transitdata.fi/oulu/google_transit.zip" -o oulu.zip
+  curl -sS -z oulu.zip "http://www.transitdata.fi/oulu/google_transit.zip" -o oulu.zip
+}
+function retrieveOulu() {
+  downloadOulu
   add_feed_id oulu.zip OULU
 
   cp oulu.zip $ROUTER_WALTTI
 }
 
-function retrieveLauttaNet() {
+
+function downloadLauttaNet() {
   echo "Retrieving Lautta.net data..."
   cd $ROUTER_FINLAND
-  curl -sS "http://lautta.net/db/gtfs/gtfs.zip" -o lautta.zip
+  curl -sS -z lautta.zip "http://lautta.net/db/gtfs/gtfs.zip" -o lautta.zip
+}
+function retrieveLauttaNet() {
+  downloadLauttaNet
   add_feed_id lautta.zip LAUTTA
 }
 
-function retrieveHsl() {
+
+function downloadHsl() {
   echo "Retrieving HSL data..."
   cd $ROUTER_HSL
-  curl -sS "http://dev.hsl.fi/gtfs/hsl.zip" -o hsl.zip
-
+  curl -sS -z hsl.zip "http://dev.hsl.fi/gtfs/hsl.zip" -o hsl.zip
+}
+function retrieveHsl() {
+  downloadHsl
   unzip -o hsl.zip stop_times.txt
   # TODO: Check that the line is in expected format
   # Needed in order to get rid of "shape_distance_travelled"
@@ -84,28 +96,30 @@ function retrieveHsl() {
   # Note! we use finland OSM graph
   echo "Note! Next mapfit requires lot of memory. If it fails mysteriously, try adding more."
   $FIT_GTFS $ROUTER_FINLAND/finland-latest.osm.pbf +init=epsg:3067 hsl.zip hsl_fitted.zip 2>&1 | tee hsl.fit.log.txt
-  echo "Mapfit ready."
+  echo "HSL mapfit ready."
   mv hsl_fitted.zip hsl.zip
   add_feed_id hsl.zip HSL
   # HSL data is also needed in national graph
   cp hsl.zip $ROUTER_FINLAND
 }
 
-function retrieveWaltti() {
+function downloadWaltti() {
   echo "Retrieving Waltti data..."
   cd $ROUTER_WALTTI
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/hameenlinna.zip" -o hameenlinna.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/kajaani.zip" -o kajaani.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/keski-suomen_ely.zip" -o keski-suomen_ely.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/kotka.zip" -o kotka.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/kvl.zip" -o kvl.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/lappeenranta.zip" -o lappeenranta.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/mikkeli.zip" -o mikkeli.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/pohjois-pohjanmaan_ely.zip" -o pohjois-pohjanmaan_ely.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_iisalmi.zip" -o posely_iisalmi.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_mikkeli.zip" -o posely_mikkeli.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/vaasa.zip" -o vaasa.zip
-
+  curl -sS -z hameenlinna.zip "http://dev.hsl.fi/gtfs.waltti/hameenlinna.zip" -o hameenlinna.zip
+  curl -sS -z kajaani.zip "http://dev.hsl.fi/gtfs.waltti/kajaani.zip" -o kajaani.zip
+  curl -sS -z keski-suomen_ely.zip "http://dev.hsl.fi/gtfs.waltti/keski-suomen_ely.zip" -o keski-suomen_ely.zip
+  curl -sS -z kotka.zip "http://dev.hsl.fi/gtfs.waltti/kotka.zip" -o kotka.zip
+  curl -sS -z kvl.zip "http://dev.hsl.fi/gtfs.waltti/kvl.zip" -o kvl.zip
+  curl -sS -z lappeenranta.zip "http://dev.hsl.fi/gtfs.waltti/lappeenranta.zip" -o lappeenranta.zip
+  curl -sS -z mikkeli.zip "http://dev.hsl.fi/gtfs.waltti/mikkeli.zip" -o mikkeli.zip
+  curl -sS -z pohjois-pohjanmaan_ely.zip "http://dev.hsl.fi/gtfs.waltti/pohjois-pohjanmaan_ely.zip" -o pohjois-pohjanmaan_ely.zip
+  curl -sS -z posely_iisalmi.zip "http://dev.hsl.fi/gtfs.waltti/posely_iisalmi.zip" -o posely_iisalmi.zip
+  curl -sS -z posely_mikkeli.zip "http://dev.hsl.fi/gtfs.waltti/posely_mikkeli.zip" -o posely_mikkeli.zip
+  curl -sS -z vaasa.zip "http://dev.hsl.fi/gtfs.waltti/vaasa.zip" -o vaasa.zip
+}
+function retrieveWaltti() {
+  downloadWaltti
   # Note! we use finland OSM graph
   cp $ROUTER_FINLAND/finland-latest.osm.pbf .
 
@@ -122,12 +136,14 @@ function retrieveWaltti() {
   add_feed_id vaasa.zip Vaasa
 }
 
-function retrieveJoensuu() {
+function downloadJoensuu() {
   echo "Retrieving Joensuu data..."
   cd $ROUTER_WALTTI
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/joensuu.zip" -o joensuu.zip
-  curl -sS "http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip" -o posely_joensuu.zip
-
+  curl -sS -z joensuu.zip "http://dev.hsl.fi/gtfs.waltti/joensuu.zip" -o joensuu.zip
+  curl -sS -z posely_joensuu.zip "http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip" -o posely_joensuu.zip
+}
+function retrieveJoensuu() {
+  downloadJoensuu
   rm -rf joensuu
 
   transformGTFS "java -server -Xmx8G -jar $OBA_GTFS --transform=$ROUTER_WALTTI/gtfs-rules/waltti.rule joensuu.zip joensuu"
@@ -142,36 +158,45 @@ function retrieveJoensuu() {
 }
 
 
-function retrieveTurku() {
+function downloadTurku() {
   echo "Retrieving Turku/Foli data..."
   cd $ROUTER_WALTTI
-  curl -sS "http://dev.hsl.fi/gtfs.foli/foli.zip" -o foli.zip
-
+  curl -sS -z foli.zip "http://dev.hsl.fi/gtfs.foli/foli.zip" -o foli.zip
+}
+function retrieveTurku() {
+  downloadTurku
   add_feed_id foli.zip FOLI
 }
 
-function retrieveLahti() {
+function downloadLahti() {
   echo "Retrieving Lahti data..."
   cd $ROUTER_WALTTI
-  curl -sS "http://dev.hsl.fi/gtfs.lahti/lahti.zip" -o lahti.zip
-
+  curl -sS -z lahti.zip "http://dev.hsl.fi/gtfs.lahti/lahti.zip" -o lahti.zip
+}
+function retrieveLahti() {
+  downloadLahti
   add_feed_id lahti.zip Lahti
 }
 
-function retrieveKuopio() {
+function downloadKuopio() {
   echo "Retrieving Kuopio data..."
   cd $ROUTER_WALTTI
-  curl -sS "http://dev.hsl.fi/gtfs.kuopio/kuopio.zip" -o kuopio.zip
+  curl -sS -z kuopio.zip "http://dev.hsl.fi/gtfs.kuopio/kuopio.zip" -o kuopio.zip
+}
 
+function retrieveKuopio() {
+  downloadKuopio
   add_feed_id kuopio.zip Kuopio
 }
 
-function retrieveKoontikanta() {
+function downloadKoontikanta() {
   echo "Retrieving Koontikanta data..."
   cd $ROUTER_FINLAND
 
-  curl -sS "http://dev.hsl.fi/gtfs.matka/matka.zip" -o matka.zip
-
+  curl -sS -z matka.zip "http://dev.hsl.fi/gtfs.matka/matka.zip" -o matka.zip
+}
+function retrieveKoontikanta() {
+  downloadKoontikanta
   rm -rf koontikanta
   mkdir -p koontikanta
 
@@ -203,6 +228,7 @@ function transformGTFS() {
 
 #add (or modify) feed_info.txt that contains the feed_id
 function add_feed_id() {
+  echo "Adding feed" $2
   set +o pipefail
   filename=$1
   id=$2
@@ -218,6 +244,8 @@ $id-fake-name,$id-fake-url,$id-fake-lang,$id
 EOT
   else
     unzip -o $filename feed_info.txt
+    tr -d '\r' < feed_info.txt > feed_info_new.txt
+    mv feed_info_new.txt feed_info.txt
     #see if if feed_id is already there
     count=`grep feed_id feed_info.txt|wc -l`
     if [ "$count" -ne "1" ]; then
@@ -237,27 +265,69 @@ EOT
   # add feed_info to zip
   zip $filename feed_info.txt
   set -o pipefail
+  echo "Feed" $2 "added"
+}
+
+
+function download1() {
+    downloadTampere
+    downloadJyvaskyla
+    downloadOulu
+    downloadLauttaNet
+}
+
+function download2() {
+    downloadHsl
+}
+
+function download3() {
+    downloadKoontikanta
+}
+
+function retrieve1() {
+    retrieveTampere
+    retrieveHsl
+}
+
+function retrieve2() {
+    retrieveJyvaskyla
+    retrieveOulu
+    retrieveLauttaNet
+}
+
+function retrieve3() {
+    retrieveKoontikanta
 }
 
 # Here we go
-retrieveHsl
 
-retrieveTampere
-retrieveJyvaskyla
-retrieveOulu
-retrieveLauttaNet
-retrieveKoontikanta
-
-retrieveWaltti
-retrieveJoensuu
-retrieveTurku
-retrieveLahti
-retrieveKuopio
-
-# build zip packages
 mkdir ${WEBROOT}
-cd $ROOT
-zip -D ${WEBROOT}/router-hsl.zip router-hsl/*
-zip -D ${WEBROOT}/router-finland.zip router-finland/*
-zip -D ${WEBROOT}/router-waltti.zip router-waltti/*
-cp ${WORK}/routers.txt ${WEBROOT}
+
+if [ "$ROUTER_NAME" == "hsl" ]; then
+    retrieveHsl
+    cd $ROOT
+    zip -D ${WEBROOT}/router-hsl.zip router-hsl/*
+elif [ "$ROUTER_NAME" == "waltti" ]; then
+    retrieveJyvaskyla
+    retrieveOulu
+    retrieveWaltti
+    retrieveJoensuu
+    retrieveTurku
+    retrieveLahti
+    retrieveKuopio
+    cd $ROOT
+    zip -D ${WEBROOT}/router-waltti.zip router-waltti/*
+else
+    retrieveTampere
+    retrieveHsl
+    retrieveJyvaskyla
+    retrieveOulu
+    retrieveLauttaNet
+    retrieveKoontikanta
+    cd $ROOT
+    zip -D ${WEBROOT}/router-finland.zip router-finland/*
+fi
+
+echo $DOCKER_TAG > ${WEBROOT}/version.txt
+
+echo "GTFS data fetched, transformed and packed"

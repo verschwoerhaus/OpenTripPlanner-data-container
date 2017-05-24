@@ -1,4 +1,4 @@
-FROM        alpine:latest
+FROM       alpine:latest
 MAINTAINER Digitransit version: 0.1
 
 RUN apk add --update --no-cache \

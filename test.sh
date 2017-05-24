@@ -1,22 +1,37 @@
 #!/bin/bash
 
-URL=${URL:-http://127.0.0.1:10000/otp/routers/default/plan?fromPlace=60.44638185995603%2C22.244396209716797&toPlace=60.45053041945487%2C22.313575744628906}
-#URL=${URL:-http://127.0.0.1:10000/otp/routers/default/plan?fromPlace=60.17078422953281%2C24.941625595092773&toPlace=60.21918441389899%2C24.811420440673828}
+# needs env variables:
+# ROUTER_NAME // hsl/waltti/finland
+# DOCKER_TAGGED_IMAGE // test this image
 
-MAX_WAIT=${MAX_WAIT:-5}
+# set defaults
+
 ROUTER_NAME=${ROUTER_NAME:-hsl}
+
+if [ "$ROUTER_NAME" == "hsl" ]; then
+    MAX_WAIT=10
+    URL="http://127.0.0.1:10000/otp/routers/default/plan?fromPlace=60.19812876015124%2C24.934051036834713&toPlace=60.218630210423306%2C24.807472229003906"
+elif [ "$ROUTER_NAME" == "waltti" ]; then
+    MAX_WAIT=15
+    URL="http://127.0.0.1:10000/otp/routers/default/plan?fromPlace=60.44638185995603%2C22.244396209716797&toPlace=60.45053041945487%2C22.313575744628906"
+else
+    MAX_WAIT=25
+    URL="http://127.0.0.1:10000/otp/routers/default/plan?fromPlace=60.19812876015124%2C24.934051036834713&toPlace=60.218630210423306%2C24.807472229003906"
+fi
+
+echo -e "\n##### Testing $ROUTER_NAME #####\n"
 
 function shutdown() {
   docker stop otp-data
   docker stop otp
   docker rm otp-data
   docker rm otp
-echo shutting down
+  echo shutting down
 }
 
-docker run --name otp-data hsldevcom/opentripplanner-data-container &
+docker run --name otp-data $DOCKER_TAGGED_IMAGE &
 sleep 2
-docker run --name otp -p 10000:8080 -e ROUTER_NAME=$ROUTER_NAME -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data:otp-data hsldevcom/opentripplanner:prod &
+docker run --name otp -p 10000:8080 -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS="-Xms4G -Xmx6G" -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data:otp-data hsldevcom/opentripplanner:prod &
 
 ITERATIONS=$(($MAX_WAIT * 6))
 echo "max wait (minutes): $MAX_WAIT"
