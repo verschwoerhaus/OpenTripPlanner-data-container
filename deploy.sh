@@ -28,7 +28,7 @@ if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
     docker login -u $DOCKER_USER -p $DOCKER_AUTH
     docker tag $DOCKER_TAGGED_IMAGE $DOCKER_LATEST_IMAGE
     docker push $DOCKER_LATEST_IMAGE
-    docker tag -f $DOCKER_TAGGED_IMAGE $DOCKER_PROD_IMAGE
+    docker tag $DOCKER_TAGGED_IMAGE $DOCKER_PROD_IMAGE
     docker push $DOCKER_PROD_IMAGE
     echo "*** Deployed $ROUTER_NAME"
 fi
