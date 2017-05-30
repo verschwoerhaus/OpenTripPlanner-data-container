@@ -10,7 +10,7 @@ set +e
 
 echo "*** Building for" $ROUTER_NAME
 
-XMX=${XMX:-6100M}
+XMX=${XMX:-6200M}
 XMS=${XMS:-3G}
 ORG=${ORG:-hsldevcom}
 CONTAINER=opentripplanner-data-container
