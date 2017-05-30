@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # needs env variables:
