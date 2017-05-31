@@ -6,8 +6,8 @@
 
 # set defaults
 
-XMX=${XMX:-6100M}
-XMS=${XMS:-3G}
+XMX=${XMX:-6G}
+XMS=${XMS:-4G}
 ORG=${ORG:-hsldevcom}
 ROUTER_NAME=${ROUTER_NAME:-hsl}
 

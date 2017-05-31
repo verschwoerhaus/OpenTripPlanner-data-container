@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # Set these environment variables
@@ -10,8 +9,7 @@ set +e
 
 echo "*** Building for" $ROUTER_NAME
 
-XMX=${XMX:-6200M}
-XMS=${XMS:-3G}
+XMX=${XMX:-6G}
 ORG=${ORG:-hsldevcom}
 CONTAINER=opentripplanner-data-container
 DOCKER_TAG=${DOCKER_TAG:-$TRAVIS_BUILD_ID}
@@ -51,7 +49,7 @@ if [ $? -ne 0 ]; then
     exit 0
 fi
 VERSION=`docker run --rm --entrypoint /bin/bash $ORG/opentripplanner:prod  -c "java -jar otp-shaded.jar --version"|grep commit|cut -d' ' -f2`
-docker run -v `pwd`/build:/opt/opentripplanner/graphs --rm --entrypoint /bin/bash $ORG/opentripplanner:prod  -c "java -Xmx$XMX -Xms$XMS -jar otp-shaded.jar --build graphs/$ROUTER_NAME"
+docker run -v `pwd`/build:/opt/opentripplanner/graphs --rm --entrypoint /bin/bash $ORG/opentripplanner:prod  -c "java -Xmx$XMX -jar otp-shaded.jar --build graphs/$ROUTER_NAME"
 if [ $? -ne 0 ]; then
     exit 0
 fi
