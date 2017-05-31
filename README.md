@@ -1,5 +1,5 @@
 # OpenTripPlanner-data-containers
-[![Build](https://api.travis-ci.org/HSLdevcom/OpenTripPlanner-dta-container.svg?branch=master)](https://travis-ci.org/HSLdevcom/OpenTripPlanner-data-container)
+[![Build](https://api.travis-ci.org/HSLdevcom/OpenTripPlanner-data-container.svg?branch=master)](https://travis-ci.org/HSLdevcom/OpenTripPlanner-data-container)
 
 ## This dockerization project:
 
