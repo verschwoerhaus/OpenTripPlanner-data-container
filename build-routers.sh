@@ -36,7 +36,15 @@ function downloadTampere() {
 }
 function retrieveTampere() {
   downloadTampere
-  $FIT_GTFS finland-latest.osm.pbf +init=epsg:3067 tampere.zip tampere_fitted.zip 2>&1 | tee tampere.fit.log.txt
+  set +e
+  $FIT_GTFS finland-latest.osm.pbf +init=epsg:3067 tampere.zip tampere_fitted.zip &> tampere.fit.log.txt
+  RESULT=$?
+  if [ $RESULT -ne 0 ]; then
+      echo "GTFS fit failed"
+      tail -100 tampere.fit.log.txt
+      exit 1
+  fi
+  set -e
   mv tampere_fitted.zip tampere.zip
   add_feed_id tampere.zip JOLI
 }
@@ -95,7 +103,15 @@ function retrieveHsl() {
 
   # Note! we use finland OSM graph
   echo "Note! Next mapfit requires lot of memory. If it fails mysteriously, try adding more."
-  $FIT_GTFS $ROUTER_FINLAND/finland-latest.osm.pbf +init=epsg:3067 hsl.zip hsl_fitted.zip 2>&1 | tee hsl.fit.log.txt
+  set +e
+  $FIT_GTFS $ROUTER_FINLAND/finland-latest.osm.pbf +init=epsg:3067 hsl.zip hsl_fitted.zip &> hsl.fit.log.txt
+  RESULT=$?
+  if [ $RESULT -ne 0 ]; then
+      echo "GTFS fit failed"
+      tail -100 hsl.fit.log.txt
+      exit 1
+  fi
+  set -e
   echo "HSL mapfit ready."
   mv hsl_fitted.zip hsl.zip
   add_feed_id hsl.zip HSL
@@ -210,10 +226,18 @@ function retrieveKoontikanta() {
   cd ../..
 
   mv matka.filtered.zip matka.zip
+  set +e
+  $FIT_GTFS_STOPS finland-latest.osm.pbf +init=epsg:3067 matka.zip matka_fitted.zip &> matka.fit.log.txt
+  RESULT=$?
+  if [ $RESULT -ne 0 ]; then
+      echo "GTFS fit failed"
+      tail -100 matka.fit.log.txt
+      exit 1
+  fi
+  set -e
 
-  $FIT_GTFS_STOPS finland-latest.osm.pbf +init=epsg:3067 matka.zip matka_fitted.zip 2>&1 | tee matka.fit.log.txt
   mv matka_fitted.zip matka.zip
-  
+
   add_feed_id matka.zip MATKA
 }
 
