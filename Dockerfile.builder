@@ -37,8 +37,8 @@ RUN mkdir -p ${WORK}/one-busaway-gtfs-transformer && \
 RUN git clone https://github.com/jswhit/pyproj.git && \
   cd pyproj && \
   git checkout ec9151e8c6909f7fac72bb2eab927ff18fa4cf1d && \
-  python setup.py build 1>/dev/null&& \
-  python setup.py install 1>/dev/null&& \
+  python setup.py build &>/dev/null&& \
+  python setup.py install &>/dev/null&& \
   cd ..
 
 RUN git clone --recursive -b fastmapmatch https://github.com/HSLdevcom/gtfs_shape_mapfit.git && \
