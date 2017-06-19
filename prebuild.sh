@@ -3,38 +3,35 @@
 set +e
 
 # Set these environment variables
-#ROUTER_NAME // hsl/waltti/finland
 #DOCKER_USER // dockerhub credentials
 #DOCKER_AUTH
 
-echo "*** Pre-building for" $ROUTER_NAME
+echo "*** Building generic builder image *
 
 ORG=${ORG:-hsldevcom}
-CONTAINER=opentripplanner-data-container
 DOCKER_TAG=${DOCKER_TAG:-$TRAVIS_BUILD_ID}
-DOCKER_IMAGE=$ORG/$CONTAINER-$ROUTER_NAME
-DOCKER_BUILDER_IMAGE=$DOCKER_IMAGE:builder
-
-echo "***Build ID:"$DOCKER_TAG
-
-echo "*** Fetching OSM data"
-curl -s http://dev.hsl.fi/osm.finland/finland.osm.pbf -o finland.osm.pbf &
-curl -s http://dev.hsl.fi/osm.hsl/hsl.osm.pbf -o hsl.osm.pbf &
-wait
+DOCKER_IMAGE=$ORG/$CONTAINER-builder
+DOCKER_BUILDER_IMAGE=opt-data-builder
 
 echo "*** Creating builder image"
-docker build --build-arg ROUTER_NAME="$ROUTER_NAME" --build-arg DOCKER_TAG="$DOCKER_TAG" --tag=$DOCKER_BUILDER_IMAGE -f Dockerfile.builder .
-if [ $? -ne 0 ]; then
-    exit 0
+echo "***Build ID:"$DOCKER_TAG
+
+docker build  --tag=$DOCKER_BUILDER_IMAGE -f Dockerfile.builder .
+EC=$?
+if [ $EC -ne 0 ]; then
+    exit $EC
 fi
 docker login -u $DOCKER_USER -p $DOCKER_AUTH
-if [ $? -ne 0 ]; then
-    exit 0
+EC=$?
+if [ $EC -ne 0 ]; then
+    exit $EC
 fi
 echo "*** Pushing builder image"
 docker push $DOCKER_BUILDER_IMAGE 1>/dev/null
-if [ $? -ne 0 ]; then
-    exit 0
+EC=$?
+if [ $EC -ne 0 ]; then
+    echo "*** $ROUTER_NAME pre-build finished"
+    exit $EC
 fi
 
-echo "*** $ROUTER_NAME pre-build finished"
+echo "** Generic builder image build completed"
