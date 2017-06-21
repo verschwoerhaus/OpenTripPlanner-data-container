@@ -63,7 +63,7 @@ function testGTFS(gtfsFile, quiet=false) {
         reject(e);
       }
     });
-    r.pipe(fs.createWriteStream(`${folder}/gtfs.zip`));
+    r.pipe(fs.createWriteStream(`${folder}/${gtfsFile.split('/').pop()}`));
 });
 
 
