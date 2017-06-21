@@ -1,54 +1,58 @@
 const gulp = require('gulp');
-const dl = require('gulp-download');
+const dl = require('./src/lib/Download');
 const map = require('map-stream');
 const exec = require('child_process').exec;
-const {setFeedId} = require('./src/lib/SetFeedId');
+const {setFeedId, setFeedIdTask} = require('./src/lib/SetFeedId');
 const {OBAFilter} = require('./src/lib/OBAFilter');
 const {fitGTFS} = require('./src/lib/MapFit');
+const request = require('request')
+const {testGTFSFile} = require('./src/lib/GTFSTest')
+var through = require('through2');
 
+withIdUrlFit = (id,url,fit) => ({id,url,fit});
 
 const HSL_CONFIG = {
-  "config":"router-hsl",
+  "id":"hsl",
   "src": [
-    {
-      "id":"HSL",
-      "url":"http://daev.hsl.fi/gtfs/hsl.zip",
-      "fit": true
-    }
+    withIdUrlFit("HSL","http://dev.hsl.fi/gtfs/hsl.zip", true)
   ],
   "osm":"hsl.osm.pbf",
 }
 
-const fileIdExceptions = {
-  'http://data.itsfactory.fi/journeys/files/gtfs/latest/gtfs_tampere.zip':'tampere',
-  'http://data.jyvaskyla.fi/tiedostot/linkkidata.zip':'jyvaskyla',
-  'http://lautta.net/db/gtfs/gtfs.zip':'lautta',
-  'http://www.transitdata.fi/oulu/google_transit.zip':'oulu'
+const FINLAND_CONFIG = {
+  "id":"finland",
+  "src": [
+    withIdUrlFit("HSL","http://dev.hsl.fi/gtfs/hsl.zip", true),
+    withIdUrlFit("MATKA","http://dev.hsl.fi/gtfs.matka/matka.zip", false),
+    withIdUrlFit("tampere","http://data.itsfactory.fi/journeys/files/gtfs/latest/gtfs_tampere.zip", false),
+    withIdUrlFit("jyvaskyla","http://data.jyvaskyla.fi/tiedostot/linkkidata.zip", false),
+    withIdUrlFit("lautta","http://lautta.net/db/gtfs/gtfs.zip", false),
+    withIdUrlFit("oulu",'http://www.transitdata.fi/oulu/google_transit.zip', false),
+  ],
+  "osm":"finland.osm.pbf",
 }
 
-const finland_gtfs = [
-  'http://data.itsfactory.fi/journeys/files/gtfs/latest/gtfs_tampere.zip',
-  'http://dev.hsl.fi/gtfs/hsl.zip',
-  'http://data.jyvaskyla.fi/tiedostot/linkkidata.zip',
-  'http://www.transitdata.fi/oulu/google_transit.zip',
-  'http://lautta.net/db/gtfs/gtfs.zip',
-  'http://dev.hsl.fi/gtfs.matka/matka.zip'];
+const WALTTI_CONFIG = {
+  "id":"waltti",
+  "src": [
+    withIdUrlFit("Hameenlinna","http://dev.hsl.fi/gtfs.waltti/hameenlinna.zip", false),
+    withIdUrlFit("Kajaani","http://dev.hsl.fi/gtfs.waltti/kajaani.zip", false),
+    withIdUrlFit("KeskiSuomenEly",'http://dev.hsl.fi/gtfs.waltti/keski-suomen_ely.zip', false),
+    withIdUrlFit("Kotka",'http://dev.hsl.fi/gtfs.waltti/kotka.zip', false),
+    withIdUrlFit("Kouvola",'http://dev.hsl.fi/gtfs.waltti/kvl.zip',false),
+    withIdUrlFit("Lappeenranta",'http://dev.hsl.fi/gtfs.waltti/lappeenranta.zip',false),
+    withIdUrlFit("Mikkeli",'http://dev.hsl.fi/gtfs.waltti/mikkeli.zip',false),
+    withIdUrlFit("PohjoisPohjanmaanEly",'http://dev.hsl.fi/gtfs.waltti/pohjois-pohjanmaan_ely.zip',false),
+    withIdUrlFit("IisalmiEly",'http://dev.hsl.fi/gtfs.waltti/posely_iisalmi.zip',false),
+    withIdUrlFit("MikkeliEly",'http://dev.hsl.fi/gtfs.waltti/posely_mikkeli.zip',false),
+    withIdUrlFit("Vaasa",'http://dev.hsl.fi/gtfs.waltti/vaasa.zip',false),
+    withIdUrlFit("Joensuu", 'http://dev.hsl.fi/gtfs.waltti/joensuu.zip',false),
+    withIdUrlFit("JoensuuEly", 'http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip',false)
+  ],
+  "osm":"finland.osm.pbf",
+}
 
-const waltti_gtfs = [
-  'http://dev.hsl.fi/gtfs.waltti/hameenlinna.zip',
-  'http://dev.hsl.fi/gtfs.waltti/kajaani.zip',
-  'http://dev.hsl.fi/gtfs.waltti/keski-suomen_ely.zip',
-  'http://dev.hsl.fi/gtfs.waltti/kotka.zip',
-  'http://dev.hsl.fi/gtfs.waltti/kvl.zip',
-  'http://dev.hsl.fi/gtfs.waltti/lappeenranta.zip',
-  'http://dev.hsl.fi/gtfs.waltti/mikkeli.zip',
-  'http://dev.hsl.fi/gtfs.waltti/pohjois-pohjanmaan_ely.zip',
-  'http://dev.hsl.fi/gtfs.waltti/posely_iisalmi.zip',
-  'http://dev.hsl.fi/gtfs.waltti/posely_mikkeli.zip',
-  'http://dev.hsl.fi/gtfs.waltti/vaasa.zip',
-  'http://dev.hsl.fi/gtfs.waltti/joensuu.zip',
-  'http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip'
-];
+const ALL_CONFIGS=[HSL_CONFIG, FINLAND_CONFIG, WALTTI_CONFIG];
 
 const osm = [
   'http://dev.hsl.fi/osm.finland/finland.osm.pbf',
@@ -56,41 +60,64 @@ const osm = [
 ];
 
 gulp.task('download-osm', function () {
-  return dl(osm, true).pipe(gulp.dest("downloads/osm"));
+  osm.map(url => request
+  .get(url)
+  .on('error', function(err) {
+    console.log(err)
+  })
+  .pipe(gulp.dest("downloads/osm")));
 });
 
-gulp.task('download-gtfs', function () {
-  const files = HSL_CONFIG.src.map(src=>src.url).concat(finland_gtfs).concat(waltti_gtfs).reduce(
-    function(res,url){
-        if(res.indexOf(url)==-1) {
-          res.push(url);
-        }
-        return res;
-    },[])
-    return dl(files, true, true).pipe(gulp.dest("downloads/gtfs"));
+gulp.task('waltti', function() {
+  //copy & zip router content
+  //prebuild routing graph
+  //build and deploy container
 });
 
-gulp.task('stage', function() {
-  return gulp.src(['downloads/**/'])
-   .pipe(gulp.dest('staging'));
+/**
+ * Update gtfs data:
+ * 1. download
+ * 2. name zip as <id>.zip (in dir download)
+ * 3. test zip loads with OpenTripPlanner
+ * 4. add feedid
+ * 5. copy to stage dir
+ */
+gulp.task('update-gtfs', function () {
+  const urlEntry = {}
+  ALL_CONFIGS.map(cfg => cfg.src).reduce((acc,val) => acc.concat(val), []).forEach(
+    (entry)=>{
+      if(urlEntry[entry.url]===undefined) {
+          urlEntry[entry.url] = entry;
+      }
+    }
+  );
+
+  const files = Object.keys(urlEntry).map(key=>urlEntry[key]);
+
+  return dl(files, true, true)
+    .pipe(gulp.dest("downloads/gtfs"))
+    .pipe(testGTFSFile())
+    .pipe(gulp.dest("stage/gtfs"))
+    .pipe(setFeedIdTask());
 });
 
-gulp.task('processed', function() {
-  return gulp.src(['staging/**/'])
-   .pipe(gulp.dest('processed'));
-});
+/**
+ * Seed GTFS & OSM data with data from previous data-containes to allow
+ * continuous flow of data into production
+ */
+ gulp.task('seed-data', function () {
+   ALL_CONFIGS.forEach(c=>{
+     console.log(c.id);
+   });
+ });
 
 /**
  * Sets feed id to gtfs
  */
-cost setId = function(file, id, cb) {
+const setId = function(file, id, cb) {
   const fileName=file.history[file.history.length-1];
   setFeedId(fileName, id, cb);
 };
-
-gulp.task('set-feed-id', function() {
-  return gulp.src(["processed/gtfs/*"],{read:false}).pipe(map(setId));
-});
 
 gulp.task('filter-data', function() {
   return OBAFilter("processed/gtfs/hsl.zip" );
