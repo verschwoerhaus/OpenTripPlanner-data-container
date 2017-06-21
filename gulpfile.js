@@ -33,6 +33,7 @@ const FINLAND_CONFIG = {
 }
 
 const WALTTI_CONFIG = {
+
   "id":"waltti",
   "src": [
     withIdUrlFit("Hameenlinna","http://dev.hsl.fi/gtfs.waltti/hameenlinna.zip", false),
@@ -47,12 +48,15 @@ const WALTTI_CONFIG = {
     withIdUrlFit("MikkeliEly",'http://dev.hsl.fi/gtfs.waltti/posely_mikkeli.zip',false),
     withIdUrlFit("Vaasa",'http://dev.hsl.fi/gtfs.waltti/vaasa.zip',false),
     withIdUrlFit("Joensuu", 'http://dev.hsl.fi/gtfs.waltti/joensuu.zip',false),
-    withIdUrlFit("JoensuuEly", 'http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip',false)
+    withIdUrlFit("JoensuuEly", 'http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip',false),
+    withIdUrlFit("FOLI", 'http://dev.hsl.fi/gtfs.foli/foli.zip', false),
+    withIdUrlFit("Lahti", 'http://dev.hsl.fi/gtfs.lahti/lahti.zip', false),
+    withIdUrlFit("Kuopio", 'http://dev.hsl.fi/gtfs.kuopio/kuopio.zip', false)
   ],
   "osm":"finland.osm.pbf",
 }
 
-const ALL_CONFIGS=[HSL_CONFIG, FINLAND_CONFIG, WALTTI_CONFIG];
+const ALL_CONFIGS=[WALTTI_CONFIG, HSL_CONFIG, FINLAND_CONFIG];
 
 const osm = [
   'http://dev.hsl.fi/osm.finland/finland.osm.pbf',
@@ -106,7 +110,8 @@ gulp.task('update-gtfs', function () {
  * continuous flow of data into production
  */
  gulp.task('seed-data', function () {
-   ALL_CONFIGS.forEach(c=>{
+   ALL_CONFIGS.forEach(c => {
+
      console.log(c.id);
    });
  });
