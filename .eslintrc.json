@@ -1,0 +1,19 @@
+{
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
+  "extends": [
+        "eslint:recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "rules": {
+    "quotes": [1, "single"],
+    "semi": "error",
+    "indent": ["error", 2],
+    "arrow-spacing": "error"
+  }
+}
