@@ -2,14 +2,12 @@ const JSZip = require('JSZip');
 const fs = require("fs")
 const converter = require('json-2-csv');
 const through = require('through2');
-var gutil = require("gulp-util");
-var col = gutil.colors;
+const gutil = require("gulp-util");
+const col = gutil.colors;
+const cloneable = require('cloneable-readable')
 
-function createFeedInfo(zip, file, id, cb) {
-  const csv =
-  `feed_publisher_name,feed_publisher_url,feed_lang,feed_id
-${id}-fake-name,${id}-fake-url,${id}-fake-lang,${id}`
-  zip.file("feed-info.txt", csv);
+function createFeedInfo(zip, file, csv, cb) {
+  zip.file("feed_info.txt", csv);
   zip.generateNodeStream({streamFiles:true,compression: "DEFLATE"})
   .pipe(fs.createWriteStream(file))
   .on('finish', function () {
@@ -24,23 +22,33 @@ function setFeedId(file, id, cb) {
     zip.loadAsync(data).then(function () {
     const feedInfo = zip.file("feed-info.txt")
     if(feedInfo===null) {
-      createFeedInfo(zip, file, id, ()=>{
+      const csv =`feed_publisher_name,feed_publisher_url,feed_lang,feed_id
+${id}-fake-name,${id}-fake-url,${id}-fake-lang,${id}\n`;
+
+      createFeedInfo(zip, file, csv, ()=>{
         cb("created");
       });
       return;
     } else {
       feedInfo.async("string").then(function(data){
-        var csv2jsonCallback = function (err, json) {
+        const csv2jsonCallback = function (err, json) {
+
+          const json2csvcallback = function(err, csv) {
+            createFeedInfo(zip, file, csv, ()=>{
+              cb("edited");
+            });
+          }
           if (err) cb(err);
           if(json.length>0) {
-
+            if(json[0]['feed_id']===undefined || json[0]['feed_id']!==id) {
+              json[0]['feed_id']=id;
+              converter.json2csv(json, json2csvcallback);
+            } else {
+              cb("nop");
+            }
           }
-          console.log(typeof json);
-          console.log(json.length);
-          console.log(json);
         }
         converter.csv2json(data, csv2jsonCallback);
-        cb("nop");
       });
     }
   })
@@ -59,6 +67,7 @@ module.exports= {
       process.stdout.write(gtfsFile + ' ' + "Setting GTFS ID to " + id + '\n');
       setFeedId(gtfsFile, id, (action)=>{
         process.stdout.write(gtfsFile + ' ' + col.green('ID ' + action + ' SUCCESS\n'));
+        file.contents=cloneable(fs.createReadStream(gtfsFile))
         callback(null, file);
       })
     })
