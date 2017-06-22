@@ -55,7 +55,7 @@ gulp.task('gtfs:dl', function () {
 gulp.task('gtfs:id', function(){
   return gulp.src(["id/gtfs/*"])
     .pipe(setFeedIdTask())
-    //.pipe(vinylPaths(del))
+    .pipe(vinylPaths(del))
     .pipe(gulp.dest("fit/gtfs"))
 });
 
