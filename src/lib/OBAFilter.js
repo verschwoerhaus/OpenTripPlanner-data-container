@@ -1,63 +1,98 @@
 /*
- * wrapper for OBA filtering
-
- # One Bus away transform does not end terminate with a correct error code. Check that here and fail if configuration is set
- function transformGTFS() {
-   if (! $1 2>&1) | grep "Exception"
-   then
-     echo "Failed to transform GTFS data"
-     exit 1
-   fi
- }
-
-
- transformGTFS "java -server -Xmx8G -jar $OBA_GTFS --transform=$ROUTER_FINLAND/gtfs-rules/matka.rule matka.zip koontikanta/matka.tmp"
-
-OBA_GTFS=$ROOT/one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar
-
+ * Wrapper for OBA filtering
  */
 const exec = require('child_process').exec;
+const through = require('through2');
+const gutil = require("gulp-util");
+const col = gutil.colors;
+const fs = require('fs');
+const path = require('path');
+const async = require('async');
+
+/**
+ * returns promise that resolves to true (success) or false (failure)
+ */
+function OBAFilter(src, dst, rule) {
+  const p = new Promise((resolve, reject) => {
+
+    let success = true;
+    let lastLog = [];
+    ls = exec(`docker run -v $(pwd):/data --rm builder java -jar one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar --transform=${rule} /data/${src} /data/${dst}`);
+
+    const checkError=(data)=> {
+      lastLog.push(data.toString());
+      if(lastLog.length>20) {
+        delete lastLog[0];
+      }
+      if(data.toString().indexOf('Exception') !==-1) {
+        success = false;
+      }
+    }
+
+    ls.stdout.on('data', function (data) {
+      checkError(data);
+    });
+
+    ls.stderr.on('data', function (data) {
+      checkError(data);
+    });
+
+    ls.on('exit', function (code) {
+      console.log('exit code: ', code, success);
+      if(code === 0 && success===true) {
+        resolve(true);
+      } else {
+        process.stdout.write(src + ' ' + col.red(lastLog.join("")));
+          resolve(false);
+      }
+    });
+  });
+  return p;
+}
 
 module.exports= {
-  /**
-   * returns promise
-   */
-  OBAFilter: function(srz, dst, rule) {
-    const p = new Promise((resolve, reject) => {
+  OBAFilterTask: (configs) => {
+    return through.obj(function(file, encoding, callback) {
 
-      let success = true;
-      let lastError = null;
-      ls = exec(`docker run -v $(pwd):/data --rm builder java -jar one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar --transform=${rule} /data/${src} /data/${dst}`);
-
-      const checkError=(data)=> {
-        lastLog = data.toString();
-        if(data.toString().indexOf('Exception') !==-1) {
-          success = false;
-        }
+      const gtfsFile = file.history[file.history.length-1];
+      const fileName = gtfsFile.split('/').pop();
+      const relativeFilename = path.relative(process.cwd(), gtfsFile);
+      const id = fileName.substring(0,fileName.indexOf('.'))
+      const config = configs[id];
+      if(config===undefined) {
+        throw new Error(`Could not find config for Id:${id}`);
       }
 
-      ls.stdout.on('data', function (data) {
-        checkError(data);
-        console.log("stdout:" + data);
-      });
+      if(config.rules!==undefined) {
+        const src = `${relativeFilename}`;
+        const dst = `${relativeFilename}-filtered`;
 
-      ls.stderr.on('data', function (data) {
-        checkError(data);
-        console.log("stderr:" + data);
-      });
+        const hasFailures = false;
 
-      ls.on('exit', function (code) {
-        console.log('exit code: ', code);
-        if(code === 0) {
-          if(success) {
-            resolve({e:null, success});
+        const functions = config.rules.map((rule)=>(done)=>{
+          OBAFilter(src,dst,rule).then((success)=>{
+            if(success) {
+              fs.unlinkSync(src);
+              fs.renameSync(dst, src);
+              process.stdout.write(rule + " " + gtfsFile + col.green(" filter SUCCESS\n"));
+            } else {
+              hasFailures=true;
+              process.stdout.write(rule + " " + gtfsFile + col.red(" filter FAILED\n"));
+            }
+            done();
+          })
+        });
+        async.waterfall(functions, function (err, result) {
+          if(hasFailures) {
+            callback(null, null);
           } else {
-            reject(code);
+            callback(null, file);
           }
-        }
-      });
-    });
-    return p;
+        });
+      } else {
+        process.stdout.write(gtfsFile + col.green(" filter skipped\n"));
+        callback(null, file);
+      }
+    })
   }
-
 }
