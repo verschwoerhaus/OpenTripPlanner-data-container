@@ -3,7 +3,7 @@
  */
 const exec = require('child_process').exec;
 const through = require('through2');
-const gutil = require("gulp-util");
+const gutil = require('gulp-util');
 const col = gutil.colors;
 const fs = require('fs');
 const path = require('path');
@@ -37,7 +37,7 @@ function OBAFilter(src, dst, rule) {
       if(code === 0 && success===true) {
         resolve(true);
       } else {
-        process.stdout.write(src + ' ' + col.red(lastLog.join("")));
+        process.stdout.write(src + ' ' + col.red(lastLog.join('')));
         resolve(false);
       }
     });
@@ -69,10 +69,10 @@ module.exports= {
             if(success) {
               fs.unlinkSync(src);
               fs.renameSync(dst, src);
-              process.stdout.write(rule + " " + gtfsFile + col.green(" filter SUCCESS\n"));
+              process.stdout.write(rule + ' ' + gtfsFile + col.green(' filter SUCCESS\n'));
             } else {
               hasFailures=true;
-              process.stdout.write(rule + " " + gtfsFile + col.red(" filter FAILED\n"));
+              process.stdout.write(rule + ' ' + gtfsFile + col.red(' filter FAILED\n'));
             }
             done();
           });
@@ -85,7 +85,7 @@ module.exports= {
           }
         });
       } else {
-        process.stdout.write(gtfsFile + col.green(" filter skipped\n"));
+        process.stdout.write(gtfsFile + col.green(' filter skipped\n'));
         callback(null, file);
       }
     });
