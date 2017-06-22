@@ -1,7 +1,7 @@
-var through = require('through');
-var gutil = require('gulp-util');
-var request = require('request');
-var col = gutil.colors;
+const through = require('through');
+const gutil = require('gulp-util');
+const request = require('request');
+const col = gutil.colors;
 
 /**
  * Download external data (gtfs, osm) resources.
