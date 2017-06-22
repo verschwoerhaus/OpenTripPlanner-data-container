@@ -8,7 +8,9 @@ const col = gutil.colors;
 const fs = require('fs');
 const path = require('path');
 const async = require('async');
-
+const JSZip = require('JSZip');
+const cloneable = require('cloneable-readable');
+const del = require('del');
 /**
  * returns promise that resolves to true (success) or false (failure)
  */
@@ -67,19 +69,31 @@ module.exports= {
           OBAFilter(src,dst,rule).then((success) => {
             if(success) {
               fs.unlinkSync(src);
-              fs.renameSync(dst, src);
-              process.stdout.write(rule + ' ' + gtfsFile + col.green(' filter SUCCESS\n'));
+
+              /* create zip named src from files in dst*/
+              const zip = new JSZip();
+
+              fs.readdirSync(dst).forEach(file => zip.file(file, fs.createReadStream(path.resolve(dst, file))));
+              zip.generateNodeStream({streamFiles:true,compression: 'DEFLATE'})
+                .pipe(fs.createWriteStream(src))
+                .on('finish', () => {
+                  del([dst]);
+                  process.stdout.write(rule + ' ' + gtfsFile + col.green(' filter SUCCESS\n'));
+                  done();
+                });
             } else {
               hasFailures=true;
               process.stdout.write(rule + ' ' + gtfsFile + col.red(' filter FAILED\n'));
+              done();
             }
-            done();
+
           });
         });
         async.waterfall(functions, () => {
           if(hasFailures) {
             callback(null, null);
           } else {
+            file.contents=cloneable(fs.createReadStream(gtfsFile));
             callback(null, file);
           }
         });
