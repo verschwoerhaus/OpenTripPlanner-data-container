@@ -13,37 +13,32 @@ const async = require('async');
  * returns promise that resolves to true (success) or false (failure)
  */
 function OBAFilter(src, dst, rule) {
-  const p = new Promise((resolve, reject) => {
-
+  const p = new Promise((resolve) => {
     let success = true;
     let lastLog = [];
-    ls = exec(`docker run -v $(pwd):/data --rm builder java -jar one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar --transform=${rule} /data/${src} /data/${dst}`);
+    const process = exec(`docker run -v $(pwd):/data --rm builder java -jar one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar --transform=${rule} /data/${src} /data/${dst}`);
 
-    const checkError=(data)=> {
-      lastLog.push(data.toString());
+    const checkError=(data) => {
+      if(success)
+        lastLog.push(data.toString());
       if(lastLog.length>20) {
         delete lastLog[0];
       }
       if(data.toString().indexOf('Exception') !==-1) {
         success = false;
       }
-    }
+    };
 
-    ls.stdout.on('data', function (data) {
-      checkError(data);
-    });
+    process.stdout.on('data', data => checkError(data));
 
-    ls.stderr.on('data', function (data) {
-      checkError(data);
-    });
+    process.stderr.on('data', data => checkError(data));
 
-    ls.on('exit', function (code) {
-      console.log('exit code: ', code, success);
+    process.on('exit', function (code) {
       if(code === 0 && success===true) {
         resolve(true);
       } else {
         process.stdout.write(src + ' ' + col.red(lastLog.join("")));
-          resolve(false);
+        resolve(false);
       }
     });
   });
@@ -57,7 +52,7 @@ module.exports= {
       const gtfsFile = file.history[file.history.length-1];
       const fileName = gtfsFile.split('/').pop();
       const relativeFilename = path.relative(process.cwd(), gtfsFile);
-      const id = fileName.substring(0,fileName.indexOf('.'))
+      const id = fileName.substring(0,fileName.indexOf('.'));
       const config = configs[id];
       if(config===undefined) {
         throw new Error(`Could not find config for Id:${id}`);
@@ -67,10 +62,10 @@ module.exports= {
         const src = `${relativeFilename}`;
         const dst = `${relativeFilename}-filtered`;
 
-        const hasFailures = false;
+        let hasFailures = false;
 
-        const functions = config.rules.map((rule)=>(done)=>{
-          OBAFilter(src,dst,rule).then((success)=>{
+        const functions = config.rules.map((rule) => (done) => {
+          OBAFilter(src,dst,rule).then((success) => {
             if(success) {
               fs.unlinkSync(src);
               fs.renameSync(dst, src);
@@ -80,9 +75,9 @@ module.exports= {
               process.stdout.write(rule + " " + gtfsFile + col.red(" filter FAILED\n"));
             }
             done();
-          })
+          });
         });
-        async.waterfall(functions, function (err, result) {
+        async.waterfall(functions, () => {
           if(hasFailures) {
             callback(null, null);
           } else {
@@ -93,6 +88,6 @@ module.exports= {
         process.stdout.write(gtfsFile + col.green(" filter skipped\n"));
         callback(null, file);
       }
-    })
+    });
   }
-}
+};
