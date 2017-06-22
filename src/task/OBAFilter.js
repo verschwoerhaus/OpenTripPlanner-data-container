@@ -63,7 +63,6 @@ module.exports= {
         const dst = `${relativeFilename}-filtered`;
 
         let hasFailures = false;
-
         const functions = config.rules.map((rule) => (done) => {
           OBAFilter(src,dst,rule).then((success) => {
             if(success) {

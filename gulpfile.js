@@ -1,27 +1,24 @@
 const gulp = require('gulp');
-const dl = require('./src/lib/Download');
-const map = require('map-stream');
-const exec = require('child_process').exec;
-const {setFeedIdTask} = require('./src/lib/SetFeedId');
-const {OBAFilterTask} = require('./src/lib/OBAFilter');
-const {fitGTFSTask} = require('./src/lib/MapFit');
-const request = require('request')
-const {testGTFSFile} = require('./src/lib/GTFSTest')
-const Seed = require("./src/lib/Seed");
-const through = require('through2');
+const dl = require('./src/task/Download');
+const {setFeedIdTask} = require('./src/task/SetFeedId');
+const {OBAFilterTask} = require('./src/task/OBAFilter');
+const {fitGTFSTask} = require('./src/task/MapFit');
+const request = require('request');
+const {testGTFSFile} = require('./src/task/GTFSTest');
+const Seed = require('./src/task/Seed');
 const del = require('del');
 const vinylPaths = require('vinyl-paths');
-const config = require('./config')
+const config = require('./src/config');
 
 gulp.task('update-osm', function () {
-  osm.map(url => request
-  .get(url)
-  .on('error', function(err) {
-    console.log(err)
-  })
-  .pipe(gulp.dest("downloads/osm"))
-  .pipe(testGTFSFile())
-    );
+  config.osmUrls.map(url => request
+    .get(url)
+    .on('error', function(err) {
+      throw err;
+    })
+    .pipe(gulp.dest('downloads/osm'))
+    .pipe(testGTFSFile())
+  );
 });
 
 /**
@@ -32,79 +29,75 @@ gulp.task('update-osm', function () {
  * 3. test zip loads with OpenTripPlanner
  * 4. copy to id dir if test is succesful
  */
-gulp.task('gtfs:dl', function () {
-  const urlEntry = {}
+gulp.task('gtfs:dl', ['del:id'],function () {
+  const urlEntry = {};
   config.ALL_CONFIGS.map(cfg => cfg.src).reduce((acc,val) => acc.concat(val), []).forEach(
-    (entry)=>{
+    (entry) => {
       if(urlEntry[entry.url]===undefined) {
-          urlEntry[entry.url] = entry;
+        urlEntry[entry.url] = entry;
       }
     }
   );
 
-  const files = Object.keys(urlEntry).map(key=>urlEntry[key]);
+  const files = Object.keys(urlEntry).map(key => urlEntry[key]);
 
   return dl(files, true, true)
-    .pipe(gulp.dest("downloads/gtfs"))
+    .pipe(gulp.dest('downloads/gtfs'))
     .pipe(testGTFSFile())
     .pipe(vinylPaths(del))
-    .pipe(gulp.dest("id/gtfs"))
+    .pipe(gulp.dest('id/gtfs'));
 });
 
 //Add feedId to gtfs files in id dir, and moves files to fit dir
-gulp.task('gtfs:id', function(){
-  return gulp.src(["id/gtfs/*"])
+gulp.task('gtfs:id', ['del:fit'], function(){
+  return gulp.src(['id/gtfs/*'])
     .pipe(setFeedIdTask())
     .pipe(vinylPaths(del))
-    .pipe(gulp.dest("fit/gtfs"))
+    .pipe(gulp.dest('fit/gtfs'));
 });
 
 //Run MapFit on gtfs files (based on config) and moves files to filter dir
-gulp.task('gtfs:fit', function(){
-  return gulp.src(["fit/gtfs/*"])
-    .pipe(fitGTFSTask(configMap))
-    .pipe(vinylPaths(del))
-    .pipe(gulp.dest("filter/gtfs"))
+gulp.task('gtfs:fit', ['del:filter'], function(){
+  return gulp.src(['fit/gtfs/*'])
+    .pipe(fitGTFSTask(config.configMap))
+    //.pipe(vinylPaths(del))
+    .pipe(gulp.dest('filter/gtfs'));
 });
 
 //Run one of more filter runs on gtfs files(based on config) and moves files to ready dir
 gulp.task('gtfs:filter', function(){
-  return gulp.src(["fit/gtfs/*"])
-    .pipe(OBAFilterTask(configMap))
-    .pipe(vinylPaths(del))
-    .pipe(gulp.dest("ready/gtfs"))
+  return gulp.src(['filter/gtfs/*'])
+    .pipe(OBAFilterTask(config.configMap))
+    //.pipe(vinylPaths(del))
+    .pipe(gulp.dest('ready/gtfs'));
 });
 
-gulp.task('del:gtfs', ()=>(del([
-  'ready/gtfs'])));
+gulp.task('del:ready', () => (del(['ready'])));
+
+gulp.task('del:filter', () => (del(['filter'])));
+
+gulp.task('del:fit', () => (del(['fit'])));
+
+gulp.task('del:id', () => (del(['id'])));
 
 gulp.task('seed:gtfs', ['del:gtfs'], function () {
-  return Seed(config.ALL_CONFIGS,/\.zip/).pipe(gulp.dest("ready/gtfs"))
+  return Seed(config.ALL_CONFIGS,/\.zip/).pipe(gulp.dest('ready/gtfs'));
 });
 
-gulp.task('del:osm', ()=>(del([
+gulp.task('del:osm', () => (del([
   'ready/osm'])));
 
 gulp.task('seed:osm', ['del:osm'], function () {
-  return Seed(config.ALL_CONFIGS,/\.osm\.pbf/).pipe(gulp.dest("ready/osm"))
+  return Seed(config.ALL_CONFIGS,/\.osm\.pbf/).pipe(gulp.dest('ready/osm'));
 });
 
  /**
   * Seed GTFS & OSM data with data from previous data-containes to allow
   * continuous flow of data into production.
   */
-gulp.task('seed', ['seed:osm','seed:gtfs'])
-
-gulp.task('filter-data', function() {
-  return OBAFilter("processed/gtfs/hsl.zip" );
-});
-
-gulp.task('map-fit', function() {
-  return fitGTFS("processed/osm/finland.osm.pbf","processed/gtfs/hsl.zip", "processed/gtfs/hsl-fitted.zip");
-});
+gulp.task('seed', ['seed:osm','seed:gtfs']);
 
 gulp.task('hsl', function(){
-  return gulp.src(["processed/gtfs/*"],{read:false}).pipe(map(setId));
   /*
 
 
@@ -134,4 +127,4 @@ gulp.task('hsl', function(){
     # HSL data is also needed in national graph
     cp hsl.zip $ROUTER_FINLAND
   */
-})
+});
