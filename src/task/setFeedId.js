@@ -30,24 +30,32 @@ ${id}-fake-name,${id}-fake-url,${id}-fake-lang,${id}\n`;
         });
         return;
       } else {
-        feedInfo.async('string').then(function(data){
-          const csv2jsonCallback = function (err, json) {
+        //callback function for csv2json converter
+        const csv2jsonCallback = function (err, json) {
+          if (err) {
+            cb(err);
+            return;
+          }
 
-            const json2csvcallback = function(err, csv) {
-              createFeedInfo(zip, file, csv, () => {
-                cb('edited');
-              });
-            };
-            if (err) cb(err);
-            if(json.length>0) {
-              if(json[0]['feed_id']===undefined || json[0]['feed_id']!==id) {
-                json[0]['feed_id']=id;
-                converter.json2csv(json, json2csvcallback);
-              } else {
-                cb('nop');
-              }
-            }
+          //callback function for json2csv converter
+          const json2csvcallback = function(err, csv) {
+            createFeedInfo(zip, file, csv, () => {
+              cb('edited');
+            });
           };
+          if(json.length>0) {
+            //no id or id is wrong
+            if(json[0]['feed_id']===undefined || json[0]['feed_id']!==id) {
+              json[0]['feed_id']=id;
+              converter.json2csv(json, json2csvcallback);
+            } else {
+              //id was already ok
+              cb('nop');
+            }
+          }
+        };
+
+        feedInfo.async('string').then(function(data){
           converter.csv2json(data, csv2jsonCallback);
         });
       }
@@ -55,10 +63,10 @@ ${id}-fake-name,${id}-fake-url,${id}-fake-lang,${id}\n`;
   });
 }
 
-/**
- * Sets gtfs feed id
- */
 module.exports= {
+  /**
+   * Sets gtfs feed id in gtfs zip
+   */
   setFeedIdTask: () => {
     return through.obj(function(file, encoding, callback) {
       const gtfsFile = file.history[file.history.length-1];

@@ -36,7 +36,7 @@ module.exports = function(configs, regexp){
           f.async('arraybuffer').then(data => {
             const file = new gutil.File( {path:fileName, contents: new Buffer(data)} );
             stream.queue(file);
-            toProcess--;
+            toProcess-=1;
             process.stdout.write(fileName + ' ' + col.green('Seed SUCCESS\n'));
             if(toProcess===0) {
               stream.emit('end');
