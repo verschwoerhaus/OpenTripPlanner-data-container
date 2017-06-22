@@ -3,6 +3,7 @@ const gutil = require("gulp-util");
 const col = gutil.colors;
 const fs = require('fs');
 const path = require('path');
+const cloneable = require('cloneable-readable')
 /*
  * node.js wrapper for MapFit
 
@@ -58,6 +59,7 @@ module.exports= {
             fs.unlinkSync(src);
             fs.renameSync(dst, src);
             process.stdout.write(gtfsFile + col.green(" fit SUCCESS\n"));
+            file.contents=cloneable(fs.createReadStream(gtfsFile))
             callback(null, file);
           } else {
             process.stdout.write(gtfsFile + col.red(" fit FAILED\n"));
