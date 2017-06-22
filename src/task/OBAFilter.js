@@ -11,6 +11,7 @@ const async = require('async');
 const JSZip = require('JSZip');
 const cloneable = require('cloneable-readable');
 const del = require('del');
+const {zipDir} = require('../util');
 /**
  * returns promise that resolves to true (success) or false (failure)
  */
@@ -71,22 +72,16 @@ module.exports= {
               fs.unlinkSync(src);
 
               /* create zip named src from files in dst*/
-              const zip = new JSZip();
-
-              fs.readdirSync(dst).forEach(file => zip.file(file, fs.createReadStream(path.resolve(dst, file))));
-              zip.generateNodeStream({streamFiles:true,compression: 'DEFLATE'})
-                .pipe(fs.createWriteStream(src))
-                .on('finish', () => {
-                  del([dst]);
-                  process.stdout.write(rule + ' ' + gtfsFile + col.green(' filter SUCCESS\n'));
-                  done();
-                });
+              zipDir(src, dst, () => {
+                del([dst]);
+                process.stdout.write(rule + ' ' + gtfsFile + col.green(' filter SUCCESS\n'));
+                done();
+              });
             } else {
               hasFailures=true;
               process.stdout.write(rule + ' ' + gtfsFile + col.red(' filter FAILED\n'));
               done();
             }
-
           });
         });
         async.waterfall(functions, () => {
