@@ -3,26 +3,26 @@ const dl = require('./src/task/Download');
 const {setFeedIdTask} = require('./src/task/SetFeedId');
 const {OBAFilterTask} = require('./src/task/OBAFilter');
 const {fitGTFSTask} = require('./src/task/MapFit');
-const request = require('request');
 const {testGTFSFile} = require('./src/task/GTFSTest');
 const Seed = require('./src/task/Seed');
 const del = require('del');
 const vinylPaths = require('vinyl-paths');
 const config = require('./src/config');
 
-gulp.task('update-osm', function () {
-  config.osmUrls.map(url => request
-    .get(url)
-    .on('error', function(err) {
-      throw err;
-    })
+/**
+ * Download and test new osm data
+ */
+gulp.task('osm:update', function () {
+  const osmMap = config.ALL_CONFIGS.map(cfg => cfg.osm).reduce((acc, val) => {acc[val] = true; return acc;},{});
+  const urls = Object.keys(osmMap).map(key => config.osmMap[key]);
+  return dl(urls, true, true)
     .pipe(gulp.dest('downloads/osm'))
     .pipe(testGTFSFile())
-  );
+    .pipe(gulp.dest('ready/osm'));
 });
 
 /**
- * download new gtfs data:
+ * download and test new gtfs data:
  * clear download & stage dir
  * 1. download
  * 2. name zip as <id>.zip (in dir download)
@@ -80,14 +80,17 @@ gulp.task('del:fit', () => (del(['fit'])));
 
 gulp.task('del:id', () => (del(['id'])));
 
-gulp.task('seed:gtfs', ['del:gtfs'], function () {
+gulp.task('gtfs:del', () => (del([
+  'ready/gtfs'])));
+
+gulp.task('gtfs:seed', ['gtfs:del'], function () {
   return Seed(config.ALL_CONFIGS,/\.zip/).pipe(gulp.dest('ready/gtfs'));
 });
 
-gulp.task('del:osm', () => (del([
+gulp.task('osm:del', () => (del([
   'ready/osm'])));
 
-gulp.task('seed:osm', ['del:osm'], function () {
+gulp.task('osm:seed', ['osm:del'], function () {
   return Seed(config.ALL_CONFIGS,/\.osm\.pbf/).pipe(gulp.dest('ready/osm'));
 });
 
@@ -95,7 +98,7 @@ gulp.task('seed:osm', ['del:osm'], function () {
   * Seed GTFS & OSM data with data from previous data-containes to allow
   * continuous flow of data into production.
   */
-gulp.task('seed', ['seed:osm','seed:gtfs']);
+gulp.task('seed', ['osm:seed','gtfs:seed']);
 
 gulp.task('hsl', function(){
   /*

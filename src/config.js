@@ -85,6 +85,6 @@ module.exports={
   ALL_CONFIGS,
   configMap,
   osm,
-  osmUrls:osm.map(e => e.url)
-
+  osmUrls:osm.map(e => e.url),
+  osmMap:osm.reduce((acc,val) => {acc[val.id]=val; return acc;},{})
 };
