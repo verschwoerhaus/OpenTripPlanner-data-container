@@ -1,6 +1,6 @@
-var through = require("through");
-var gutil = require("gulp-util");
-var request = require("request");
+var through = require('through');
+var gutil = require('gulp-util');
+var request = require('request');
 var col = gutil.colors;
 
 /**
@@ -11,13 +11,13 @@ module.exports = function(entries){
 
   var stream = through(
     function(file,enc,cb){
-		this.push(file);
-		cb();
-	});
+      this.push(file);
+      cb();
+    });
 
-	const downloadIgnoreErrors = (entry) => {
+  const downloadIgnoreErrors = (entry) => {
 
-    const downloadHandler = (err, res, body) =>{
+    const downloadHandler = (err, res, body) => {
       if(err) {
         process.stdout.write(entry.url + ' ' + col.red('Download FAILED\n'));
         incProcessed();
@@ -30,21 +30,21 @@ module.exports = function(entries){
 
       process.stdout.write(entry.url + ' ' + col.green('Download SUCCESS\n'));
       incProcessed();
-    }
+    };
 
-    process.stdout.write('Downloading ' + entry.url+ "...\n");
-		request({url:entry.url,encoding:null}, downloadHandler);
+    process.stdout.write('Downloading ' + entry.url+ '...\n');
+    request({url:entry.url,encoding:null}, downloadHandler);
 
     const incProcessed= () => {
       downloadCount+=1;
       if(downloadCount != entries.length){
-        downloadIgnoreErrors(entries[downloadCount])
+        downloadIgnoreErrors(entries[downloadCount]);
       }else{
-        stream.emit('end')
+        stream.emit('end');
       }
-    }
-	}
-	downloadIgnoreErrors(entries[0])
+    };
+  };
+  downloadIgnoreErrors(entries[0]);
 
-	return stream;
-}
+  return stream;
+};
