@@ -3,8 +3,8 @@ const fs = require('fs');
 const fse = require('fs-extra')
 const exec = require('child_process').exec;
 const through = require('through2');
-var gutil = require("gulp-util");
-var col = gutil.colors;
+const gutil = require("gulp-util");
+const col = gutil.colors;
 
 /**
  * Builds an OTP graph with gtfs file. If the build is succesful we can trust
@@ -19,14 +19,14 @@ function testGTFS(gtfsFile, quiet=false) {
   if(!fs.existsSync('tmp')) {
     fs.mkdirSync('tmp');
   }
-  fs.mkdtemp('tmp/gtfs-build-test', (err, folder) => {
+  fs.mkdtemp('tmp/router-build-test', (err, folder) => {
     if (err) throw err;
     process.stdout.write("Testing " + gtfsFile + "...\n")
     const dir = folder.substring(4);
     const r = fs.createReadStream(gtfsFile)
     r.on('end', ()=>{
       try {
-        const build = exec(`docker run -v $(pwd)/tmp:/opt/opentripplanner/graphs --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -Xmx6G -jar otp-shaded.jar --build graphs/${dir} "`,
+        const build = exec(`docker run --rm -v $(pwd)/tmp:/opt/opentripplanner/graphs --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -Xmx6G -jar otp-shaded.jar --build graphs/${dir} "`,
       {maxBuffer:1024*1024*8});
         build.on('exit', function(c){
           if(c===0) {
@@ -58,7 +58,8 @@ function testGTFS(gtfsFile, quiet=false) {
           }
         });
       } catch(e) {
-        console.log("no can do!", e);
+        process.stdout.write(gtfsFile + ' ' + col.red(`Test FAILED (${e})`));
+        process.stdout.write(gtfsFile + ': ' + col.red(lastLog.join('')));
         fse.removeSync(folder);
         reject(e);
       }
