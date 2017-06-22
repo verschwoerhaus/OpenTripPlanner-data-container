@@ -21,7 +21,7 @@ const FINLAND_CONFIG = {
     src("HSL","http://dev.hsl.fi/gtfs/hsl.zip", true),
     src("MATKA","http://dev.hsl.fi/gtfs.matka/matka.zip", true),
     src("tampere","http://data.itsfactory.fi/journeys/files/gtfs/latest/gtfs_tampere.zip", true),
-    src("jyvaskyla","http://data.jyvaskyla.fi/tiedostot/linkkidata.zip", false),
+    src("LINKKI","http://data.jyvaskyla.fi/tiedostot/linkkidata.zip", false),
     src("lautta","http://lautta.net/db/gtfs/gtfs.zip", false),
     src("oulu",'http://www.transitdata.fi/oulu/google_transit.zip', false),
   ],
