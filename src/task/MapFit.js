@@ -45,13 +45,24 @@ module.exports= {
       const id = fileName.substring(0,fileName.indexOf('.'));
       const config = configs[id];
       if(config===undefined) {
-        throw new Error(`Could not find config for Id:${id}`);
+        process.stdout.write(col.yellow(`${gtfsFile} Could not find config for Id:${id}, ignoring fit...\n`));
+        callback(null, null);
+        return;
       }
-      if(config.fit===true) {
+      if(config.fit===false) {
+        process.stdout.write(gtfsFile + col.green(' fit skipped\n'));
+        callback(null, file);
+      } else {
+        let script = '';
+        if(config.fit===true) {
+          script = 'gtfs_shape_mapfit/fit_gtfs.bash';
+        } else {
+          script = config.fit;
+        }
         const src = `${relativeFilename}`;
         const dst = `${relativeFilename}-fitted`;
 
-        run('gtfs_shape_mapfit/fit_gtfs.bash', 'ready/osm/finland-latest.osm.pbf', src, dst).then((status) => {
+        run(script, 'ready/osm/finland.pbf', src, dst).then((status) => {
           if(status===0) {
             fs.unlinkSync(src);
             fs.renameSync(dst, src);
@@ -63,9 +74,6 @@ module.exports= {
             callback(null, null);
           }
         });
-      } else {
-        process.stdout.write(gtfsFile + col.green(' fit skipped\n'));
-        callback(null, file);
       }
     });
   }

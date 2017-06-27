@@ -8,7 +8,6 @@ const col = gutil.colors;
 const fs = require('fs');
 const path = require('path');
 const async = require('async');
-const JSZip = require('JSZip');
 const cloneable = require('cloneable-readable');
 const del = require('del');
 const {zipDir} = require('../util');
@@ -58,7 +57,9 @@ module.exports= {
       const id = fileName.substring(0,fileName.indexOf('.'));
       const config = configs[id];
       if(config===undefined) {
-        throw new Error(`Could not find config for Id:${id}`);
+        process.stdout.write(col.yellow(`${gtfsFile} Could not find config for Id:${id}, ignoring filter...\n`));
+        callback(null, null);
+        return;
       }
 
       if(config.rules!==undefined) {
