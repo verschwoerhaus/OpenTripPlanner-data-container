@@ -1,0 +1,7 @@
+build/
+downloads/
+filter/
+fit/
+node_modules/
+ready/
+.DS_Store
