@@ -11,33 +11,5 @@ install: true
 language: C
 
 jobs:
-  include:
-   - stage: update builder
-     env: ROUTER_NAME=hsl
-     script: ./prebuild.sh
-   - stage: update builder
-     env: ROUTER_NAME=waltti
-     script: ./prebuild.sh
-   - stage: update builder
-     env: ROUTER_NAME=finland
-     script: ./prebuild.sh
-
    - stage: build
-     env: ROUTER_NAME=hsl
-     script: ./build-docker-image.sh
-   - stage: build
-     env: ROUTER_NAME=waltti
-     script: ./build-docker-image.sh
-   - stage: build
-     env: ROUTER_NAME=finland
-     script: ./build-docker-image.sh
-
-   - stage: test and deploy
-     env: ROUTER_NAME=hsl
-     script: ./deploy.sh
-   - stage: test and deploy
-     env: ROUTER_NAME=waltti
-     script: ./deploy.sh
-   - stage: test and deploy
-     env: ROUTER_NAME=finland
-     script: ./deploy.sh
+     script: ./travis-build.sh

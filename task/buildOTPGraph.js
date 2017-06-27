@@ -1,4 +1,3 @@
-const through = require('through2');
 const gutil = require('gulp-util');
 const col = gutil.colors;
 const {zipWithGlob} = require('../util');
@@ -38,13 +37,13 @@ const buildGraph = function(config) {
 module.exports= {
 
   buildOTPGraphTask: (configs) => {
-
     return Promise.all(configs.map(config => {
       return buildGraph(config).then(({commit, config}) => {
         const p1= new Promise((resolve, reject) => {
-        //create zip file for building router
-        //include all gtfs + osm + router + build configs
-          zipWithGlob(`${config.id}-router.zip`, [`build/${config.id}/router/*.zip`, `build/${config.id}/router/*.json`,`build/${config.id}/router/finland.pbf`],
+          process.stdout.write('Creating zip file for router data\n');
+          //create zip file for the source data
+          //include all gtfs + osm + router- + build configs
+          zipWithGlob(`build/${config.id}/${config.id}-router.zip`, [`build/${config.id}/router/*.zip`, `build/${config.id}/router/*.json`,`build/${config.id}/router/finland.pbf`],
           (err) => {
             if(err) {
               reject(err);
@@ -54,9 +53,10 @@ module.exports= {
           });
         });
         const p2= new Promise((resolve, reject) => {
-        //create zip file for prebuild graph:
-        //graph-$ROUTER_NAME-$VERSION.zip; contains graph.obj + router-config.json,
-          zipWithGlob(`graph-${config.id}-${commit}.zip`, [`build/${config.id}/router/Graph.obj`, `build/${config.id}/router/router-*.json`],
+          process.stdout.write('Creating zip file for otp graph\n');
+          //create zip file for the graph:
+          //include  graph.obj + router-config.json
+          zipWithGlob(`build/${config.id}/graph-${config.id}-${commit}.zip`, [`build/${config.id}/router/Graph.obj`, `build/${config.id}/router/router-*.json`],
         (err) => {
           if(err) {
             reject(err);
@@ -67,5 +67,7 @@ module.exports= {
         });
         return Promise.all([p1,p2]);
       });
-    }));
+    })).then(() => {
+      process.stdout.write(col.green('Created SUCCESS\n'));
+    });
   }};

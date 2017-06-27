@@ -11,6 +11,8 @@ const async = require('async');
 const cloneable = require('cloneable-readable');
 const del = require('del');
 const {zipDir} = require('../util');
+const {dataToolImage} = require('../config.js');
+
 /**
  * returns promise that resolves to true (success) or false (failure)
  */
@@ -18,7 +20,7 @@ function OBAFilter(src, dst, rule) {
   const p = new Promise((resolve) => {
     let success = true;
     let lastLog = [];
-    const process = exec(`docker run -v $(pwd):/data --rm builder java -jar one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar --transform=${rule} /data/${src} /data/${dst}`);
+    const process = exec(`docker run -v $(pwd):/data --rm ${dataToolImage} java -jar one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar --transform=${rule} /data/${src} /data/${dst}`);
 
     const checkError=(data) => {
       if(success)

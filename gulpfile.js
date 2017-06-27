@@ -1,16 +1,15 @@
 const gulp = require('gulp');
-const dl = require('./src/task/Download');
-const {setFeedIdTask} = require('./src/task/SetFeedId');
-const {OBAFilterTask} = require('./src/task/OBAFilter');
-const {fitGTFSTask} = require('./src/task/MapFit');
-const {testGTFSFile} = require('./src/task/GTFSTest');
-const Seed = require('./src/task/Seed');
-const makeRouter = require('./src/task/makeRouter');
+const dl = require('./task/Download');
+const {setFeedIdTask} = require('./task/SetFeedId');
+const {OBAFilterTask} = require('./task/OBAFilter');
+const {fitGTFSTask} = require('./task/MapFit');
+const {testGTFSFile} = require('./task/GTFSTest');
+const Seed = require('./task/Seed');
+const prepareRouterData = require('./task/prepareRouterData');
 const del = require('del');
 const vinylPaths = require('vinyl-paths');
-const config = require('./src/config');
-const {buildOTPGraphTask} = require('./src/task/buildOTPGraph');
-const {makeImageTask} = require('./src/task/makeImage');
+const config = require('./config');
+const {buildOTPGraphTask} = require('./task/buildOTPGraph');
 
 /**
  * Download and test new osm data
@@ -51,7 +50,7 @@ gulp.task('gtfs:dl', ['del:id'],function () {
     .pipe(gulp.dest('id/gtfs'));
 });
 
-//Add feedId to gtfs files in id dir, and moves files to fit dir
+//Add feedId to gtfs files in id dir, and moves files to directory 'fit'
 gulp.task('gtfs:id', ['del:fit'], function(){
   return gulp.src(['id/gtfs/*'])
     .pipe(setFeedIdTask())
@@ -59,7 +58,8 @@ gulp.task('gtfs:id', ['del:fit'], function(){
     .pipe(gulp.dest('fit/gtfs'));
 });
 
-//Run MapFit on gtfs files (based on config) and moves files to filter dir
+//Run MapFit on gtfs files (based on config) and moves files to directory
+//'filter'
 gulp.task('gtfs:fit', ['del:filter'], function(){
   return gulp.src(['fit/gtfs/*'])
     .pipe(fitGTFSTask(config.configMap))
@@ -67,7 +67,8 @@ gulp.task('gtfs:fit', ['del:filter'], function(){
     .pipe(gulp.dest('filter/gtfs'));
 });
 
-//Run one of more filter runs on gtfs files(based on config) and moves files to ready dir
+//Run one of more filter runs on gtfs files(based on config) and moves files to
+//directory 'ready'
 gulp.task('gtfs:filter', function(){
   return gulp.src(['filter/gtfs/*'])
     .pipe(OBAFilterTask(config.configMap))
@@ -98,16 +99,21 @@ gulp.task('osm:seed', ['osm:del'], function () {
 });
 
 gulp.task('router:copy', function () {
-  return makeRouter(config.ALL_CONFIGS).pipe(gulp.dest('build'));
+  return prepareRouterData(config.ALL_CONFIGS).pipe(gulp.dest('build'));
 });
 
  /**
   * Seed GTFS & OSM data with data from previous data-containes to allow
-  * continuous flow of data into production.
+  * continuous flow of data into production when one or more updated data files
+  * are broken.
   */
 gulp.task('seed', ['osm:seed','gtfs:seed']);
 
 gulp.task('router:buildGraph', function(){
+  gulp.src(['otp-data-container/*'])
+    .pipe(gulp.dest('build/waltti'))
+    .pipe(gulp.dest('build/finland'))
+    .pipe(gulp.dest('build/hsl'));
   return buildOTPGraphTask(config.ALL_CONFIGS);
 });
 

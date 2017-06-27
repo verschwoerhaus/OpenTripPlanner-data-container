@@ -27,14 +27,12 @@ echo -e "\n##### Testing $ROUTER_NAME #####\n"
 function shutdown() {
   docker stop otp-data
   docker stop otp
-  docker rm otp-data
-  docker rm otp
   echo shutting down
 }
 
-docker run --name otp-data $DOCKER_TAGGED_IMAGE &
+docker run --rm --name otp-data $DOCKER_TAGGED_IMAGE &
 sleep 2
-docker run --name otp -p 10000:8080 -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS="-Xms$XMS -Xmx$XMX" -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data:otp-data $ORG/opentripplanner:prod &
+docker run --rm --name otp -p 10000:8080 -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS="-Xms$XMS -Xmx$XMX" -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data:otp-data $ORG/opentripplanner:prod &
 
 ITERATIONS=$(($MAX_WAIT * 6))
 echo "max wait (minutes): $MAX_WAIT"
@@ -62,4 +60,3 @@ done
 shutdown
 
 exit 1;
-

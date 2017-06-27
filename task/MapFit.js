@@ -4,6 +4,7 @@ const col = gutil.colors;
 const fs = require('fs');
 const path = require('path');
 const cloneable = require('cloneable-readable');
+const {dataToolImage} = require('../config.js');
 /*
  * node.js wrapper for MapFit
 
@@ -13,7 +14,7 @@ const exec = require('child_process').exec;
 const run = function(cmd, osmExtract, src, dst) {
   const p = new Promise((resolve) => {
 
-    const fit = exec(`docker run -e TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=2147483648 -v $(pwd):/data --rm builder ${cmd} /data/${osmExtract} +init=epsg:3067 /data/${src} /data/${dst}`,{maxBuffer:1024*1024*8});
+    const fit = exec(`docker run -e TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=2147483648 -v $(pwd):/data --rm ${dataToolImage} ${cmd} /data/${osmExtract} +init=epsg:3067 /data/${src} /data/${dst}`,{maxBuffer:1024*1024*8});
 
     fit.stdout.on('data', function (data) {
       process.stdout.write(data.toString());

@@ -1,6 +1,5 @@
 const JSZip = require('JSZip');
 const fs = require('fs');
-const path = require('path');
 const globby = require('globby');
 
 module.exports= {
@@ -22,7 +21,7 @@ module.exports= {
         zip.file(file.split('/').pop(), fs.createReadStream(file));
       });
 
-      zip.generateNodeStream({streamFiles:true,compression: 'DEFLATE'})
+      zip.generateNodeStream({streamFiles:true,compression: 'DEFLATE',compressionOptions : {level:6}})
         .pipe(fs.createWriteStream(zipFile))
         .on('finish', (err) => {
           cb(err);

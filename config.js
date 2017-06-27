@@ -87,5 +87,6 @@ module.exports={
   configMap,
   osm,
   osmUrls:osm.map(e => e.url),
-  osmMap:osm.reduce((acc,val) => {acc[val.id]=val; return acc;},{})
+  osmMap:osm.reduce((acc,val) => {acc[val.id]=val; return acc;},{}),
+  dataToolImage: 'hsldevcom/otp-data-tools'
 };
