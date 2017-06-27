@@ -17,15 +17,16 @@ const {dataToolImage} = require('../config.js');
  * returns promise that resolves to true (success) or false (failure)
  */
 function OBAFilter(src, dst, rule) {
+  process.stdout.write(`filtering ${src} with ${rule}...\n`);
   const p = new Promise((resolve) => {
     let success = true;
     let lastLog = [];
-    const process = exec(`docker run -v $(pwd):/data --rm ${dataToolImage} java -jar one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar --transform=${rule} /data/${src} /data/${dst}`);
+    const cmd = `docker run -v $(pwd):/data --rm ${dataToolImage} java -Xmx6g -jar one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar --transform=/data/${rule} /data/${src} /data/${dst}`;
+    const filterProcess = exec(cmd);
 
     const checkError=(data) => {
-      if(success)
-        lastLog.push(data.toString());
-      if(lastLog.length>20) {
+      lastLog.push(data.toString());
+      if(lastLog.length > 20) {
         delete lastLog[0];
       }
       if(data.toString().indexOf('Exception') !==-1) {
@@ -33,14 +34,15 @@ function OBAFilter(src, dst, rule) {
       }
     };
 
-    process.stdout.on('data', data => checkError(data));
+    filterProcess.stdout.on('data', data => checkError(data));
 
-    process.stderr.on('data', data => checkError(data));
+    filterProcess.stderr.on('data', data => checkError(data));
 
-    process.on('exit', function (code) {
+    filterProcess.on('exit', function (code) {
       if(code === 0 && success===true) {
         resolve(true);
       } else {
+        process.stdout.write('running command ' + cmd + ' failed:\n');
         process.stdout.write(src + ' ' + col.red(lastLog.join('')));
         resolve(false);
       }
