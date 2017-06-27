@@ -5,9 +5,12 @@ const {OBAFilterTask} = require('./src/task/OBAFilter');
 const {fitGTFSTask} = require('./src/task/MapFit');
 const {testGTFSFile} = require('./src/task/GTFSTest');
 const Seed = require('./src/task/Seed');
+const makeRouter = require('./src/task/makeRouter');
 const del = require('del');
 const vinylPaths = require('vinyl-paths');
 const config = require('./src/config');
+const {buildOTPGraphTask} = require('./src/task/buildOTPGraph');
+const {makeImageTask} = require('./src/task/makeImage');
 
 /**
  * Download and test new osm data
@@ -91,7 +94,11 @@ gulp.task('osm:del', () => (del([
   'ready/osm'])));
 
 gulp.task('osm:seed', ['osm:del'], function () {
-  return Seed(config.ALL_CONFIGS,/\.osm\.pbf/).pipe(gulp.dest('ready/osm'));
+  return Seed(config.ALL_CONFIGS,/.pbf/).pipe(gulp.dest('ready/osm'));
+});
+
+gulp.task('router:copy', function () {
+  return makeRouter(config.ALL_CONFIGS).pipe(gulp.dest('build'));
 });
 
  /**
@@ -100,6 +107,12 @@ gulp.task('osm:seed', ['osm:del'], function () {
   */
 gulp.task('seed', ['osm:seed','gtfs:seed']);
 
+gulp.task('router:buildGraph', function(){
+  return buildOTPGraphTask(config.ALL_CONFIGS);
+});
+
+//do all
+gulp.task('default', ['seed', 'osm:update', 'gtfs:update', 'router:copy','router:build']);
 gulp.task('hsl', function(){
   /*
 
