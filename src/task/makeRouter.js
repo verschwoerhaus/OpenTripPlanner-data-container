@@ -1,14 +1,14 @@
-const through = require('through');
+const through = require('through2');
 const gutil = require('gulp-util');
 const fs = require('fs');
 const cloneable = require('cloneable-readable');
-const routerDir=(config) => 'router-' + config.id;
+const {routerDir} = require('../util');
 const osmFile=(config) => config.osm + '.pbf';
 const gtfsFile=(src) => src.id + '.zip';
 
-
 function createFile(config, fileName, source) {
-  const name = config.id + '/' + fileName;
+  const name = `${config.id}/router/${fileName}`;
+  process.stdout.write(`copying ${fileName}...\n`);
   const file = new gutil.File( {path:name, contents: cloneable(fs.createReadStream(source))});
   return file;
 }
@@ -18,26 +18,17 @@ function createFile(config, fileName, source) {
  */
 module.exports = function(configs){
 
-  const stream = new through(
-    function(file,enc,cb){
-      this.push(file);
-      cb();
-    }
-  );
+  const stream = through.obj();
 
-  setTimeout(() => {
-    configs.forEach(config => {
-      stream.queue(createFile(config, 'build-config-json', routerDir(config) + '/build-config.json'));
-      stream.queue(createFile(config, 'router-config-json', routerDir(config) + '/router-config.json'));
-      stream.queue(createFile(config, osmFile(config), 'ready/osm/' + osmFile(config)));
-      config.src.forEach(src => {
-        stream.queue(createFile(config, gtfsFile(src), 'ready/gtfs/' + gtfsFile(src)));
-      });
+  configs.forEach(config => {
+    stream.push(createFile(config, 'build-config.json', `${routerDir(config)}/build-config.json`));
+    stream.push(createFile(config, 'router-config.json', `${routerDir(config)}/router-config.json`));
+    stream.push(createFile(config, osmFile(config), `ready/osm/${osmFile(config)}`));
+    config.src.forEach(src => {
+      stream.push(createFile(config, gtfsFile(src), `ready/gtfs/${gtfsFile(src)}`));
     });
-
-    stream.emit('end');
-  }, 0);
-
+  });
+  stream.end();
 
   return stream;
 };
