@@ -1,6 +1,7 @@
 const gutil = require('gulp-util');
 const col = gutil.colors;
 const {zipWithGlob} = require('../util');
+const fs = require('fs');
 /*
  * node.js wrapper for building OTP graph
  */
@@ -43,29 +44,45 @@ module.exports= {
           process.stdout.write('Creating zip file for router data\n');
           //create zip file for the source data
           //include all gtfs + osm + router- + build configs
-          zipWithGlob(`build/${config.id}/${config.id}-router.zip`, [`build/${config.id}/router/*.zip`, `build/${config.id}/router/*.json`,`build/${config.id}/router/finland.pbf`],
-          (err) => {
-            if(err) {
-              reject(err);
-            } else {
-              resolve();
-            }
-          });
+          zipWithGlob(`build/${config.id}/${config.id}-router.zip`,
+            [`build/${config.id}/router/*.zip`, `build/${config.id}/router/*.json`,`build/${config.id}/router/finland.pbf`],
+             config.id,
+             (err) => {
+               if(err) {
+                 reject(err);
+               } else {
+                 resolve();
+               }
+             });
         });
         const p2= new Promise((resolve, reject) => {
           process.stdout.write('Creating zip file for otp graph\n');
           //create zip file for the graph:
           //include  graph.obj + router-config.json
-          zipWithGlob(`build/${config.id}/graph-${config.id}-${commit}.zip`, [`build/${config.id}/router/Graph.obj`, `build/${config.id}/router/router-*.json`],
-        (err) => {
-          if(err) {
-            reject(err);
-          } else {
+          zipWithGlob(`build/${config.id}/graph-${config.id}-${commit}.zip`,
+            [`build/${config.id}/router/Graph.obj`, `build/${config.id}/router/router-*.json`],
+            config.id,
+            (err) => {
+              if(err) {
+                reject(err);
+              } else {
+                resolve();
+              }
+            });
+        });
+
+        const p3 = new Promise((resolve, reject) => {
+
+          fs.writeFile(`build/${config.id}/version.txt`, new Date().toISOString(), function(err) {
+            if(err) {
+              reject(err);
+            }
+
             resolve();
-          }
+          });
+
         });
-        });
-        return Promise.all([p1,p2]);
+        return Promise.all([p1,p2,p3]);
       });
     })).then(() => {
       process.stdout.write(col.green('Created SUCCESS\n'));

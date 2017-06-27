@@ -2,16 +2,18 @@ const JSZip = require('JSZip');
 const fs = require('fs');
 const globby = require('globby');
 
-
-const zipWithGlob = (zipFile, glob, cb) => {
+const zipWithGlob = (zipFile, glob, zipDir, cb) => {
 
   return globby(glob).then(paths => {
-    const zip = new JSZip();
-    paths.forEach(file => {
-      zip.file(file.split('/').pop(), fs.createReadStream(file));
-    });
+    let zip = new JSZip();
 
-    zip.generateNodeStream({streamFiles:true,compression: 'DEFLATE',compressionOptions : {level:6}})
+    if(zipDir!==undefined ) {
+      zip.folder(zipDir);
+    }
+    paths.forEach(file => {
+      zip.file((zipDir!==undefined?(zipDir + '/'):'') + file.split('/').pop(), fs.createReadStream(file));
+    });
+    zip.generateNodeStream({streamFiles:true, compression: 'DEFLATE',compressionOptions : {level:6}})
       .pipe(fs.createWriteStream(zipFile))
       .on('finish', (err) => {
         cb(err);
@@ -22,7 +24,7 @@ const zipWithGlob = (zipFile, glob, cb) => {
 
 module.exports= {
   zipDir: (zipFile, dir, cb) => {
-    zipWithGlob(zipFile, [`${dir}/*`], cb);
+    zipWithGlob(zipFile, [`${dir}/*`], undefined, cb);
   },
 
   /**

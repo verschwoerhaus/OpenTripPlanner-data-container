@@ -1,15 +1,18 @@
 #!/bin/bash
-
+set +e
 # needs env variables:
 # ROUTER_NAME // hsl/waltti/finland
-# DOCKER_TAGGED_IMAGE // test this image
 
 # set defaults
 
-XMX=${XMX:-6G}
-XMS=${XMS:-4G}
-ORG=${ORG:-hsldevcom}
-ROUTER_NAME=${ROUTER_NAME:-hsl}
+ORG=hsldevcom
+JAVA_OPTS=${JAVA_OPTS:--Xmx7g}
+ROUTER_NAME=${1:-hsl}
+DOCKER_IMAGE=$ORG/opentripplanner-data-container-$ROUTER_NAME:test
+
+docker rmi $DOCKER_IMAGE || true
+cd build/$ROUTER_NAME
+docker build -t $DOCKER_IMAGE -f Dockerfile.data-container .
 
 if [ "$ROUTER_NAME" == "hsl" ]; then
     MAX_WAIT=10
@@ -25,14 +28,14 @@ fi
 echo -e "\n##### Testing $ROUTER_NAME #####\n"
 
 function shutdown() {
-  docker stop otp-data
-  docker stop otp
+  docker stop otp-data-$ROUTER_NAME
+  docker stop otp-$ROUTER_NAME
   echo shutting down
 }
 
-docker run --rm --name otp-data $DOCKER_TAGGED_IMAGE &
+docker run --rm --name otp-data-$ROUTER_NAME $DOCKER_IMAGE &
 sleep 2
-docker run --rm --name otp -p 10000:8080 -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS="-Xms$XMS -Xmx$XMX" -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data:otp-data $ORG/opentripplanner:prod &
+docker run --rm --name otp-$ROUTER_NAME -p 10000:8080 -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS=$JAVA_OPTS -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data-$ROUTER_NAME:otp-data $ORG/opentripplanner:prod &
 
 ITERATIONS=$(($MAX_WAIT * 6))
 echo "max wait (minutes): $MAX_WAIT"

@@ -14,5 +14,6 @@ ENV PORT="8080"
 EXPOSE 8080
 
 ADD *.zip  /var/www/localhost/htdocs/
+ADD version.txt /var/www/localhost/htdocs/
 
 ENTRYPOINT ["/usr/sbin/startlighttpd" ]

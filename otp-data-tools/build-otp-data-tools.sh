@@ -1,4 +1,6 @@
 #!/bin/bash
+# this script is run inside the otp-data-tools container
+set +e
 apt-get update && \
   apt-get -y install \
     git build-essential python-dev protobuf-compiler libprotobuf-dev \

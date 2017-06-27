@@ -5,7 +5,7 @@ const {dataToolImage} = require('../config.js');
 
 
 /**
- * Make router data ready for inclusion in data container.
+ * remove column from stop_times.txt
  */
 module.exports = function(){
 
@@ -23,7 +23,6 @@ module.exports = function(){
   zip -f /data/filter/gtfs/HSL.zip stop_times.txt
   rm stop_times.txt`;
     const fullCommand = `docker run --rm -v $(pwd):/data ${dataToolImage} bash -c "${cmd}"`;
-    console.log(fullCommand);
     const hslHack = exec(fullCommand, {maxBuffer:1024*1024*8});
 
     hslHack.on('exit', function(c){
@@ -38,7 +37,6 @@ module.exports = function(){
     });
 
     hslHack.stdout.on('data', function (data) {
-      console.log(data.toString());
       lastLog.push(data.toString());
       if(lastLog.length===20) {
         delete lastLog[0];

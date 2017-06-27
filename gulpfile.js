@@ -10,6 +10,7 @@ const del = require('del');
 const vinylPaths = require('vinyl-paths');
 const config = require('./config');
 const {buildOTPGraphTask} = require('./task/buildOTPGraph');
+const hslHackTask= require('./task/hslHackTask');
 
 /**
  * Download and test new osm data
@@ -67,9 +68,13 @@ gulp.task('gtfs:fit', ['del:filter'], function(){
     .pipe(gulp.dest('filter/gtfs'));
 });
 
+gulp.task('hslHack', function(){
+  return hslHackTask();
+});
+
 //Run one of more filter runs on gtfs files(based on config) and moves files to
 //directory 'ready'
-gulp.task('gtfs:filter', function(){
+gulp.task('gtfs:filter', ['hslHack'], function(){
   return gulp.src(['filter/gtfs/*'])
     .pipe(OBAFilterTask(config.configMap))
     //.pipe(vinylPaths(del))
@@ -98,55 +103,24 @@ gulp.task('osm:seed', ['osm:del'], function () {
   return Seed(config.ALL_CONFIGS,/.pbf/).pipe(gulp.dest('ready/osm'));
 });
 
-gulp.task('router:copy', function () {
+/**
+ * Seed GTFS & OSM data with data from previous data-containes to allow
+ * continuous flow of data into production when one or more updated data files
+ * are broken.
+ */
+gulp.task('seed', ['osm:seed','gtfs:seed']);
+
+gulp.task('router:del',() => (del([
+  'build'])));
+
+gulp.task('router:copy', ['router:del'], function () {
   return prepareRouterData(config.ALL_CONFIGS).pipe(gulp.dest('build'));
 });
 
- /**
-  * Seed GTFS & OSM data with data from previous data-containes to allow
-  * continuous flow of data into production when one or more updated data files
-  * are broken.
-  */
-gulp.task('seed', ['osm:seed','gtfs:seed']);
-
-gulp.task('router:buildGraph', function(){
-  gulp.src(['otp-data-container/*'])
+gulp.task('router:buildGraph', ['router:copy'], function(){
+  gulp.src(['otp-data-container/*','otp-data-container/.*'])
     .pipe(gulp.dest('build/waltti'))
     .pipe(gulp.dest('build/finland'))
     .pipe(gulp.dest('build/hsl'));
   return buildOTPGraphTask(config.ALL_CONFIGS);
-});
-
-//do all
-gulp.task('default', ['seed', 'osm:update', 'gtfs:update', 'router:copy','router:build']);
-gulp.task('hsl', function(){
-  /*
-
-
-    unzip -o hsl.zip stop_times.txt
-    # TODO: Check that the line is in expected format
-    # Needed in order to get rid of "shape_distance_travelled"
-    # this field is not currently available in shapes.txt. OpenTripPlanner needs it to be.
-    cut --complement -f 9 -d, stop_times.txt > stop_times.new
-    mv stop_times.new stop_times.txt
-    zip -f hsl.zip stop_times.txt
-    rm stop_times.txt
-
-    # Note! we use finland OSM graph
-    echo "Note! Next mapfit requires lot of memory. If it fails mysteriously, try adding more."
-    set +e
-    $FIT_GTFS $ROUTER_FINLAND/finland-latest.osm.pbf +init=epsg:3067 hsl.zip hsl_fitted.zip &> hsl.fit.log.txt
-    RESULT=$?
-    if [ $RESULT -ne 0 ]; then
-        echo "GTFS fit failed"
-        tail -100 hsl.fit.log.txt
-        exit 1
-    fi
-    set -e
-    echo "HSL mapfit ready."
-    mv hsl_fitted.zip hsl.zip
-    add_feed_id hsl.zip HSL
-    # HSL data is also needed in national graph
-    cp hsl.zip $ROUTER_FINLAND
-  */
 });
