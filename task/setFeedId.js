@@ -72,7 +72,7 @@ module.exports= {
       const gtfsFile = file.history[file.history.length-1];
       const fileName = gtfsFile.split('/').pop();
       const id = fileName.substring(0,fileName.indexOf('.'));
-      process.stdout.write(gtfsFile + ' ' + 'Setting GTFS ID to ' + id + '\n');
+      process.stdout.write(gtfsFile + ' ' + 'Setting GTFS feed id to ' + id + '\n');
       setFeedId(gtfsFile, id, (action) => {
         process.stdout.write(gtfsFile + ' ' + col.green('ID ' + action + ' SUCCESS\n'));
         file.contents=cloneable(fs.createReadStream(gtfsFile));

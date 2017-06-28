@@ -52,16 +52,21 @@ const WALTTI_CONFIG = {
   'osm':'finland',
 };
 
+let ALL_CONFIGS;
+
+const setCurrentConfig = (name) => {
+  ALL_CONFIGS = [WALTTI_CONFIG, HSL_CONFIG, FINLAND_CONFIG].reduce((acc,nxt) => {
+    if((name && name.split(',').indexOf(nxt.id)!=-1)
+      || name===undefined) {
+      acc.push(nxt);
+    }
+    return acc;
+  },[]);
+};
+
 //Allow limiting active configs with env variable
-const ALL_CONFIGS=[WALTTI_CONFIG, HSL_CONFIG, FINLAND_CONFIG].reduce((acc,nxt) => {
+setCurrentConfig(process.env.ROUTER);
 
-  if((process.env.ROUTER && process.env.ROUTER.split(',').indexOf(nxt.id)!=-1)
-    || process.env.ROUTER==undefined) {
-    acc.push(nxt);
-  }
-
-  return acc;
-},[]);
 
 //add config to every source
 ALL_CONFIGS.forEach(cfg => cfg.src.forEach(src => src.config=cfg));
@@ -81,7 +86,6 @@ const osm = [
   {id:'hsl', url: 'http://dev.hsl.fi/osm.hsl/hsl.osm.pbf'}
 ];
 
-
 module.exports={
   ALL_CONFIGS,
   configMap,
@@ -90,5 +94,6 @@ module.exports={
   osmMap:osm.reduce((acc,val) => {acc[val.id]=val; return acc;},{}),
   dataToolImage: 'hsldevcom/otp-data-tools',
   dataDir: process.env.DATA || `${process.cwd()}/data`,
-  hostDataDir: process.env.HOST_DATA || `${process.cwd()}/data`
+  hostDataDir: process.env.HOST_DATA || `${process.cwd()}/data`,
+  setCurrentConfig
 };

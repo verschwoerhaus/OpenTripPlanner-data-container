@@ -1,4 +1,4 @@
-const through = require('through');
+const through = require('through2');
 const gutil = require('gulp-util');
 const col = gutil.colors;
 const execSync = require('child_process').execSync;
@@ -10,11 +10,7 @@ const JSZip = require('jszip');
  */
 module.exports = function(configs, regexp){
 
-  const stream = through(
-    function(file,enc,cb){
-      this.push(file);
-      cb();
-    });
+  var stream = through.obj();
 
   let toProcess=configs.length;
   configs.forEach(c => {
@@ -35,11 +31,11 @@ module.exports = function(configs, regexp){
           const fileName = f.name.split('/').pop();
           f.async('arraybuffer').then(data => {
             const file = new gutil.File( {path:fileName, contents: new Buffer(data)} );
-            stream.queue(file);
+            stream.push(file);
             toProcess-=1;
             process.stdout.write(fileName + ' ' + col.green('Seed SUCCESS\n'));
             if(toProcess===0) {
-              stream.emit('end');
+              stream.end();
             }
           });
         });

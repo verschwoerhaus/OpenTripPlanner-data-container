@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const {setCurrentConfig} = require('./config');
 require('./gulpfile');
 const {promisify} = require('util');
 const  everySeries = require('async/everySeries');
@@ -13,23 +14,32 @@ const start = promisify((task, cb) => gulp.start(task,cb));
 
 const updateOSM=['osm:update'];
 const updateGTFS=['gtfs:dl','gtfs:id','gtfs:fit','gtfs:filter'];
-const router=['router:buildGraph'];
 
-process.env.ROUTER='waltti';
+const routers=['hsl,waltti,finland'];
 
-every(updateGTFS, function(task, callback) {
-  console.log('starting', task);
-  gulp.start(task, callback);
-}).then('GTFS updated!');
-
-
-/*
 var CronJob = require('cron').CronJob;
-new CronJob('0 * * * * *',
-  function() {
-    console.log('starting...');
-    foo('seed').then(() => {console.log('done');});
+new CronJob('0 28 * * * *',
+  update, null, true, 'Europe/Helsinki');
 
-  },
-  null, true, 'America/Los_Angeles');
-*/
+function update() {
+  every(updateOSM, function(task, callback) {
+    start(task).then(() => { callback(null, true);});
+  }).then(() => {
+    process.stdout.write('OSM data updated\n');
+  }).then(() => every(updateGTFS, function(task, callback) {
+    start(task).then(() => { callback(null, true);});
+  }).then(() => {
+    process.stdout.write('GTFS data updated\n');
+  })).then(
+  () => {
+    every(routers, function(router, callback) {
+      process.stdout.write('starting build & deploy for', router);
+      setCurrentConfig(router);
+      start('router:buildGraph').then(() => { callback(null, true);});
+    }).then(() => {
+      //run deploy for router
+      process.stdout.write('router data updated.');
+    });
+  }
+);
+}

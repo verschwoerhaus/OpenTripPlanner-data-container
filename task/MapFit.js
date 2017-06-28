@@ -11,6 +11,7 @@ const {hostDataDir,dataToolImage} = require('../config.js');
 const exec = require('child_process').exec;
 
 const run = function(cmd, osmExtract, src, dst) {
+  process.stdout.write('fitting ' + src + '...\n');
   const lastLog=[];
   let success = true;
   const p = new Promise((resolve) => {

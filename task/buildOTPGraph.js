@@ -2,7 +2,7 @@ const gutil = require('gulp-util');
 const col = gutil.colors;
 const {zipWithGlob} = require('../util');
 const fs = require('fs');
-const {dataDir, hostDataDir,dataToolImage} = require('../config.js');
+const {dataDir, hostDataDir} = require('../config.js');
 /*
  * node.js wrapper for building OTP graph
  */
