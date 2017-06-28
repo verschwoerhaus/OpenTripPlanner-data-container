@@ -1,6 +1,7 @@
 const exec = require('child_process').exec;
 const gutil = require('gulp-util');
 const col = gutil.colors;
+const fs = require('fs');
 const {dataToolImage, hostDataDir} = require('../config.js');
 
 /**
@@ -9,6 +10,9 @@ const {dataToolImage, hostDataDir} = require('../config.js');
 module.exports = function(){
 
 
+  if(!fs.existsSync(`${hostDataDir}/data/fit/gtfs/HSL.zip`)){
+    return Promise.resolve(true);
+  }
   const p = new Promise((resolve, reject) => {
 
     const lastLog=[];
