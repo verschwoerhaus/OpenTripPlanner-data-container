@@ -1,9 +1,5 @@
-build/
-downloads/
-filter/
-fit/
+data
 node_modules/
-ready/
 .DS_Store
 router-finland.zip
 router-hsl.zip
