@@ -3,6 +3,6 @@ MAINTAINER Digitransit version: 0.1
 
 WORKDIR /opt/datapipe
 ADD *  /opt/datapipe/
-npm install
+RUN npm install
 
 ENTRYPOINT ["node","index.js"]
