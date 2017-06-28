@@ -9,3 +9,4 @@ build/
 otp-data-container/
 otp-data-tools/
 tmp/
+*.zip

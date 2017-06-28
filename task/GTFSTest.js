@@ -4,6 +4,7 @@ const exec = require('child_process').exec;
 const through = require('through2');
 const gutil = require('gulp-util');
 const col = gutil.colors;
+const {hostDataDir, dataDir} = require('../config');
 
 /**
  * Builds an OTP graph with gtfs file. If the build is succesful we can trust
@@ -14,18 +15,17 @@ function testGTFS(gtfsFile, quiet=false) {
 
   const p = new Promise((resolve, reject) => {
     if(fs.existsSync(gtfsFile)) {
-
-      if(!fs.existsSync('tmp')) {
-        fs.mkdirSync('tmp');
+      if(!fs.existsSync(`${dataDir}/tmp`)) {
+        fs.mkdirSync(`${dataDir}/tmp`);
       }
-      fs.mkdtemp('tmp/router-build-test', (err, folder) => {
+      fs.mkdtemp(`${dataDir}/tmp/router-build-test`, (err, folder) => {
         if (err) throw err;
-        process.stdout.write('Testing ' + gtfsFile + '...\n');
-        const dir = folder.substring(4);
+        process.stdout.write('Testing ' + gtfsFile + ' in directory ' + folder +'...\n');
+        const dir = folder.split('/').pop();
         const r = fs.createReadStream(gtfsFile);
         r.on('end', () => {
           try {
-            const build = exec(`docker run --rm -v $(pwd)/tmp:/opt/opentripplanner/graphs --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -Xmx6G -jar otp-shaded.jar --build graphs/${dir} "`,
+            const build = exec(`docker run --rm -v ${hostDataDir}/tmp:/opt/opentripplanner/graphs --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -Xmx6G -jar otp-shaded.jar --build graphs/${dir} "`,
       {maxBuffer:1024*1024*8});
             build.on('exit', function(c){
               if(c===0) {
@@ -70,7 +70,6 @@ function testGTFS(gtfsFile, quiet=false) {
     }
   });
   return p;
-
 }
 
 module.exports= {

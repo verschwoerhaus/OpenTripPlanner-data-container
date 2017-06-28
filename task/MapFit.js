@@ -4,27 +4,44 @@ const col = gutil.colors;
 const fs = require('fs');
 const path = require('path');
 const cloneable = require('cloneable-readable');
-const {dataToolImage} = require('../config.js');
+const {hostDataDir,dataToolImage} = require('../config.js');
 /*
  * node.js wrapper for MapFit
-
  */
 const exec = require('child_process').exec;
 
 const run = function(cmd, osmExtract, src, dst) {
+  const lastLog=[];
+  let success = true;
   const p = new Promise((resolve) => {
+    const dcmd = `docker run --rm -e TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=2147483648 -v ${hostDataDir}:/data --rm ${dataToolImage} ${cmd} ${osmExtract} +init=epsg:3067 /${src} /${dst}`;
+    const fit = exec(dcmd,{maxBuffer:1024*1024*8});
 
-    const fit = exec(`docker run -e TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=2147483648 -v $(pwd):/data --rm ${dataToolImage} ${cmd} /data/${osmExtract} +init=epsg:3067 /data/${src} /data/${dst}`,{maxBuffer:1024*1024*8});
 
-    fit.stdout.on('data', function (data) {
-      process.stdout.write(data.toString());
+    const checkError=(data) => {
+      lastLog.push(data.toString());
+      if(lastLog.length > 20) {
+        delete lastLog[0];
+      }
+      if(data.toString().indexOf('Traceback') !==-1) {
+        success = false;
+      }
+    };
+
+    fit.stdout.on('data', data => checkError(data));
+
+    fit.stderr.on('data', data => checkError(data));
+
+    fit.on('exit', function (code) {
+      if(code === 0 && success===true) {
+        resolve(true);
+      } else {
+        process.stdout.write('running command ' + cmd + ' failed:\n');
+        process.stdout.write(src + ' ' + col.red(lastLog.join('')));
+        resolve(false);
+      }
     });
 
-    fit.stderr.on('data', function (data) {
-      process.stdout.write(col.red(data.toString()));
-    });
-
-    fit.on('exit', resolve);
   });
   return p;
 };
@@ -63,8 +80,8 @@ module.exports= {
         const src = `${relativeFilename}`;
         const dst = `${relativeFilename}-fitted`;
 
-        run(script, 'ready/osm/finland.pbf', src, dst).then((status) => {
-          if(status===0) {
+        run(script, '/data/ready/osm/finland.pbf', src, dst).then((status) => {
+          if(status===true) {
             fs.unlinkSync(src);
             fs.renameSync(dst, src);
             process.stdout.write(gtfsFile + col.green(' fit SUCCESS\n'));

@@ -18,8 +18,9 @@
   "homepage": "https://github.com/HSLdevcom/OpenTripPlanner-data-container#readme",
   "dependencies": {
     "adm-zip": "^0.4.7",
-    "async": "^2.4.1",
+    "async": "^2.5.0",
     "cloneable-readable": "^1.0.0",
+    "cron": "^1.2.1",
     "del": "^3.0.0",
     "eslint-plugin-async-await": "0.0.0",
     "fs-extra": "^3.0.1",

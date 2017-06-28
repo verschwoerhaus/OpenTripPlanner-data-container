@@ -88,5 +88,7 @@ module.exports={
   osm,
   osmUrls:osm.map(e => e.url),
   osmMap:osm.reduce((acc,val) => {acc[val.id]=val; return acc;},{}),
-  dataToolImage: 'hsldevcom/otp-data-tools'
+  dataToolImage: 'hsldevcom/otp-data-tools',
+  dataDir: process.env.DATA || `${process.cwd()}/data`,
+  hostDataDir: process.env.HOST_DATA || `${process.cwd()}/data`
 };

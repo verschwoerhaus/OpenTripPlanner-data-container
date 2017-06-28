@@ -1,4 +1,4 @@
-const JSZip = require('JSZip');
+const JSZip = require('jszip');
 const fs = require('fs');
 const converter = require('json-2-csv');
 const through = require('through2');
