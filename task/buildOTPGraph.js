@@ -14,7 +14,7 @@ const buildGraph = function(config) {
     const version = execSync('docker run --rm --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -jar otp-shaded.jar --version"');
     const commit = version.toString().match(/commit: ([0-9a-f]+)/)[1];
 
-    const buildGraph = exec(`docker run -v ${hostDataDir}/build:/opt/opentripplanner/graphs --rm --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -Xmx7g -jar otp-shaded.jar --build graphs/${config.id}/router"`,{maxBuffer:1024*1024*8});
+    const buildGraph = exec(`docker run -v ${hostDataDir}/build:/opt/opentripplanner/graphs --rm --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -Xmx7g -Dsentry.dsn=${process.env.SENTRY_DSN} -jar otp-shaded.jar --build graphs/${config.id}/router"`,{maxBuffer:1024*1024*8});
     //const buildGraph = exec('ls -la');
 
     buildGraph.stdout.on('data', function (data) {
@@ -47,7 +47,7 @@ module.exports= {
           //include all gtfs + osm + router- + build configs
           zipWithGlob(`${dataDir}/build/${config.id}/router-${config.id}.zip`,
             [`${dataDir}/build/${config.id}/router/*.zip`, `${dataDir}/build/${config.id}/router/*.json`,`${dataDir}/build/${config.id}/router/finland.pbf`],
-             config.id,
+             `router-${config.id}`,
              (err) => {
                if(err) {
                  reject(err);
