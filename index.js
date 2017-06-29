@@ -17,9 +17,10 @@ const updateGTFS=['gtfs:dl','gtfs:id','gtfs:fit','gtfs:filter'];
 
 const routers=['hsl,waltti,finland'];
 
-var CronJob = require('cron').CronJob;
-new CronJob(process.env.CRON|'0 28 * * * *',
-  update, null, true, 'Europe/Helsinki');
+start('seed').then(() => {
+  var CronJob = require('cron').CronJob;
+  new CronJob(process.env.CRON || '0 28 * * * *', update, null, true, 'Europe/Helsinki');
+});
 
 function update() {
   every(updateOSM, function(task, callback) {
