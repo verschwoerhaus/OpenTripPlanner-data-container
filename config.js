@@ -62,6 +62,7 @@ const setCurrentConfig = (name) => {
     }
     return acc;
   },[]);
+  console.log('aactive configs:', ALL_CONFIGS.map((config) => config.id));
 };
 
 //Allow limiting active configs with env variable
@@ -87,7 +88,7 @@ const osm = [
 ];
 
 module.exports={
-  ALL_CONFIGS,
+  ALL_CONFIGS: () => ALL_CONFIGS,
   configMap,
   osm,
   osmUrls:osm.map(e => e.url),
@@ -95,5 +96,5 @@ module.exports={
   dataToolImage: 'hsldevcom/otp-data-tools',
   dataDir: process.env.DATA || `${process.cwd()}/data`,
   hostDataDir: process.env.HOST_DATA || `${process.cwd()}/data`,
-  setCurrentConfig
+  setCurrentConfig: setCurrentConfig
 };
