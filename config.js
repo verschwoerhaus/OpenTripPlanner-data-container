@@ -18,7 +18,7 @@ const HSL_CONFIG = {
 const FINLAND_CONFIG = {
   'id':'finland',
   'src': [
-    src('HSL','http://dev.hsl.fi/gtfs/hsl.zip', true),
+    src('HSL','http://dev.hsl.fi/gtfs/hsl.zip', false),
     src('MATKA','http://dev.hsl.fi/gtfs.matka/matka.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-finland/gtfs-rules/matka.rule','router-finland/gtfs-rules/matka-id.rule' ]),
     src('tampere','http://data.itsfactory.fi/journeys/files/gtfs/latest/gtfs_tampere.zip', true),
     src('LINKKI','http://data.jyvaskyla.fi/tiedostot/linkkidata.zip', false),
