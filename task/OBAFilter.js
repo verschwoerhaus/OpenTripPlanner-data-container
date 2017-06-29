@@ -12,6 +12,7 @@ const cloneable = require('cloneable-readable');
 const del = require('del');
 const {zipDir} = require('../util');
 const {dataToolImage} = require('../config.js');
+const {hostDataDir, dataDir} = require('../config.js');
 
 /**
  * returns promise that resolves to true (success) or false (failure)
@@ -21,7 +22,7 @@ function OBAFilter(src, dst, rule) {
   const p = new Promise((resolve) => {
     let success = true;
     let lastLog = [];
-    const cmd = `docker run -v $(pwd):/data --rm ${dataToolImage} java -Xmx6g -jar one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar --transform=/data/${rule} /data/${src} /data/${dst}`;
+    const cmd = `docker run -v ${hostDataDir}:/data --rm ${dataToolImage} java -Xmx6g -jar one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar --transform=/data/${rule} /data/${src} /data/${dst}`;
     const filterProcess = exec(cmd);
 
     const checkError=(data) => {
@@ -57,7 +58,7 @@ module.exports= {
 
       const gtfsFile = file.history[file.history.length-1];
       const fileName = gtfsFile.split('/').pop();
-      const relativeFilename = path.relative(process.cwd(), gtfsFile);
+      const relativeFilename = path.relative(dataDir, gtfsFile);
       const id = fileName.substring(0,fileName.indexOf('.'));
       const config = configs[id];
       if(config===undefined) {
