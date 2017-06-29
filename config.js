@@ -10,7 +10,7 @@ const src = (id,url,fit,rules) => ({id,url,fit,rules});
 const HSL_CONFIG = {
   'id':'hsl',
   'src': [
-    src('HSL','http://dev.hsl.fi/gtfs/hsl.zip', true)
+    src('HSL','http://dev.hsl.fi/gtfs/hsl.zip', false)
   ],
   'osm':'hsl',
 };
