@@ -76,8 +76,9 @@ module.exports= {
           fs.writeFile(`${dataDir}/build/${config.id}/version.txt`, new Date().toISOString(), function(err) {
             if(err) {
               reject(err);
+            } else {
+              resolve();
             }
-            resolve();
           });
         });
         return Promise.all([p1,p2,p3]);
