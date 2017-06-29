@@ -23,6 +23,8 @@ install app deps:
 update osm data:
   `gulp osm:update`
 
+Normally when the application is running (as a container) the index.js is used.
+
 The end result of a data build is a deployed docker container ready to be deployed
 
 Each datacontainer image runs a http server listening to port 8080, serving both a gtfs data bundle and a pre-built graph:
