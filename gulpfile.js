@@ -7,8 +7,7 @@ const {testGTFSFile} = require('./task/GTFSTest');
 const Seed = require('./task/Seed');
 const prepareRouterData = require('./task/prepareRouterData');
 const del = require('del');
-const vinylPaths = require('vinyl-paths');
-const {configMap, osmMap, ALL_CONFIGS, dataDir} = require('./config');
+const config = require('./config');
 const {buildOTPGraphTask} = require('./task/buildOTPGraph');
 const hslHackTask= require('./task/hslHackTask');
 
@@ -16,12 +15,12 @@ const hslHackTask= require('./task/hslHackTask');
  * Download and test new osm data
  */
 gulp.task('osm:update', function () {
-  const map = ALL_CONFIGS.map(cfg => cfg.osm).concat('finland').reduce((acc, val) => {acc[val] = true; return acc;},{});
-  const urls = Object.keys(map).map(key => osmMap[key]);
+  const map = config.ALL_CONFIGS().map(cfg => cfg.osm).concat('finland').reduce((acc, val) => {acc[val] = true; return acc;},{});
+  const urls = Object.keys(map).map(key => config.osmMap[key]);
   return dl(urls, true, true)
-    .pipe(gulp.dest(`${dataDir}/downloads/osm`))
+    .pipe(gulp.dest(`${config.dataDir}/downloads/osm`))
     .pipe(testGTFSFile())
-    .pipe(gulp.dest(`${dataDir}/ready/osm`));
+    .pipe(gulp.dest(`${config.dataDir}/ready/osm`));
 });
 
 /**
@@ -34,7 +33,7 @@ gulp.task('osm:update', function () {
  */
 gulp.task('gtfs:dl', ['del:id'],function () {
   const urlEntry = {};
-  ALL_CONFIGS.map(cfg => cfg.src).reduce((acc,val) => acc.concat(val), []).forEach(
+  config.ALL_CONFIGS().map(cfg => cfg.src).reduce((acc,val) => acc.concat(val), []).forEach(
     (entry) => {
       if(urlEntry[entry.url]===undefined) {
         urlEntry[entry.url] = entry;
@@ -45,27 +44,27 @@ gulp.task('gtfs:dl', ['del:id'],function () {
   const files = Object.keys(urlEntry).map(key => urlEntry[key]);
 
   return dl(files, true, true)
-    .pipe(gulp.dest(`${dataDir}/downloads/gtfs`))
+    .pipe(gulp.dest(`${config.dataDir}/downloads/gtfs`))
 //    .pipe(vinylPaths(del))
     .pipe(testGTFSFile())
-    .pipe(gulp.dest(`${dataDir}/id/gtfs`));
+    .pipe(gulp.dest(`${config.dataDir}/id/gtfs`));
 });
 
 //Add feedId to gtfs files in id dir, and moves files to directory 'fit'
 gulp.task('gtfs:id', ['del:fit'], function(){
-  return gulp.src([`${dataDir}/id/gtfs/*`])
+  return gulp.src([`${config.dataDir}/id/gtfs/*`])
     .pipe(setFeedIdTask())
 //    .pipe(vinylPaths(del))
-    .pipe(gulp.dest(`${dataDir}/fit/gtfs`));
+    .pipe(gulp.dest(`${config.dataDir}/fit/gtfs`));
 });
 
 //Run MapFit on gtfs files (based on config) and moves files to directory
 //'filter'
 gulp.task('gtfs:fit', ['del:filter', 'hslHack'], function(){
-  return gulp.src([`${dataDir}/fit/gtfs/*`])
-    .pipe(fitGTFSTask(configMap))
+  return gulp.src([`${config.dataDir}/fit/gtfs/*`])
+    .pipe(fitGTFSTask(config.configMap))
     //.pipe(vinylPaths(del))
-    .pipe(gulp.dest(`${dataDir}/filter/gtfs`));
+    .pipe(gulp.dest(`${config.dataDir}/filter/gtfs`));
 });
 
 gulp.task('hslHack', function(){
@@ -74,38 +73,38 @@ gulp.task('hslHack', function(){
 
 gulp.task('copyRouterConfig', function(){
   return gulp.src(['router-*/**']).pipe(
-    gulp.dest(dataDir));
+    gulp.dest(config.dataDir));
 });
 
 //Run one of more filter runs on gtfs files(based on config) and moves files to
 //directory 'ready'
 gulp.task('gtfs:filter', ['copyRouterConfig'], function(){
-  return gulp.src([`${dataDir}/filter/gtfs/*`])
-    .pipe(OBAFilterTask(configMap))
+  return gulp.src([`${config.dataDir}/filter/gtfs/*`])
+    .pipe(OBAFilterTask(config.configMap))
     //.pipe(vinylPaths(del))
-    .pipe(gulp.dest(`${dataDir}/ready/gtfs`));
+    .pipe(gulp.dest(`${config.dataDir}/ready/gtfs`));
 });
 
-gulp.task('del:ready', () => (del([`${dataDir}/ready`])));
+gulp.task('del:ready', () => (del([`${config.dataDir}/ready`])));
 
-gulp.task('del:filter', () => (del([`${dataDir}/filter`])));
+gulp.task('del:filter', () => (del([`${config.dataDir}/filter`])));
 
-gulp.task('del:fit', () => (del([`${dataDir}/fit`])));
+gulp.task('del:fit', () => (del([`${config.dataDir}/fit`])));
 
-gulp.task('del:id', () => (del([`${dataDir}/id`])));
+gulp.task('del:id', () => (del([`${config.dataDir}/id`])));
 
 gulp.task('gtfs:del', () => (del([
-  `${dataDir}/ready/gtfs`])));
+  `${config.dataDir}/ready/gtfs`])));
 
 gulp.task('gtfs:seed', ['gtfs:del'], function () {
-  return Seed(ALL_CONFIGS,/\.zip/).pipe(gulp.dest(`${dataDir}/ready/gtfs`));
+  return Seed(config.ALL_CONFIGS(),/\.zip/).pipe(gulp.dest(`${config.dataDir}/ready/gtfs`));
 });
 
 gulp.task('osm:del', () => (del([
-  `${dataDir}/ready/osm`])));
+  `${config.dataDir}/ready/osm`])));
 
 gulp.task('osm:seed', ['osm:del'], function () {
-  return Seed(ALL_CONFIGS,/.pbf/).pipe(gulp.dest(`${dataDir}/ready/osm`));
+  return Seed(config.ALL_CONFIGS(),/.pbf/).pipe(gulp.dest(`${config.dataDir}/ready/osm`));
 });
 
 /**
@@ -116,16 +115,16 @@ gulp.task('osm:seed', ['osm:del'], function () {
 gulp.task('seed', ['osm:seed','gtfs:seed']);
 
 gulp.task('router:del',() => (del([
-  `${dataDir}/build`])));
+  `${config.dataDir}/build`])));
 
 gulp.task('router:copy', ['router:del'], function () {
-  return prepareRouterData(ALL_CONFIGS).pipe(gulp.dest(`${dataDir}/build`));
+  return prepareRouterData(config.ALL_CONFIGS()).pipe(gulp.dest(`${config.dataDir}/build`));
 });
 
 gulp.task('router:buildGraph', ['router:copy'], function(){
   gulp.src(['otp-data-container/*','otp-data-container/.*'])
-    .pipe(gulp.dest(`${dataDir}/build/waltti`))
-    .pipe(gulp.dest(`${dataDir}/build/finland`))
-    .pipe(gulp.dest(`${dataDir}/build/hsl`));
-  return buildOTPGraphTask(ALL_CONFIGS);
+    .pipe(gulp.dest(`${config.dataDir}/build/waltti`))
+    .pipe(gulp.dest(`${config.dataDir}/build/finland`))
+    .pipe(gulp.dest(`${config.dataDir}/build/hsl`));
+  return buildOTPGraphTask(config.ALL_CONFIGS());
 });
