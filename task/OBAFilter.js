@@ -75,11 +75,11 @@ module.exports= {
         const functions = config.rules.map((rule) => (done) => {
           OBAFilter(src,dst,rule).then((success) => {
             if(success) {
-              fs.unlinkSync(src);
+              fs.unlinkSync(`${dataDir}/${src}`);
 
               /* create zip named src from files in dst*/
-              zipDir(src, dst, () => {
-                del([dst]);
+              zipDir(`${dataDir}/${src}`, `${dataDir}/${dst}`, () => {
+                del([`${dataDir}/${dst}`]);
                 process.stdout.write(rule + ' ' + gtfsFile + col.green(' filter SUCCESS\n'));
                 done();
               });

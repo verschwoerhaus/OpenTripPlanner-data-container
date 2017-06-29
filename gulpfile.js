@@ -74,7 +74,7 @@ gulp.task('hslHack', function(){
 
 gulp.task('copyRouterConfig', function(){
   return gulp.src(['router-*/**']).pipe(
-    gulp.dest(`${dataDir}`));
+    gulp.dest(dataDir));
 });
 
 //Run one of more filter runs on gtfs files(based on config) and moves files to
