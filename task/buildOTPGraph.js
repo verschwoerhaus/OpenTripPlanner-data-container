@@ -45,7 +45,7 @@ module.exports= {
           process.stdout.write('Creating zip file for router data\n');
           //create zip file for the source data
           //include all gtfs + osm + router- + build configs
-          zipWithGlob(`${dataDir}/build/${config.id}/${config.id}-router.zip`,
+          zipWithGlob(`${dataDir}/build/${config.id}/router-${config.id}.zip`,
             [`${dataDir}/build/${config.id}/router/*.zip`, `${dataDir}/build/${config.id}/router/*.json`,`${dataDir}/build/${config.id}/router/finland.pbf`],
              config.id,
              (err) => {
