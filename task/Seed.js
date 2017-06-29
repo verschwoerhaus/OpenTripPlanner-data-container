@@ -15,8 +15,8 @@ module.exports = function(configs, regexp){
   let toProcess=configs.length;
   configs.forEach(c => {
     const s =
-  `docker rm data-extract-${c.id};
-  docker create --name data-extract-${c.id} hsldevcom/opentripplanner-data-container-${c.id}:prod;
+  `docker rm data-extract-${c.id} || true;
+  docker create --name data-extract-${c.id} hsldevcom/opentripplanner-data-container-${c.id}:latest;
   docker cp data-extract-${c.id}:var/www/localhost/htdocs/router-${c.id}.zip .;
   docker rm data-extract-${c.id}`;
     execSync(s);
