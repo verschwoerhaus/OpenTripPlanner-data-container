@@ -14,9 +14,11 @@ module.exports = function(configs, regexp){
 
   let toProcess=configs.length;
   configs.forEach(c => {
+    const container = `hsldevcom/opentripplanner-data-container-${c.id}:latest`;
+    process.stdout.write(`extracting data from ${container}...\n`);
     const s =
   `docker rm data-extract-${c.id} || true;
-  docker create --name data-extract-${c.id} hsldevcom/opentripplanner-data-container-${c.id}:latest;
+  docker create --name data-extract-${c.id} ${container};
   docker cp data-extract-${c.id}:var/www/localhost/htdocs/router-${c.id}.zip .;
   docker rm data-extract-${c.id}`;
     execSync(s);
