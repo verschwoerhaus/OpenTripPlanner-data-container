@@ -72,9 +72,14 @@ gulp.task('hslHack', function(){
   return hslHackTask();
 });
 
+gulp.task('copyRouterConfig', function(){
+  return gulp.src(['router-*/**']).pipe(
+    gulp.dest(`${dataDir}`));
+});
+
 //Run one of more filter runs on gtfs files(based on config) and moves files to
 //directory 'ready'
-gulp.task('gtfs:filter', function(){
+gulp.task('gtfs:filter', ['copyRouterConfig'], function(){
   return gulp.src([`${dataDir}/filter/gtfs/*`])
     .pipe(OBAFilterTask(configMap))
     //.pipe(vinylPaths(del))
