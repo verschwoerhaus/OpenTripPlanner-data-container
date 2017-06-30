@@ -16,12 +16,12 @@ module.exports = function(configs, regexp){
   configs.forEach(c => {
     const container = `hsldevcom/opentripplanner-data-container-${c.id}:latest`;
     process.stdout.write(`extracting data from ${container}...\n`);
-    const s =
-  `docker rm data-extract-${c.id} || true;
+    const script =
+  `docker rmi ${container} || true;docker rm data-extract-${c.id} || true;
   docker create --name data-extract-${c.id} ${container};
   docker cp data-extract-${c.id}:var/www/localhost/htdocs/router-${c.id}.zip .;
   docker rm data-extract-${c.id}`;
-    execSync(s);
+    execSync(script);
     const file = `router-${c.id}.zip`;
     fs.readFile(file, function(err, data) {
       if (err) throw err;

@@ -4,6 +4,7 @@ require('./gulpfile');
 const {promisify} = require('util');
 const  everySeries = require('async/everySeries');
 const {execFileSync}= require('child_process');
+const {postSlackMessage} = require('./util');
 
 const every = promisify((list, task, cb) => {
   everySeries(list, task, function(err, result) {
@@ -19,8 +20,6 @@ const updateGTFS=['gtfs:dl','gtfs:id','gtfs:fit','gtfs:filter'];
 
 const routers=['waltti'];
 
-console.log('I am alive!');
-
 ///testing without cron
 //start('seed').then(() => {
 //  var CronJob = require('cron').CronJob;
@@ -33,20 +32,22 @@ update();
 
 async function update() {
 
+  postSlackMessage('Starting databuild');
+
   await every(updateOSM, function(task, callback) {
     start(task).then(() => {callback(null, true);});
   });
 
-  process.stdout.write('OSM data updated\n');
+  postSlackMessage('OSM data updated');
 
   await every(updateGTFS, function(task, callback) {
     start(task).then(() => {callback(null, true);});
   });
 
-  process.stdout.write('GTFS data updated\n');
+  postSlackMessage('GTFS data updated');
 
   await every(routers, function(router, callback) {
-    process.stdout.write(`Starting build & deploy for ${router}...`);
+    postSlackMessage(`Starting build & deploy for ${router}...`);
     setCurrentConfig(router);
     start('router:buildGraph').then(() => {
       try {
@@ -54,9 +55,12 @@ async function update() {
         execFileSync('./deploy.sh',[router], {env:{DOCKER_USER:process.env.DOCKER_USER,DOCKER_AUTH:process.env.DOCKER_AUTH}, stdio:[0,1,2]});
         process.stdout.write('Router data updated.');
       } catch (E) {
-        process.stdout.write('Router data update failed' + E.message);
+        postSlackMessage('Router data update failed' + E.message);
       }
       callback(null, true);
     });
   });
+
+  postSlackMessage('Databuild completed');
+
 }

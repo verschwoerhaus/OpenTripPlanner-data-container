@@ -62,7 +62,6 @@ const setCurrentConfig = (name) => {
     }
     return acc;
   },[]);
-  console.log('aactive configs:', ALL_CONFIGS.map((config) => config.id));
 };
 
 //Allow limiting active configs with env variable

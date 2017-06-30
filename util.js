@@ -2,6 +2,16 @@ const JSZip = require('jszip');
 const fs = require('fs');
 const globby = require('globby');
 
+const IncomingWebhook = require('@slack/client').IncomingWebhook;
+const url = process.env.SLACK_WEBHOOK_URL || '';
+const webhook = url !==undefined ? new IncomingWebhook(url, {username:'Bob the otp-data-builder', channel:'ci'}):null;
+
+/**
+ * zipFile file to create
+ * dir directory for source files
+ * glob pattern array
+ * cb function to call when done
+ */
 const zipWithGlob = (zipFile, glob, zipDir, cb) => {
 
   return globby(glob).then(paths => {
@@ -21,18 +31,25 @@ const zipWithGlob = (zipFile, glob, zipDir, cb) => {
   });
 };
 
+const postSlackMessage = (message) => {
+  if(webhook===null) {
+    process.stdout.write(`Not sending to slack: ${message}`);
+    return;
+  }
+
+  webhook.send(message, function(err) {
+    if (err) {
+      process.stdout.write(`ERROR sending to slack: ${err}`);
+    }
+  });
+};
+
 
 module.exports= {
   zipDir: (zipFile, dir, cb) => {
     zipWithGlob(zipFile, [`${dir}/*`], undefined, cb);
   },
-
-  /**
-   * zipFile file to create
-   * dir directory for source files
-   * glob pattern array
-   * cb function to call when done
-   */
   zipWithGlob,
-  routerDir: (config) => `router-${config.id}`
+  routerDir: (config) => `router-${config.id}`,
+  postSlackMessage
 };

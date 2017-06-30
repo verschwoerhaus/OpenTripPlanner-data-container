@@ -1,5 +1,4 @@
 data/
 node_modules/
-otp-data-container/
 otp-data-tools/
 *.zip

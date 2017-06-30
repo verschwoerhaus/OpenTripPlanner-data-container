@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/HSLdevcom/OpenTripPlanner-data-container#readme",
   "dependencies": {
+    "@slack/client": "^3.10.0",
     "adm-zip": "^0.4.7",
     "async": "^2.5.0",
     "cloneable-readable": "^1.0.0",
