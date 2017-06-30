@@ -12,27 +12,20 @@ const every = promisify((list, task, cb) => {
   });
 });
 
-setCurrentConfig('waltti');
 const start = promisify((task, cb) => gulp.start(task,cb));
 
 const updateOSM=['osm:update'];
 const updateGTFS=['gtfs:dl','gtfs:id','gtfs:fit','gtfs:filter'];
 
-const routers=['waltti'];
+const routers=['finland','waltti','hsl'];
 
-///testing without cron
-//start('seed').then(() => {
-//  var CronJob = require('cron').CronJob;
-//  new CronJob(process.env.CRON || '0 28 * * * *', update, null, true, 'Europe/Helsinki');
-//});
-
-//start('seed').then(() => {
-update();
-//});
+start('seed').then(() => {
+  var CronJob = require('cron').CronJob;
+  new CronJob(process.env.CRON || '0 0 4 * * *', update, null, true, 'Europe/Helsinki');
+});
 
 async function update() {
-
-  postSlackMessage('Starting databuild');
+  postSlackMessage('Starting data build');
 
   await every(updateOSM, function(task, callback) {
     start(task).then(() => {callback(null, true);});
@@ -55,12 +48,12 @@ async function update() {
         execFileSync('./deploy.sh',[router], {env:{DOCKER_USER:process.env.DOCKER_USER,DOCKER_AUTH:process.env.DOCKER_AUTH}, stdio:[0,1,2]});
         process.stdout.write('Router data updated.');
       } catch (E) {
-        postSlackMessage('Router data update failed' + E.message);
+        postSlackMessage('Router data update failed: ' + E.message);
       }
       callback(null, true);
     });
   });
 
-  postSlackMessage('Databuild completed');
+  postSlackMessage('Data build completed');
 
 }
