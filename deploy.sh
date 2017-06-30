@@ -1,5 +1,5 @@
 #!/bin/bash
-#builds and deploys data container from prepared data
+#builds tests and deploys data container from prepared data
 
 
 # Set these environment variables
@@ -27,6 +27,6 @@ echo "*** Deploying $ROUTER_NAME"
 docker login -u $DOCKER_USER -p $DOCKER_AUTH
 docker tag $DOCKER_TEST_IMAGE $DOCKER_LATEST_IMAGE
 docker push $DOCKER_LATEST_IMAGE
-#docker tag $DOCKER_TAGGED_IMAGE $DOCKER_PROD_IMAGE
+#docker tag $DOCKER_TEST_IMAGE $DOCKER_PROD_IMAGE
 #docker push $DOCKER_PROD_IMAGE
 echo "*** Deployed $ROUTER_NAME"
