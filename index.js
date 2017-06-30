@@ -31,16 +31,16 @@ async function update() {
     start(task).then(() => {callback(null, true);});
   });
 
-  postSlackMessage('OSM data updated');
+  //postSlackMessage('OSM data updated');
 
   await every(updateGTFS, function(task, callback) {
     start(task).then(() => {callback(null, true);});
   });
 
-  postSlackMessage('GTFS data updated');
+  //postSlackMessage('GTFS data updated');
 
   await every(routers, function(router, callback) {
-    postSlackMessage(`Starting build & deploy for ${router}...`);
+    //postSlackMessage(`Starting build & deploy for ${router}...`);
     setCurrentConfig(router);
     start('router:buildGraph').then(() => {
       try {
@@ -54,6 +54,6 @@ async function update() {
     });
   });
 
-  postSlackMessage('Data build completed');
+  //postSlackMessage('Data build completed');
 
 }
