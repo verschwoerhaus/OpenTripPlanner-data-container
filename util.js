@@ -3,8 +3,8 @@ const fs = require('fs');
 const globby = require('globby');
 
 const IncomingWebhook = require('@slack/client').IncomingWebhook;
-const url = process.env.SLACK_WEBHOOK_URL || '';
-const webhook = url !==undefined ? new IncomingWebhook(url, {username:'Bob the otp-data-builder', channel:'ci'}):null;
+const url = process.env.SLACK_WEBHOOK_URL || null;
+const webhook = url !==null ? new IncomingWebhook(url, {username:'OTP data builder', channel:'ci'}):null;
 
 /**
  * zipFile file to create
