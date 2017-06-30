@@ -1,14 +1,12 @@
 {
   "env": {
-    "es6": true,
-    "node": true,
-    "mocha": true
+    "node": true
   },
   "extends": [
-        "eslint:recommended"
+    "eslint:recommended"
   ],
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 7
   },
   "rules": {
     "quotes": [1, "single"],
