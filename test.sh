@@ -8,26 +8,30 @@ ROUTER_NAME=${1:-hsl}
 DOCKER_IMAGE=$ORG/opentripplanner-data-container-$ROUTER_NAME:test
 
 function shutdown() {
-  docker stop otp-data-$ROUTER_NAME
-  docker stop otp-$ROUTER_NAME
   echo shutting down
+  docker stop otp-data-$ROUTER_NAME || true
+  docker stop otp-$ROUTER_NAME || true
 }
 
-docker rmi $DOCKER_IMAGE || true
-cd data/build/$ROUTER_NAME
-ls -la
-pwd
-docker build -t $DOCKER_IMAGE -f Dockerfile.data-container .
-
-echo -e "\n##### Testing $ROUTER_NAME ($DOCKER_IMAGE)#####\n"
-
+echo "Making sure there are no old containers or image available"
 docker stop otp-data-$ROUTER_NAME || true
 docker stop otp-$ROUTER_NAME || true
-docker run --rm --name otp-data-$ROUTER_NAME $DOCKER_IMAGE &
-sleep 2
-docker run --rm --name otp-$ROUTER_NAME -p 10000:8080 -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS=$JAVA_OPTS -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data-$ROUTER_NAME:otp-data $ORG/opentripplanner:prod &
+docker rmi $DOCKER_IMAGE || true
+cd data/build/$ROUTER_NAME
+echo "building..."
+docker build -t $DOCKER_IMAGE -f Dockerfile.data-container .
+echo -e "\n##### Testing $ROUTER_NAME ($DOCKER_IMAGE)#####\n"
 
+echo "starting data container..."
+docker run --rm --name otp-data-$ROUTER_NAME $DOCKER_IMAGE &
+sleep 5
+echo "starting otp..."
+docker run --rm --name otp-$ROUTER_NAME -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS=$JAVA_OPTS -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data-$ROUTER_NAME:otp-data $ORG/opentripplanner:prod &
+sleep 5
+echo "getting otp ip.."
 IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' otp-$ROUTER_NAME)
+echo "got otp ip: $IP"
+
 
 if [ "$ROUTER_NAME" == "hsl" ]; then
     MAX_WAIT=10
