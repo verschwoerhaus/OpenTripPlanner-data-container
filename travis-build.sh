@@ -29,7 +29,22 @@ DOCKER_IMAGE=$ORG/otp-data-tools:${DOCKER_TAG}
 echo Building otp-data-tools: $DOCKER_IMAGE
 
 docker build  --tag=$DOCKER_IMAGE -f Dockerfile .
-docker login -u $DOCKER_USER -p $DOCKER_AUTH
-docker push $DOCKER_IMAGE
+
+if [ "${TRAVIS_PULL_REQUEST}" == "false" ] then
+  docker login -u $DOCKER_USER -p $DOCKER_AUTH
+  docker push $DOCKER_IMAGE
+fi
+
+cd ..
+
+DOCKER_IMAGE=$ORG/otp-data-tools:${DOCKER_TAG}
+echo Building otp-data-updater: $DOCKER_IMAGE
+
+docker build --tag=$DOCKER_IMAGE -f Dockerfile .
+
+if [ "${TRAVIS_PULL_REQUEST}" == "false" ] then
+  docker login -u $DOCKER_USER -p $DOCKER_AUTH
+  docker push $DOCKER_IMAGE
+fi
 
 echo Build completed
