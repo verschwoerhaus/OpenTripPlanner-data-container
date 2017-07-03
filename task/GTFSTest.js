@@ -5,6 +5,7 @@ const through = require('through2');
 const gutil = require('gulp-util');
 const col = gutil.colors;
 const {hostDataDir, dataDir} = require('../config');
+const {postSlackMessage} = require('./util');
 
 /**
  * Builds an OTP graph with gtfs file. If the build is succesful we can trust
@@ -32,8 +33,10 @@ function testGTFS(gtfsFile, quiet=false) {
                 resolve(true);
                 process.stdout.write(gtfsFile + ' ' + col.green('Test SUCCESS\n'));
               } else {
+                const log = lastLog.join('');
                 process.stdout.write(gtfsFile + ' ' + col.red(`Test FAILED (${c})\n`));
                 process.stdout.write(gtfsFile + ': ' + col.red(lastLog.join('')));
+                postSlackMessage(`${gtfsFile} test failed: ${log}`);
                 resolve(false);
               }
               fse.removeSync(folder);
@@ -57,8 +60,10 @@ function testGTFS(gtfsFile, quiet=false) {
               }
             });
           } catch(e) {
+            const log = lastLog.join('');
             process.stdout.write(gtfsFile + ' ' + col.red(`Test FAILED (${e})`));
-            process.stdout.write(gtfsFile + ': ' + col.red(lastLog.join('')));
+            process.stdout.write(gtfsFile + ': ' + col.red(log));
+            postSlackMessage(`${gtfsFile} test failed: ${log}`);
             fse.removeSync(folder);
             reject(e);
           }
