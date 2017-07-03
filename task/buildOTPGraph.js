@@ -47,14 +47,14 @@ module.exports= {
           //include all gtfs + osm + router- + build configs
           zipWithGlob(`${dataDir}/build/${config.id}/router-${config.id}.zip`,
             [`${dataDir}/build/${config.id}/router/*.zip`, `${dataDir}/build/${config.id}/router/*.json`,`${dataDir}/build/${config.id}/router/finland.pbf`],
-             `router-${config.id}`,
-             (err) => {
-               if(err) {
-                 reject(err);
-               } else {
-                 resolve();
-               }
-             });
+            `router-${config.id}`,
+            (err) => {
+              if(err) {
+                reject(err);
+              } else {
+                resolve();
+              }
+            });
         });
         const p2= new Promise((resolve, reject) => {
           process.stdout.write('Creating zip file for otp graph\n');

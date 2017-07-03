@@ -9,10 +9,10 @@ const cloneable = require('cloneable-readable');
 function createFeedInfo(zip, file, csv, cb) {
   zip.file('feed_info.txt', csv);
   zip.generateNodeStream({streamFiles:true,compression: 'DEFLATE'})
-  .pipe(fs.createWriteStream(file))
-  .on('finish', function () {
-    cb(null);
-  });
+    .pipe(fs.createWriteStream(file))
+    .on('finish', function () {
+      cb(null);
+    });
 }
 
 function setFeedId(file, id, cb) {

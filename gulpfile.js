@@ -45,7 +45,7 @@ gulp.task('gtfs:dl', ['del:id'],function () {
 
   return dl(files, true, true)
     .pipe(gulp.dest(`${config.dataDir}/downloads/gtfs`))
-//    .pipe(vinylPaths(del))
+  //    .pipe(vinylPaths(del))
     .pipe(testGTFSFile())
     .pipe(gulp.dest(`${config.dataDir}/id/gtfs`));
 });
@@ -54,7 +54,7 @@ gulp.task('gtfs:dl', ['del:id'],function () {
 gulp.task('gtfs:id', ['del:fit'], function(){
   return gulp.src([`${config.dataDir}/id/gtfs/*`])
     .pipe(setFeedIdTask())
-//    .pipe(vinylPaths(del))
+  //    .pipe(vinylPaths(del))
     .pipe(gulp.dest(`${config.dataDir}/fit/gtfs`));
 });
 
