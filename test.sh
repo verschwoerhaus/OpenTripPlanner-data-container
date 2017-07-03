@@ -18,20 +18,26 @@ docker stop otp-data-$ROUTER_NAME || true
 docker stop otp-$ROUTER_NAME || true
 docker rmi $DOCKER_IMAGE || true
 cd data/build/$ROUTER_NAME
-echo "building..."
+echo "Building data-container image..."
 docker build -t $DOCKER_IMAGE -f Dockerfile.data-container .
 echo -e "\n##### Testing $ROUTER_NAME ($DOCKER_IMAGE)#####\n"
 
-echo "starting data container..."
+echo "Starting data container..."
 docker run --rm --name otp-data-$ROUTER_NAME $DOCKER_IMAGE &
 sleep 5
-echo "starting otp..."
+echo "Starting otp..."
 docker run --rm --name otp-$ROUTER_NAME -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS=$JAVA_OPTS -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data-$ROUTER_NAME:otp-data $ORG/opentripplanner:prod &
 sleep 5
-echo "getting otp ip.."
-IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' otp-$ROUTER_NAME)
-echo "got otp ip: $IP"
+echo "Getting otp ip.."
+timeout=$(($(date +%s) + 60))
+until IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' otp-$ROUTER_NAME) || [[ $(date +%s) -gt $timeout ]]; do sleep 1;done;
 
+if [ "$IP" == "" ]; then
+  echo "Could not get ip. failing test"
+  exit 1
+fi
+
+echo "Got otp ip: $IP"
 
 if [ "$ROUTER_NAME" == "hsl" ]; then
     MAX_WAIT=10
