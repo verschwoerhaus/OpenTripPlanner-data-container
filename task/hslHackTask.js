@@ -26,7 +26,7 @@ module.exports = function(){
   mv stop_times.new stop_times.txt
   zip -f gtfs/HSL.zip stop_times.txt
   rm stop_times.txt`;
-    const fullCommand = `docker run --rm -v ${hostDataDir}:/data ${dataToolImage} bash -c "${cmd}"`;
+    const fullCommand = `docker pull ${dataToolImage}; docker run --rm -v ${hostDataDir}:/data ${dataToolImage} bash -c "${cmd}"`;
     const hslHack = exec(fullCommand, {maxBuffer:1024*1024*8});
 
     hslHack.on('exit', function(c){

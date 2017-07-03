@@ -15,7 +15,7 @@ const run = function(cmd, osmExtract, src, dst) {
   const lastLog=[];
   let success = true;
   const p = new Promise((resolve) => {
-    const dcmd = `docker run --rm -e TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=2147483648 -v ${hostDataDir}:/data --rm ${dataToolImage} ${cmd} ${osmExtract} +init=epsg:3067 /${src} /${dst}`;
+    const dcmd = `docker pull ${dataToolImage}; docker run --rm -e TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=2147483648 -v ${hostDataDir}:/data --rm ${dataToolImage} ${cmd} ${osmExtract} +init=epsg:3067 /${src} /${dst}`;
     const fit = exec(dcmd,{maxBuffer:1024*1024*8});
 
 
