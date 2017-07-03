@@ -37,6 +37,8 @@ const postSlackMessage = (message) => {
     return;
   }
 
+  process.stdout.write(`Sending to slack: ${message}`);
+
   webhook.send(message, function(err) {
     if (err) {
       process.stdout.write(`ERROR sending to slack: ${err}`);
