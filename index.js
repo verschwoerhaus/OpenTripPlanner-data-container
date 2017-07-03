@@ -5,6 +5,7 @@ const {promisify} = require('util');
 const  everySeries = require('async/everySeries');
 const {execFileSync}= require('child_process');
 const {postSlackMessage} = require('./util');
+const CronJob = require('cron').CronJob;
 
 const every = promisify((list, task, cb) => {
   everySeries(list, task, function(err, result) {
@@ -20,8 +21,9 @@ const updateGTFS=['gtfs:dl','gtfs:id','gtfs:fit','gtfs:filter'];
 const routers=['finland','waltti','hsl'];
 
 start('seed').then(() => {
-  var CronJob = require('cron').CronJob;
-  new CronJob(process.env.CRON || '0 0 4 * * *', update, null, true, 'Europe/Helsinki');
+  const cronPattern = process.env.CRON || '0 0 4 * * *';
+  process.stdout.write(`Starting timer with pattern: ${cronPattern}`);
+  new CronJob(cronPattern, update, null, true, 'Europe/Helsinki');
 });
 
 async function update() {
@@ -46,9 +48,9 @@ async function update() {
       try {
         process.stdout.write('Executing deploy script.');
         execFileSync('./deploy.sh',[router], {env:{DOCKER_USER:process.env.DOCKER_USER,DOCKER_AUTH:process.env.DOCKER_AUTH}, stdio:[0,1,2]});
-        process.stdout.write('Router data updated.');
+        postSlackMessage(`${router} data updated.`);
       } catch (E) {
-        postSlackMessage('Router data update failed: ' + E.message);
+        postSlackMessage(`${router} data update failed: ` + E.message);
       }
       callback(null, true);
     });
