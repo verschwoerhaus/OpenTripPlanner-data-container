@@ -1,15 +1,11 @@
 sudo: required
-
 branches:
   only:
     - master
 
 services: docker
-
 install: true
 
 language: C
 
-jobs:
-   - stage: build
-     script: ./travis-build.sh
+script: ./travis-build.sh
