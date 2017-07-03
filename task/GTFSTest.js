@@ -5,7 +5,7 @@ const through = require('through2');
 const gutil = require('gulp-util');
 const col = gutil.colors;
 const {hostDataDir, dataDir} = require('../config');
-const {postSlackMessage} = require('./util');
+const {postSlackMessage} = require('../util');
 
 /**
  * Builds an OTP graph with gtfs file. If the build is succesful we can trust
