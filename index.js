@@ -16,7 +16,7 @@ const every = promisify((list, task, cb) => {
 const start = promisify((task, cb) => gulp.start(task,cb));
 
 const updateOSM=['osm:update'];
-const updateGTFS=['gtfs:dl','gtfs:id','gtfs:fit','gtfs:filter'];
+const updateGTFS=['gtfs:dl','gtfs:fit','gtfs:filter','gtfs:id'];
 
 const routers=['finland','waltti','hsl'];
 

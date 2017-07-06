@@ -44,13 +44,13 @@ before running gtfs:fit stage
 Currently there are 4 steps for processing gtfs data:
 1. gtfs:download
 Downloads a GTFS package from configured location, tests the file with otp, if
-test passes data is copied to dir id. The resulting zip is named <id>.zip.
-1. gtfs:id
-Sets the gtfs feed id to <id> and copies data to directory fit.
+test passes data is copied to dir fir. The resulting zip is named <id>.zip.
 1. gtfs:fit
 Runs configured map fits. Copies data to directory filterProcess.
 1. gtfs:filter
-Runs configured filterings. Copies data to directory ready.
+Runs configured filterings. Copies data to directory id.
+1. gtfs:id
+Sets the gtfs feed id to <id> and copies data to directory ready.
 
 Building the router from available (seeded or downloadedand processed) data:
 1. router:buildGraph

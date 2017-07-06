@@ -47,15 +47,15 @@ gulp.task('gtfs:dl', ['del:id'],function () {
     .pipe(gulp.dest(`${config.dataDir}/downloads/gtfs`))
   //    .pipe(vinylPaths(del))
     .pipe(testGTFSFile())
-    .pipe(gulp.dest(`${config.dataDir}/id/gtfs`));
+    .pipe(gulp.dest(`${config.dataDir}/fit/gtfs`));
 });
 
 //Add feedId to gtfs files in id dir, and moves files to directory 'fit'
-gulp.task('gtfs:id', ['del:fit'], function(){
+gulp.task('gtfs:id', function(){
   return gulp.src([`${config.dataDir}/id/gtfs/*`])
     .pipe(setFeedIdTask())
   //    .pipe(vinylPaths(del))
-    .pipe(gulp.dest(`${config.dataDir}/fit/gtfs`));
+    .pipe(gulp.dest(`${config.dataDir}/ready/gtfs`));
 });
 
 //Run MapFit on gtfs files (based on config) and moves files to directory
@@ -82,7 +82,7 @@ gulp.task('gtfs:filter', ['copyRouterConfig'], function(){
   return gulp.src([`${config.dataDir}/filter/gtfs/*`])
     .pipe(OBAFilterTask(config.configMap))
     //.pipe(vinylPaths(del))
-    .pipe(gulp.dest(`${config.dataDir}/ready/gtfs`));
+    .pipe(gulp.dest(`${config.dataDir}/id/gtfs`));
 });
 
 gulp.task('del:ready', () => (del([`${config.dataDir}/ready`])));
