@@ -13,6 +13,7 @@ const del = require('del');
 const {zipDir} = require('../util');
 const {dataToolImage} = require('../config.js');
 const {hostDataDir, dataDir} = require('../config.js');
+const debug =require ('debug')('OBAFilter');
 
 /**
  * returns promise that resolves to true (success) or false (failure)
@@ -26,6 +27,8 @@ function OBAFilter(src, dst, rule) {
     const filterProcess = exec(cmd);
 
     const checkError=(data) => {
+      debug(data);
+      console.log(data);
       lastLog.push(data.toString());
       if(lastLog.length > 20) {
         delete lastLog[0];

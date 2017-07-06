@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const cloneable = require('cloneable-readable');
 const {hostDataDir,dataToolImage} = require('../config.js');
+const debug =require ('debug')('MAPFit');
 /*
  * node.js wrapper for MapFit
  */
@@ -20,11 +21,13 @@ const run = function(cmd, osmExtract, src, dst) {
 
 
     const checkError=(data) => {
+      debug(data);
       lastLog.push(data.toString());
       if(lastLog.length > 20) {
         delete lastLog[0];
       }
-      if(data.toString().indexOf('Traceback') !==-1) {
+      const txt = data.toString();
+      if(txt.indexOf('Traceback') !==-1 || txt.indexOf('IOError') !==-1) {
         success = false;
       }
     };
@@ -65,6 +68,14 @@ module.exports= {
       const config = configs[id];
       if(config===undefined) {
         process.stdout.write(col.yellow(`${gtfsFile} Could not find config for Id:${id}, ignoring fit...\n`));
+        callback(null, null);
+        return;
+      }
+      const osmFile = `${hostDataDir}/ready/osm/finland.pbf`;
+
+
+      if(!fs.existsSync(osmFile)) {
+        process.stdout.write(col.yellow(`${osmFile} not available, skipping ${gtfsFile}\n`));
         callback(null, null);
         return;
       }
