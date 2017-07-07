@@ -23,7 +23,7 @@ const FINLAND_CONFIG = {
     src('tampere','http://data.itsfactory.fi/journeys/files/gtfs/latest/gtfs_tampere.zip', true),
     src('LINKKI','http://data.jyvaskyla.fi/tiedostot/linkkidata.zip', false),
     src('lautta','http://lautta.net/db/gtfs/gtfs.zip', false),
-    src('oulu','http://www.transitdata.fi/oulu/google_transit.zip', false),
+    src('OULU','http://www.transitdata.fi/oulu/google_transit.zip', false),
   ],
   'osm':'finland',
 };
@@ -47,7 +47,9 @@ const WALTTI_CONFIG = {
     src('JoensuuEly', 'http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip',false),
     src('FOLI', 'http://dev.hsl.fi/gtfs.foli/foli.zip', false),
     src('Lahti', 'http://dev.hsl.fi/gtfs.lahti/lahti.zip', false),
-    src('Kuopio', 'http://dev.hsl.fi/gtfs.kuopio/kuopio.zip', false)
+    src('Kuopio', 'http://dev.hsl.fi/gtfs.kuopio/kuopio.zip', false),
+    src('OULU','http://www.transitdata.fi/oulu/google_transit.zip', false),
+    src('LINKKI','http://data.jyvaskyla.fi/tiedostot/linkkidata.zip', false),
   ],
   'osm':'finland',
 };
