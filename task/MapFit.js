@@ -4,7 +4,7 @@ const col = gutil.colors;
 const fs = require('fs');
 const path = require('path');
 const cloneable = require('cloneable-readable');
-const {hostDataDir,dataToolImage} = require('../config.js');
+const {dataDir, hostDataDir, dataToolImage} = require('../config.js');
 const debug =require ('debug')('MAPFit');
 /*
  * node.js wrapper for MapFit
@@ -71,7 +71,7 @@ module.exports= {
         callback(null, null);
         return;
       }
-      const osmFile = `${hostDataDir}/ready/osm/finland.pbf`;
+      const osmFile = `${dataDir}/ready/osm/finland.pbf`;
 
 
       if(!fs.existsSync(osmFile)) {
