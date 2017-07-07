@@ -28,7 +28,6 @@ function OBAFilter(src, dst, rule) {
 
     const checkError=(data) => {
       debug(data);
-      console.log(data);
       lastLog.push(data.toString());
       if(lastLog.length > 20) {
         delete lastLog[0];
