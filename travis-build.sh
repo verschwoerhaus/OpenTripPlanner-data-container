@@ -30,7 +30,7 @@ echo Building otp-data-tools: $DOCKER_IMAGE
 
 docker build  --tag=$DOCKER_IMAGE -f Dockerfile .
 
-if [ "${TRAVIS_PULL_REQUEST}" == "false" ] then
+if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
   docker login -u $DOCKER_USER -p $DOCKER_AUTH
   docker push $DOCKER_IMAGE
 fi
@@ -42,7 +42,7 @@ echo Building otp-data-updater: $DOCKER_IMAGE
 
 docker build --tag=$DOCKER_IMAGE -f Dockerfile .
 
-if [ "${TRAVIS_PULL_REQUEST}" == "false" ] then
+if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
   docker login -u $DOCKER_USER -p $DOCKER_AUTH
   docker push $DOCKER_IMAGE
 fi
