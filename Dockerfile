@@ -1,19 +1,23 @@
-FROM       alpine:latest
+FROM       node:8.1-alpine
 MAINTAINER Digitransit version: 0.1
 
 RUN apk add --update --no-cache \
-  lighttpd \
-  lighttpd-mod_auth \
-  busybox \
+  bash \
+  curl \
   && rm -rf /var/cache/apk/*
 
-ADD lighttpd.conf /etc/lighttpd/lighttpd.conf
-RUN printf '#!/bin/sh\ngrep -v "#" /etc/lighttpd/lighttpd.conf |grep port > /dev/null\nif [ "$?" = "1" ]\nthen\n  echo "server.port = $PORT" >> /etc/lighttpd/lighttpd.conf\nfi\n/usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf 2>&1' > /usr/sbin/startlighttpd && chmod 755 /usr/sbin/startlighttpd
+WORKDIR /opt/otp-data-builder
 
-ENV PORT="8080"
-EXPOSE 8080
+ADD https://get.docker.com/builds/Linux/x86_64/docker-1.11.2.tgz /opt/otp-data-builder
+RUN cd /opt/otp-data-builder ; tar xzf docker-1.11.2.tgz ; cp docker/docker /usr/bin/docker ; rm -rf docker*
 
-ADD target/opt/opentripplanner-data-container/webroot /var/www/localhost/htdocs
-ADD build/*.zip /var/www/localhost/htdocs/
+ADD package-lock.json package.json *.js *.sh  gulpfile.js /opt/otp-data-builder/
+ADD task /opt/otp-data-builder/task
+ADD router-finland /opt/otp-data-builder/router-finland
+ADD router-hsl /opt/otp-data-builder/router-hsl
+ADD router-waltti /opt/otp-data-builder/router-waltti
+ADD otp-data-container /opt/otp-data-builder/otp-data-container
 
-ENTRYPOINT ["/usr/sbin/startlighttpd" ]
+RUN npm install
+
+CMD ["node", "index.js"]

@@ -1,26 +1,11 @@
 sudo: required
-
 branches:
   only:
     - master
 
 services: docker
-
 install: true
 
 language: C
 
-jobs:
-  include:
-   - stage: update builder
-     env: ROUTER_NAME=waltti
-     script: ./prebuild.sh
-  
-   - stage: build
-     env: ROUTER_NAME=waltti
-     script: ./build-docker-image.sh
-  
-   - stage: test and deploy
-     env: ROUTER_NAME=waltti
-     script: ./deploy.sh
-  
+script: ./travis-build.sh
