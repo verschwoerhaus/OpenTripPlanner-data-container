@@ -2,7 +2,7 @@ const exec = require('child_process').exec;
 const gutil = require('gulp-util');
 const col = gutil.colors;
 const fs = require('fs');
-const {dataToolImage, hostDataDir} = require('../config.js');
+const {dataToolImage, hostDataDir, constants} = require('../config.js');
 
 /**
  * remove column from stop_times.txt
@@ -27,7 +27,7 @@ module.exports = function(){
   zip -f gtfs/HSL.zip stop_times.txt
   rm stop_times.txt`;
     const fullCommand = `docker pull ${dataToolImage}; docker run --rm -v ${hostDataDir}:/data ${dataToolImage} bash -c "${cmd}"`;
-    const hslHack = exec(fullCommand, {maxBuffer:1024*1024*8});
+    const hslHack = exec(fullCommand, {maxBuffer:constants.BUFFER_SIZE});
 
     hslHack.on('exit', function(c){
       if(c===0) {

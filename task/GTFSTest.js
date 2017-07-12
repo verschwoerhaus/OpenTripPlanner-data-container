@@ -4,7 +4,7 @@ const exec = require('child_process').exec;
 const through = require('through2');
 const gutil = require('gulp-util');
 const col = gutil.colors;
-const {hostDataDir, dataDir} = require('../config');
+const {hostDataDir, dataDir, constants} = require('../config');
 const {postSlackMessage} = require('../util');
 
 /**
@@ -30,7 +30,7 @@ function testGTFS(gtfsFile, quiet=false) {
         r.on('end', () => {
           try {
             const build = exec(`docker run --rm -v ${hostDataDir}/tmp:/opt/opentripplanner/graphs --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -Xmx8G -jar otp-shaded.jar --build graphs/${dir} "`,
-              {maxBuffer:1024*1024*8});
+              {maxBuffer:constants.BUFFER_SIZE});
             build.on('exit', function(c){
               if(c===0) {
                 resolve(true);

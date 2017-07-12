@@ -88,6 +88,10 @@ const osm = [
   {id:'hsl', url: 'http://dev.hsl.fi/osm.hsl/hsl.osm.pbf'}
 ];
 
+const constants = {
+  BUFFER_SIZE:1024*1024*8
+};
+
 module.exports={
   ALL_CONFIGS: () => ALL_CONFIGS,
   configMap,
@@ -97,5 +101,6 @@ module.exports={
   dataToolImage: 'hsldevcom/otp-data-tools',
   dataDir: process.env.DATA || `${process.cwd()}/data`,
   hostDataDir: process.env.HOST_DATA || `${process.cwd()}/data`,
-  setCurrentConfig: setCurrentConfig
+  setCurrentConfig: setCurrentConfig,
+  constants
 };

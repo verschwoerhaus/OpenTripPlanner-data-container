@@ -4,7 +4,7 @@ const col = gutil.colors;
 const fs = require('fs');
 const path = require('path');
 const cloneable = require('cloneable-readable');
-const {dataDir, hostDataDir, dataToolImage} = require('../config.js');
+const {dataDir, hostDataDir, dataToolImage, constants} = require('../config.js');
 const debug =require ('debug')('MAPFit');
 /*
  * node.js wrapper for MapFit
@@ -17,7 +17,7 @@ const run = function(cmd, osmExtract, src, dst) {
   let success = true;
   const p = new Promise((resolve) => {
     const dcmd = `docker pull ${dataToolImage}; docker run --rm -e TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=2147483648 -v ${hostDataDir}:/data --rm ${dataToolImage} ${cmd} ${osmExtract} +init=epsg:3067 /${src} /${dst}`;
-    const fit = exec(dcmd,{maxBuffer:1024*1024*8});
+    const fit = exec(dcmd,{maxBuffer:constants.BUFFER_SIZE});
 
 
     const checkError=(data) => {
