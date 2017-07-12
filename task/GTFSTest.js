@@ -15,7 +15,10 @@ function testGTFS(gtfsFile, quiet=false) {
   let lastLog=[];
 
   const p = new Promise((resolve, reject) => {
-    if(fs.existsSync(gtfsFile)) {
+    if(!fs.existsSync(gtfsFile)) {
+      process.stdout.write(gtfsFile + ' does not exist!');
+      p.reject();
+    } else {
       if(!fs.existsSync(`${dataDir}/tmp`)) {
         fs.mkdirSync(`${dataDir}/tmp`);
       }
@@ -70,8 +73,6 @@ function testGTFS(gtfsFile, quiet=false) {
         });
         r.pipe(fs.createWriteStream(`${folder}/${gtfsFile.split('/').pop()}`));
       });
-    } else {
-      process.stdout.write(gtfsFile + ' does not exist!');
     }
   });
   return p;
