@@ -16,11 +16,13 @@ DOCKER_IMAGE_LATEST=$ORG/otp-data-builder:latest
 echo Building otp-data-builder: $DOCKER_IMAGE
 
 docker build  --tag=$DOCKER_IMAGE -f Dockerfile .
+
 if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
   docker login -u $DOCKER_USER -p $DOCKER_AUTH
   docker push $DOCKER_IMAGE
   docker tag $DOCKER_IMAGE $DOCKER_IMAGE_LATEST
   docker push $DOCKER_IMAGE_LATEST
+fi
 
 echo Build completed
 
