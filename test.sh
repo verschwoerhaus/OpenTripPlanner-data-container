@@ -29,7 +29,7 @@ echo "Starting otp..."
 docker run --rm --name otp-$ROUTER_NAME -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS=$JAVA_OPTS -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data-$ROUTER_NAME:otp-data $ORG/opentripplanner:prod &
 sleep 5
 echo "Getting otp ip.."
-timeout=$(($(date +%s) + 60))
+timeout=$(($(date +%s) + 120))
 until IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' otp-$ROUTER_NAME) || [[ $(date +%s) -gt $timeout ]]; do sleep 1;done;
 
 if [ "$IP" == "" ]; then
