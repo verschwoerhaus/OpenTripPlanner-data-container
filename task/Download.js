@@ -25,7 +25,7 @@ module.exports = function(entries){
   const downloadIgnoreErrors = (entry) => {
     const downloadHandler = (err, res, body) => {
       if(err) {
-        postSlackMessage(`${entry.url} Download failed: ${err}`);
+        postSlackMessage(`${entry.url} Download failed: ${err}. Using previous data instead.`);
         process.stdout.write(entry.url + ' ' + col.red('Download FAILED\n'));
         incProcessed();
         return;
