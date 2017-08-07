@@ -1,5 +1,5 @@
 #!/bin/bash
-set +e
+set -e
 
 # set defaults
 ORG=${ORG:-hsldevcom}
@@ -13,9 +13,13 @@ function shutdown() {
   docker stop otp-$ROUTER_NAME || true
 }
 
-echo "Making sure there are no old containers or image available"
-docker stop otp-data-$ROUTER_NAME || true
-docker stop otp-$ROUTER_NAME || true
+echo "Making sure there are no old test containers or image available"
+docker stop otp-data-finland || true
+docker stop otp-finland || true
+docker stop otp-data-waltti || true
+docker stop otp-waltti || true
+docker stop otp-data-hsl || true
+docker stop otp-hsl || true
 docker rmi $DOCKER_IMAGE || true
 cd data/build/$ROUTER_NAME
 echo "Building data-container image..."
@@ -34,6 +38,7 @@ until IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' otp-$ROUTE
 
 if [ "$IP" == "" ]; then
   echo "Could not get ip. failing test"
+  shutdown
   exit 1
 fi
 
