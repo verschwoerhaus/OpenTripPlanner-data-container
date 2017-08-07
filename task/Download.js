@@ -2,6 +2,7 @@ const through = require('through2');
 const gutil = require('gulp-util');
 const request = require('request');
 const col = gutil.colors;
+const {postSlackMessage} = require('../util');
 
 /**
  * Download external data (gtfs, osm) resources.
@@ -24,6 +25,7 @@ module.exports = function(entries){
   const downloadIgnoreErrors = (entry) => {
     const downloadHandler = (err, res, body) => {
       if(err) {
+        postSlackMessage(`${entry.url} Download failed: ${err}. Using previous data instead.`);
         process.stdout.write(entry.url + ' ' + col.red('Download FAILED\n'));
         incProcessed();
         return;

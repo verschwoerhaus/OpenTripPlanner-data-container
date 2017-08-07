@@ -6,6 +6,7 @@ const path = require('path');
 const cloneable = require('cloneable-readable');
 const {dataDir, hostDataDir, dataToolImage, constants} = require('../config.js');
 const debug =require ('debug')('MAPFit');
+const {postSlackMessage} = require('../util');
 /*
  * node.js wrapper for MapFit
  */
@@ -40,12 +41,13 @@ const run = function(cmd, osmExtract, src, dst) {
       if(code === 0 && success===true) {
         resolve(true);
       } else {
-        process.stdout.write('running command ' + cmd + ' failed:\n');
-        process.stdout.write(src + ' ' + col.red(lastLog.join('')));
+        const log = lastLog.join('');
+        postSlackMessage(`Running command ${cmd} on ${src} failed: ${log}.`);
+        process.stdout.write(`Running command ${cmd} failed:\n`);
+        process.stdout.write(`${src} ${log}`);
         resolve(false);
       }
     });
-
   });
   return p;
 };

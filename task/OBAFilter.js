@@ -14,6 +14,7 @@ const {zipDir} = require('../util');
 const {dataToolImage} = require('../config.js');
 const {hostDataDir, dataDir} = require('../config.js');
 const debug =require ('debug')('OBAFilter');
+const {postSlackMessage} = require('../util');
 
 /**
  * returns promise that resolves to true (success) or false (failure)
@@ -45,8 +46,10 @@ function OBAFilter(src, dst, rule) {
       if(code === 0 && success===true) {
         resolve(true);
       } else {
-        process.stdout.write('running command ' + cmd + ' failed:\n');
-        process.stdout.write(src + ' ' + col.red(lastLog.join('')));
+        const log = lastLog.join('');
+        postSlackMessage(`Running command ${cmd} on ${src} failed: ${log}.`);
+        process.stdout.write(`Running command ${cmd} failed: ${log}.\n`);
+        process.stdout.write(`${src} ${log}`);
         resolve(false);
       }
     });
