@@ -3,12 +3,20 @@ const col = gutil.colors;
 const {zipWithGlob} = require('../util');
 const fs = require('fs');
 const {dataDir, hostDataDir, constants} = require('../config.js');
+const {postSlackMessage} = require('../util');
 /*
  * node.js wrapper for building OTP graph
  */
 const {exec, execSync}= require('child_process');
 
 const buildGraph = function(config) {
+  let lastLog=[];
+  const collectLog = (data) => {
+    lastLog.push(data.toString());
+    if(lastLog.length > 20) {
+      delete lastLog[0];
+    }
+  };
   const p = new Promise((resolve, reject) => {
 
     const version = execSync('docker run --rm --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -jar otp-shaded.jar --version"');
@@ -18,10 +26,12 @@ const buildGraph = function(config) {
     //const buildGraph = exec('ls -la');
 
     buildGraph.stdout.on('data', function (data) {
+      collectLog(data);
       process.stdout.write(data.toString());
     });
 
     buildGraph.stderr.on('data', function (data) {
+      collectLog(data);
       process.stdout.write(col.red(data.toString()));
     });
 
@@ -29,6 +39,8 @@ const buildGraph = function(config) {
       if(status===0) {
         resolve({commit:commit, config:config});
       } else {
+        const log = lastLog.join('');
+        postSlackMessage(`${config.id} build failed: ${log}`);
         reject('could not build');
       }
     });
