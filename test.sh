@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set +e
 
 # set defaults
 ORG=${ORG:-hsldevcom}
@@ -27,10 +27,10 @@ docker build -t $DOCKER_IMAGE -f Dockerfile.data-container .
 echo -e "\n##### Testing $ROUTER_NAME ($DOCKER_IMAGE)#####\n"
 
 echo "Starting data container..."
-docker run --rm --name otp-data-$ROUTER_NAME $DOCKER_IMAGE &
+docker run --rm --name otp-data-$ROUTER_NAME $DOCKER_IMAGE > /dev/stdout &
 sleep 5
 echo "Starting otp..."
-docker run --rm --name otp-$ROUTER_NAME -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS=$JAVA_OPTS -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data-$ROUTER_NAME:otp-data $ORG/opentripplanner:prod &
+docker run --rm --name otp-$ROUTER_NAME -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS=$JAVA_OPTS -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data-$ROUTER_NAME:otp-data $ORG/opentripplanner:prod > /dev/stdout &
 sleep 5
 echo "Getting otp ip.."
 timeout=$(($(date +%s) + 120))
@@ -59,7 +59,7 @@ ITERATIONS=$(($MAX_WAIT * 6))
 echo "max wait (minutes): $MAX_WAIT"
 
 for (( c=1; c<=$ITERATIONS; c++ ));do
-  STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://$IP:8080/otp/routers/default)
+  STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://$IP:8080/otp/routers/default || true)
 
   if [ $STATUS_CODE = 200 ]; then
     echo "OTP started"
