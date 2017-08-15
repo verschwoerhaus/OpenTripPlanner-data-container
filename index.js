@@ -21,13 +21,20 @@ const updateGTFS=['gtfs:dl','gtfs:fit','gtfs:filter','gtfs:id'];
 const routers=['finland','waltti','hsl'];
 
 start('seed').then(() => {
-  const cronPattern = process.env.CRON || '0 0 4 * * *';
-  process.stdout.write(`Starting timer with pattern: ${cronPattern}`);
-  new CronJob(cronPattern, update, null, true, 'Europe/Helsinki');
+  process.stdout.write('Seeded.');
+  if(process.argv.length==3 && process.argv[2]==='once') {
+    process.stdout.write('Running update once.');
+    update();
+  } else {
+    const cronPattern = process.env.CRON || '0 0 4 * * *';
+    process.stdout.write(`Starting timer with pattern: ${cronPattern}`);
+    new CronJob(cronPattern, update, null, true, 'Europe/Helsinki');
+  }
 });
 
 async function update() {
   postSlackMessage('Starting data build');
+  setCurrentConfig(routers.join(',')); //restore used config
 
   await every(updateOSM, function(task, callback) {
     start(task).then(() => {callback(null, true);});
