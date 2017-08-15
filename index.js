@@ -27,7 +27,7 @@ start('seed').then(() => {
 });
 
 async function update() {
-  postSlackMessage('Starting data build');
+  setCurrentConfig(routers.join(',')); //restore used config
 
   await every(updateOSM, function(task, callback) {
     start(task).then(() => {callback(null, true);});
