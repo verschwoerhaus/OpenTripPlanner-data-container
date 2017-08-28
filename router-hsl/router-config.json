@@ -33,19 +33,19 @@
     {
       "type": "bike-rental",
       "sourceType": "smoove",
-      "url": "http://digitransit-proxy/out/helsinki-fi.smoove.pro/api-public/stations",
+      "url": "http://digitransit-proxy:8080/out/helsinki-fi.smoove.pro/api-public/stations",
       "frequencySec": 10
     },
     {
       "type": "bike-park",
       "sourceType": "hsl-parkandride",
-      "url": "http://digitransit-proxy/out/p.hsl.fi/api/v1/facilities.json?limit=-1",
+      "url": "http://digitransit-proxy:8080/out/p.hsl.fi/api/v1/facilities.json?limit=-1",
       "frequencySec": 600
     },
     {
       "type": "car-park",
       "sourceType": "hsl-parkandride",
-      "url": "http://digitransit-proxy/out/p.hsl.fi/api/v1/facilities.json?limit=-1",
+      "url": "http://digitransit-proxy:8080/out/p.hsl.fi/api/v1/facilities.json?limit=-1",
       "frequencySec": 600
     }
   ]
