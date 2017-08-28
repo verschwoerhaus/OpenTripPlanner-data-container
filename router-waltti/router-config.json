@@ -22,14 +22,14 @@
       "type": "stop-time-updater",
       "frequencySec": 60,
       "sourceType": "gtfs-http",
-      "url": "http://92.62.36.215/RTIX/trip-updates",
+      "url": "http://digitransit-proxy/out/92.62.36.215/RTIX/trip-updates",
       "feedId": "OULU",
       "fuzzyTripMatching": false
     },
     {
       "type": "real-time-alerts",
       "frequencySec": 30,
-      "url": "http://92.62.36.215/RTIX/service-alerts",
+      "url": "http://digitransit-proxy/out/92.62.36.215/RTIX/service-alerts",
       "feedId": "OULU",
       "fuzzyTripMatching": false
     }
