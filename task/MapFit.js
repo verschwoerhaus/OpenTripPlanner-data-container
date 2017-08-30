@@ -25,7 +25,7 @@ const run = function(cmd, osmExtract, src, dst) {
       debug(data);
       lastLog.push(data.toString());
       if(lastLog.length > 20) {
-        delete lastLog[0];
+        lastLog.splice(0,1);
       }
       const txt = data.toString();
       if(txt.indexOf('Traceback') !==-1 || txt.indexOf('IOError') !==-1) {
