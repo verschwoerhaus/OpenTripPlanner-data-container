@@ -89,8 +89,8 @@ const osm = [
 ];
 
 const constants = {
-  BUFFER_SIZE:1024*1024*8
-};
+  BUFFER_SIZE:1024*1024*16
+};    
 
 module.exports={
   ALL_CONFIGS: () => ALL_CONFIGS,
