@@ -42,8 +42,8 @@ module.exports = function(){
 
     hslHack.stdout.on('data', function (data) {
       lastLog.push(data.toString());
-      if(lastLog.length===20) {
-        delete lastLog[0];
+      if(lastLog.length > 20) {
+        lastLog.splice(0,1);
       }
     });
   });

@@ -14,7 +14,7 @@ const buildGraph = function(config) {
   const collectLog = (data) => {
     lastLog.push(data.toString());
     if(lastLog.length > 20) {
-      delete lastLog[0];
+      lastLog.splice(0,1);
     }
   };
   const p = new Promise((resolve, reject) => {

@@ -55,8 +55,8 @@ function testGTFS(gtfsFile, quiet=false) {
             });
             build.stderr.on('data', function (data) {
               lastLog.push(data.toString());
-              if(lastLog.length===20) {
-                delete lastLog[0];
+              if(lastLog.length > 20) {
+                lastLog.splice(0,1);
               }
               if(!quiet) {
                 process.stderr.write(data.toString());
