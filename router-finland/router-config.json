@@ -38,14 +38,14 @@
     {
       "type": "bike-rental",
       "sourceType": "smoove",
-      "url": "http://helsinki-fi.smoove.pro/api-public/stations",
+      "url": "http://digitransit-proxy:8080/out/helsinki-fi.smoove.pro/api-public/stations",
       "frequencySec": 10
     },
     {
       "type": "stop-time-updater",
       "frequencySec": 60,
       "sourceType": "gtfs-http",
-      "url": "http://beta.liikennevirasto.fi/joukkoliikenne/manual_gtfsrt/api/gtfsrt/updates",
+      "url": "http://digitransit-proxy:8080/out/beta.liikennevirasto.fi/joukkoliikenne/manual_gtfsrt/api/gtfsrt/updates",
       "feedId": "MATKA",
       "fuzzyTripMatching": true
     },
@@ -53,7 +53,7 @@
       "type": "real-time-alerts",
       "frequencySec": 60,
       "sourceType": "gtfs-http",
-      "url": "http://beta.liikennevirasto.fi/joukkoliikenne/manual_gtfsrt/api/gtfsrt/alerts",
+      "url": "http://digitransit-proxy:8080/out/beta.liikennevirasto.fi/joukkoliikenne/manual_gtfsrt/api/gtfsrt/alerts",
       "feedId": "MATKA",
       "fuzzyTripMatching": true
     },
@@ -61,22 +61,16 @@
       "type": "stop-time-updater",
       "frequencySec": 60,
       "sourceType": "gtfs-http",
-      "url": "http://92.62.36.215/RTIX/trip-updates",
+      "url": "http://digitransit-proxy:8080/out/92.62.36.215/RTIX/trip-updates",
       "feedId": "OULU",
       "fuzzyTripMatching": false
     },
     {
       "type": "real-time-alerts",
       "frequencySec": 30,
-      "url": "http://92.62.36.215/RTIX/service-alerts",
+      "url": "http://digitransit-proxy:8080/out/92.62.36.215/RTIX/service-alerts",
       "feedId": "OULU",
       "fuzzyTripMatching": false
-    },
-    {
-      "type": "bike-rental",
-      "sourceType": "smoove",
-      "url": "http://helsinki-fi.smoove.pro/api-public/stations",
-      "frequencySec": 10
     }
   ],
   "boardTimes": {
