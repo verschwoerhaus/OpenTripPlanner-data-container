@@ -26,7 +26,7 @@ start('seed').then(() => {
     process.stdout.write('Running update once.');
     update();
   } else {
-    const cronPattern = process.env.CRON || '0 0 4 * * *';
+    const cronPattern = process.env.CRON || '0 0 3 * * *';
     process.stdout.write(`Starting timer with pattern: ${cronPattern}`);
     new CronJob(cronPattern, update, null, true, 'Europe/Helsinki');
   }
