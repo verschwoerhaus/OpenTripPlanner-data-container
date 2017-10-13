@@ -23,14 +23,7 @@
 # Tampere
 {"op":"remove", "match":{"file":"agency.txt", "agency_id":"3"}}
 # Oulu
-{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220890"}}
-{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220891"}}
-{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220892"}}
-{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220893"}}
-{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220894"}}
-{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220895"}}
-{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220896"}}
-{"op":"remove", "match":{"file":"agency.txt", "agency_id":"220897"}}
+{"op":"remove", "match":{"file":"agency.txt", "agency_name":"Oulun joukkoliikenne"}}
 # Jyväskylä
 {"op":"remove", "match":{"file":"agency.txt", "agency_id":"220968"}}
 {"op":"remove", "match":{"file":"agency.txt", "agency_id":"220969"}}
@@ -44,3 +37,8 @@
 # Waltti demand responsive transport
 {"op":"remove", "match":{"file":"routes.txt", "route_type":"6"}}
 {"op":"remove", "match":{"file":"routes.txt", "route_type":"715"}}
+
+# Waltti service points
+{"op":"remove", "match":{"file":"agency.txt", "agency_name":"R-Kioski"}}
+
+
