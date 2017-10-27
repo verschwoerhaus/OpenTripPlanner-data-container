@@ -66,8 +66,7 @@ for (( c=1; c<=$ITERATIONS; c++ ));do
     curl -s "$URL"|grep error
     if [ $? = 1 ]; then #grep finds no error
 	echo "OK"
-	shutdown
-	exit 0;
+    break
     else
 	echo "ERROR"
 	shutdown
@@ -78,6 +77,18 @@ for (( c=1; c<=$ITERATIONS; c++ ));do
     sleep 10
   fi
 done
-shutdown
 
+echo "running otpqa"
+docker run --rm --name otp-data-tool $ORG/otp-data-tool:latest /bin/sh -c "cd OTPQA; python otpprofiler_json.py http://$IP:8080/otp/routers/default $ROUTER_NAME"
+if [ $? == 0 ]; then
+  echo "OK"
+  shutdown
+  exit 0;
+else
+  echo "ERROR"
+  shutdown
+  exit 1;
+fi
+
+shutdown
 exit 1;
