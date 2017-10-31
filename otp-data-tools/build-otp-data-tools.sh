@@ -30,6 +30,10 @@ python setup.py build
 python setup.py install
 cd ..
 
+git clone --recursive -b fastmapmatch https://github.com/HSLdevcom/gtfs_shape_mapfit.git
+cd gtfs_shape_mapfit
+make -C pymapmatch
+
 git clone https://github.com/HSLdevcom/OTPQA.git
 cd OTPQA
 git checkout tpe-improv
