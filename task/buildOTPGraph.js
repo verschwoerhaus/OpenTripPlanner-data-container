@@ -1,4 +1,5 @@
 const gutil = require('gulp-util');
+const otpMatching = require('otp-matching');
 const col = gutil.colors;
 const {zipWithGlob} = require('../util');
 const fs = require('fs');
@@ -93,7 +94,7 @@ module.exports= {
             }
           });
         });
-        return Promise.all([p1,p2,p3]);
+        return Promise.all([p1,p2,p3]).then(() => otpMatching(`${dataDir}/build/${config.id}`));
       });
     })).then(() => {
       process.stdout.write(col.green('Created SUCCESS\n'));
