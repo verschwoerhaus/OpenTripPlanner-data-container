@@ -94,7 +94,7 @@ module.exports= {
             }
           });
         });
-        return Promise.all([p1,p2,p3]).then(() => otpMatching(`${dataDir}/build/${config.id}`, config.id));
+        return Promise.all([p1,p2,p3]).then(() => otpMatching(`${dataDir}/build/${config.id}/router`, config.id));
       });
     })).then(() => {
       process.stdout.write(col.green('Created SUCCESS\n'));
