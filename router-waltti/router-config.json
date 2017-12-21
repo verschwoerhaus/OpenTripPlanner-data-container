@@ -56,14 +56,6 @@
       "url": "http://digitransit-proxy:8080/out/lappeenranta.mattersoft.fi/api/gtfsrealtime/v1.0/feed/tripupdate",
       "feedId": "Lappeenranta",
       "fuzzyTripMatching": false
-    },
-    {
-      "type": "stop-time-updater",
-      "frequencySec": 60,
-      "sourceType": "gtfs-http",
-      "url": "http://digitransit-proxy:8080/out/linkki.mattersoft.fi/api/gtfsrealtime/v1.0/feed/tripupdate",
-      "feedId": "LINKKI",
-      "fuzzyTripMatching": false
     }
   ]
 }
