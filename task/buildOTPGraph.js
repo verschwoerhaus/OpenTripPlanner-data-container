@@ -23,7 +23,7 @@ const buildGraph = function(config) {
     const version = execSync('docker pull hsldevcom/opentripplanner:prod;docker run --rm --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -jar otp-shaded.jar --version"');
     const commit = version.toString().match(/commit: ([0-9a-f]+)/)[1];
 
-    const buildGraph = exec(`docker run -v ${hostDataDir}/build:/opt/opentripplanner/graphs --rm --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -Xmx8g -Dsentry.dsn=${process.env.SENTRY_DSN} -jar otp-shaded.jar --build graphs/${config.id}/router"`,{maxBuffer:constants.BUFFER_SIZE});
+    const buildGraph = exec(`docker run -v ${hostDataDir}/build:/opt/opentripplanner/graphs --rm --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -Xmx8g -jar otp-shaded.jar --build graphs/${config.id}/router"`,{maxBuffer:constants.BUFFER_SIZE});
     //const buildGraph = exec('ls -la');
 
     buildGraph.stdout.on('data', function (data) {
