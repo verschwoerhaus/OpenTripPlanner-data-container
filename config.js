@@ -89,7 +89,7 @@ const osm = [
 ];
 
 const constants = {
-  BUFFER_SIZE:1024*1024*16
+  BUFFER_SIZE:1024*1024*32
 };    
 
 module.exports={
