@@ -5,11 +5,10 @@ const exec = require('child_process').exec;
 const through = require('through2');
 const gutil = require('gulp-util');
 const col = gutil.colors;
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const async = require('async');
 const cloneable = require('cloneable-readable');
-const del = require('del');
 const {zipDir} = require('../util');
 const {dataToolImage} = require('../config.js');
 const {hostDataDir, dataDir} = require('../config.js');
@@ -64,6 +63,12 @@ module.exports= {
       const gtfsFile = file.history[file.history.length-1];
       const fileName = gtfsFile.split('/').pop();
       const relativeFilename = path.relative(dataDir, gtfsFile);
+      if(fs.lstatSync(gtfsFile).isDirectory()) {
+        process.stdout.write(col.yellow(`${gtfsFile} not a file, deleting...\n`));
+        fs.removeSync(gtfsFile);
+        callback(null, null);
+        return;
+      }
       const id = fileName.substring(0,fileName.indexOf('.'));
       const config = configs[id];
       if(config===undefined) {
@@ -76,6 +81,7 @@ module.exports= {
         const src = `${relativeFilename}`;
         const dst = `${relativeFilename}-filtered`;
 
+        const dstDir = `${dataDir}/${dst}`;
         let hasFailures = false;
         const functions = config.rules.map((rule) => (done) => {
           OBAFilter(src,dst,rule).then((success) => {
@@ -83,12 +89,19 @@ module.exports= {
               fs.unlinkSync(`${dataDir}/${src}`);
 
               /* create zip named src from files in dst*/
-              zipDir(`${dataDir}/${src}`, `${dataDir}/${dst}`, () => {
-                del([`${dataDir}/${dst}`]);
+              zipDir(`${dataDir}/${src}`, dstDir, () => {
+                if(fs.lstatSync(dstDir).isDirectory()) {
+                  process.stdout.write(col.yellow(`deleting ${dstDir}`));
+                  fs.removeSync(dstDir);
+                }
                 process.stdout.write(rule + ' ' + gtfsFile + col.green(' filter SUCCESS\n'));
                 done();
               });
             } else {
+              if(fs.lstatSync(dstDir).isDirectory()) {
+                process.stdout.write(col.yellow(`deleting ${dstDir}`));
+                fs.removeSync(dstDir);
+              }
               hasFailures=true;
               process.stdout.write(rule + ' ' + gtfsFile + col.red(' filter FAILED\n'));
               done();
