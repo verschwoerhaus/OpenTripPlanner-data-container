@@ -75,6 +75,7 @@ module.exports= {
       }
       const osmFile = `${dataDir}/ready/osm/finland.pbf`;
 
+
       if(!fs.existsSync(osmFile)) {
         process.stdout.write(col.yellow(`${osmFile} not available, skipping ${gtfsFile}\n`));
         callback(null, null);
@@ -93,7 +94,7 @@ module.exports= {
         const src = `${relativeFilename}`;
         const dst = `${relativeFilename}-fitted`;
 
-        run(script, osmFile, src, dst).then((status) => {
+        run(script, '/data/ready/osm/finland.pbf', src, dst).then((status) => {
           if(status===true) {
             fs.unlinkSync(src);
             fs.renameSync(dst, src);
