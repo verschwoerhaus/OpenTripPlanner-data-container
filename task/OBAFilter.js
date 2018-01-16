@@ -1,6 +1,7 @@
 /*
  * Wrapper for OBA filtering
  */
+const del = require('del');
 const exec = require('child_process').exec;
 const through = require('through2');
 const gutil = require('gulp-util');
@@ -89,11 +90,8 @@ module.exports= {
               fs.unlinkSync(`${dataDir}/${src}`);
 
               /* create zip named src from files in dst*/
-              zipDir(`${dataDir}/${src}`, dstDir, () => {
-                if(fs.lstatSync(dstDir).isDirectory()) {
-                  process.stdout.write(col.yellow(`deleting ${dstDir}`));
-                  fs.removeSync(dstDir);
-                }
+              zipDir(`${dataDir}/${src}`, `${dataDir}/${dst}`, () => {
+                del([`${dataDir}/${dst}`]);
                 process.stdout.write(rule + ' ' + gtfsFile + col.green(' filter SUCCESS\n'));
                 done();
               });
