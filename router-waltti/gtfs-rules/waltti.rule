@@ -1,5 +1,5 @@
 # Joensuu - remove route_type 6 = gondola
 {"op":"remove", "match":{"file":"routes.txt", "route_type":"6"}}
 # Joensuu - map white route color to 'bus blue'
-{"op":"update", "match":{"file":"routes.txt", "route_color":"FFFFFF"}, "update":{"route_color":"009FE3"}}
+{"op":"update", "match":{"file":"routes.txt", "route_color":"FFFFFF"}, "update":{"route_color":""}}
 
