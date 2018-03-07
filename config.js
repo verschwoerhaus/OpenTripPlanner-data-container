@@ -44,7 +44,7 @@ const WALTTI_CONFIG = {
     src('MikkeliEly','http://dev.hsl.fi/gtfs.waltti/posely_mikkeli.zip',false),
     src('Vaasa','http://dev.hsl.fi/gtfs.waltti/vaasa.zip',false),
     src('Joensuu', 'http://dev.hsl.fi/gtfs.waltti/joensuu.zip',false, ['router-waltti/gtfs-rules/waltti.rule']),
-    src('JoensuuEly', 'http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip',false),
+    src('JoensuuEly', 'http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip',false, ['router-waltti/gtfs-rules/waltti.rule']),
     src('FOLI', 'http://dev.hsl.fi/gtfs.foli/foli.zip', false),
     src('Lahti', 'http://dev.hsl.fi/gtfs.lahti/lahti.zip', false),
     src('Kuopio', 'http://dev.hsl.fi/gtfs.kuopio/kuopio.zip', false),
