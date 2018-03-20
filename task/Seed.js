@@ -17,7 +17,9 @@ module.exports = function(configs, regexp){
     const container = `hsldevcom/opentripplanner-data-container-${c.id}:latest`;
     process.stdout.write(`extracting data from ${container}...\n`);
     const script =
-  `docker rmi ${container} || true;docker rm data-extract-${c.id} || true;
+  `docker rmi ${container} || true;
+  docker rm data-extract-${c.id} || true;
+  docker rename data-extract-${c.id} $(date +%s) || true; 
   docker create --name data-extract-${c.id} ${container};
   docker cp data-extract-${c.id}:var/www/localhost/htdocs/router-${c.id}.zip .;
   docker rm data-extract-${c.id}`;
