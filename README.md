@@ -26,7 +26,18 @@ update osm data:
   `gulp osm:update`
 
 download new gtfs data for waltti:
-  `ROUTER=waltti gulp gtfs:dl`
+  `ROUTERS=waltti gulp gtfs:dl`
+
+#### Configuration
+It is possible to change the behaviour of the data builder by defining environment variables.
+
+* "DOCKER_USER" defines username for authenticating to docker hub.
+* "DOCKER_AUTH" defines password for authenticating to docker hub.
+* (Optional, default latest, prod and tag based on date) "DOCKER_TAG" defines what will be the updated docker tag of data container images in remote register.
+* (Optional, default ${process.cwd()}/data) "HOST_DATA" defines base path for volume directories.
+* (Optional, default 'finland, waltti, hsl') "ROUTERS" defines which data containers are being built and deployed.
+* (Optional, default ${process.cwd()}/data) "DATA" defines base path for data directories in container's file system.
+* (Optional, default '0 0 3 * * *') "CRON" defines when data build is being run.
 
 #### Data processing steps
 Seed data can be retrieved with single gulp command:

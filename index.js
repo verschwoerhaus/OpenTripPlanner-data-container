@@ -18,7 +18,12 @@ const start = promisify((task, cb) => gulp.start(task,cb));
 const updateOSM=['osm:update'];
 const updateGTFS=['gtfs:dl','gtfs:fit','gtfs:filter','gtfs:id'];
 
-const routers=['finland','waltti','hsl'];
+let routers;
+if (process.env.ROUTERS) {
+  routers = process.env.ROUTERS.replace(/ /g,'').split(',');
+} else {
+  routers = ['finland','waltti','hsl'];
+}
 
 start('seed').then(() => {
   process.stdout.write('Seeded.');

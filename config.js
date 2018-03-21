@@ -67,8 +67,11 @@ const setCurrentConfig = (name) => {
 };
 
 //Allow limiting active configs with env variable
-setCurrentConfig(process.env.ROUTER);
-
+if (process.env.ROUTERS) {
+  setCurrentConfig(process.env.ROUTERS.replace(/ /g,''));
+} else {
+  setCurrentConfig();
+}
 
 //add config to every source
 ALL_CONFIGS.forEach(cfg => cfg.src.forEach(src => src.config=cfg));
