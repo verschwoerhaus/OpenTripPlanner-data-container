@@ -62,14 +62,14 @@
       "frequencySec": 60,
       "sourceType": "gtfs-http",
       "url": "http://digitransit-proxy:8080/out/pilottilissu.tampere.fi/api/gtfsrealtime/v1.0/feed/tripupdate",
-      "feedId": "Tampere",
+      "feedId": "tampere",
       "fuzzyTripMatching": false
     },
     {
       "type": "real-time-alerts",
       "frequencySec": 30,
       "url": "http://digitransit-proxy:8080/out/pilottilissu.tampere.fi/api/gtfsrealtime/v1.0/feed/servicealert",
-      "feedId": "Tampere",
+      "feedId": "tampere",
       "fuzzyTripMatching": false
     }
   ]

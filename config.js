@@ -50,7 +50,7 @@ const WALTTI_CONFIG = {
     src('Kuopio', 'http://dev.hsl.fi/gtfs.kuopio/kuopio.zip', false),
     src('OULU','http://www.transitdata.fi/oulu/google_transit.zip', false),
     src('LINKKI','http://jakoon.jkl.fi/reittiopas/datajkl.zip', false),
-    src('Tampere', 'http://tampere.fi/ekstrat/ptdata/tamperefeed.zip', true),
+    src('tampere', 'http://tampere.fi/ekstrat/ptdata/tamperefeed.zip', true),
   ],
   'osm':'finland',
 };
