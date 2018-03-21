@@ -18,7 +18,12 @@ const start = promisify((task, cb) => gulp.start(task,cb));
 const updateOSM=['osm:update'];
 const updateGTFS=['gtfs:dl','gtfs:fit','gtfs:filter','gtfs:id'];
 
-const routers=['finland','waltti','hsl'];
+let routers;
+if (process.env.ROUTERS) {
+  routers = process.env.ROUTERS.replace(/ /g,'').split(',');
+} else {
+  routers = ['finland','waltti','hsl'];
+}
 
 start('seed').then(() => {
   process.stdout.write('Seeded.');
@@ -54,7 +59,11 @@ async function update() {
     start('router:buildGraph').then(() => {
       try {
         process.stdout.write('Executing deploy script.');
-        execFileSync('./deploy.sh',[router], {env:{DOCKER_USER:process.env.DOCKER_USER,DOCKER_AUTH:process.env.DOCKER_AUTH}, stdio:[0,1,2]});
+        if (process.env.DOCKER_TAG) {
+          execFileSync('./deploy.sh',[router], {env:{DOCKER_USER:process.env.DOCKER_USER,DOCKER_AUTH:process.env.DOCKER_AUTH,DOCKER_TAG:process.env.DOCKER_TAG}, stdio:[0,1,2]});
+        } else {
+          execFileSync('./deploy.sh',[router], {env:{DOCKER_USER:process.env.DOCKER_USER,DOCKER_AUTH:process.env.DOCKER_AUTH}, stdio:[0,1,2]});
+        }
         postSlackMessage(`${router} data updated.`);
       } catch (E) {
         postSlackMessage(`${router} data update failed: ` + E.message);
