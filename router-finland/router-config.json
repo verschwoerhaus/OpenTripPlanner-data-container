@@ -72,6 +72,21 @@
       "url": "http://digitransit-proxy:8080/out/92.62.36.215/RTIX/service-alerts",
       "feedId": "OULU",
       "fuzzyTripMatching": false
+    },
+    {
+      "type": "stop-time-updater",
+      "frequencySec": 60,
+      "sourceType": "gtfs-http",
+      "url": "http://digitransit-proxy:8080/out/pilottilissu.tampere.fi/api/gtfsrealtime/v1.0/feed/tripupdate",
+      "feedId": "tampere",
+      "fuzzyTripMatching": false
+    },
+    {
+      "type": "real-time-alerts",
+      "frequencySec": 30,
+      "url": "http://digitransit-proxy:8080/out/pilottilissu.tampere.fi/api/gtfsrealtime/v1.0/feed/servicealert",
+      "feedId": "tampere",
+      "fuzzyTripMatching": false
     }
   ],
   "boardTimes": {
