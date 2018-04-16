@@ -46,7 +46,7 @@ const WALTTI_CONFIG = {
     src('Joensuu', 'http://dev.hsl.fi/gtfs.waltti/joensuu.zip',false, ['router-waltti/gtfs-rules/waltti.rule']),
     src('JoensuuEly', 'http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip',false, ['router-waltti/gtfs-rules/waltti.rule']),
     src('FOLI', 'http://dev.hsl.fi/gtfs.foli/foli.zip', false),
-    src('Lahti', 'http://www.lsl.fi/assets/uploads/google_transit.zip', false),
+    src('Lahti', 'http://www.lsl.fi/assets/uploads/google_transit.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
     src('Kuopio', 'http://dev.hsl.fi/gtfs.waltti/kuopio.zip', false),
     src('OULU','http://www.transitdata.fi/oulu/google_transit.zip', false),
     src('LINKKI','http://jakoon.jkl.fi/reittiopas/datajkl.zip', false),
