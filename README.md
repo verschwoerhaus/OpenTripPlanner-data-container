@@ -40,52 +40,64 @@ It is possible to change the behaviour of the data builder by defining environme
 * (Optional, default '0 0 3 * * *') "CRON" defines when data build is being run.
 
 #### Data processing steps
-Seed data can be retrieved with single gulp command:
+
+Seed data can be retrieved with a single gulp command:
 
 1. seed
-it downloads previous data containers and extracts osm and gtfs data from there
-and places it in ready directory.
 
-Currently there is single processing step for OSM data:
-1. osm:update
-Downloads required OSM packages from configured location, tests the file(s) with otp, if
-test passes data is copied to ready id. The resulting zip is named <id>.zip.
+Downloads previous data containers and extracts osm and gtfs data from there
+and places it in 'data/ready' directory. Old data acts as backup in case fetching/validating new data fails.
 
-Because gtfs processing steps require osm data the osm data must be available
-before running gtfs:fit stage
+Currently there is single processing step for OSM data. Because gtfs processing steps require osm data,
+the osm data must be available before running the gtfs:fit stage later below.
 
-Currently there are 4 steps for processing gtfs data:
-1. gtfs:download
+2. osm:update
+
+This command downloads required OSM packages from configured location, tests the file(s) with otp,
+and if tests pass data is copied to 'data/downloads/osm' directory.
+
+The data is then processed with the following steps:
+
+3. gtfs:dl
 Downloads a GTFS package from configured location, tests the file with otp, if
-test passes data is copied to dir fir. The resulting zip is named <id>.zip.
-1. gtfs:fit
-Runs configured map fits. Copies data to directory filterProcess.
-1. gtfs:filter
-Runs configured filterings. Copies data to directory id.
-1. gtfs:id
-Sets the gtfs feed id to <id> and copies data to directory ready.
+test passes data is copied to directory 'data/fit/gtfs'. The resulting zip is named <feedid>.zip.
 
-Building the router from available (seeded or downloadedand processed) data:
-1. router:buildGraph
+4. gtfs:fit
+Runs configured map fits. Copies data to directory 'data/filter/gtfs'.
+
+5. gtfs:filter
+Runs configured filterings. Copies data to directory 'data/id/gtfs'.
+
+6. gtfs:id
+Sets the gtfs feed id to <id> and copies data to directory 'data/ready/gtfs'.
+
+Building the router from available (seeded or downloaded and processed) data:
+
+7. router:buildGraph
+
 Prebuilds graph with current production version of OTP and creates zip files
 ready for building the otp-data container.
 
-The final step is router deployment
-1. deploy.sh
+
+The final step is router deployment:
+
+8. deploy.sh
+
 Builds a data container, starts it, starts a production version of otp and runs
-a simple routing test to verify that the data container looks ok. If test passes
-the fresh data container is pushed Docker Hub.
+a routing tests to verify that the data container looks ok. If tests pass
+the fresh data container is pushed to Dockerhub.
 
 Normally when the application is running (as a container) the index.js is used.
-It runs the data updating process on schedule specified as cron pattern.
+It runs the data updating process on a schedule specified as a cron pattern. Data build can be executed immediately
+by attaching to the builder container with bash 'docker exec -i -t <dockerid> /bin/bash' and then
+exexuting the command 'node index.js once'. The end result of the build is 3 docker containers uploaded into dockerhub.
+Digitransit-deployer detects the changes and restarts OTP instances, so that new data becomes in use.
 
-The end result of a data build is a deployed docker container ready to be deployed
-
-Each datacontainer image runs a http server listening to port 8080, serving both a gtfs data bundle and a pre-built graph:
+Each data container image runs a http server listening to port 8080, serving both a gtfs data bundle and a pre-built graph:
 - hsl: http://localhost:8080/router-hsl.zip and graph-hsl-<otpversion>.zip
 - waltti: http://localhost:8080/router-waltti.zip and graph-waltti-<otpversion>.zip
 - finland: http://localhost:8080/router-finland.zip and graph-finland-<otpversion>.zip
 
 ### otp-data-tools
-Contains tools for gtfs manipulation, such as One Bus Away gtfs filter...
-these tools are packaged inside docker container and are used dunring the data build process
+Contains tools for gtfs manipulation, such as One Bus Away gtfs filter.
+These tools are packaged inside docker container and are used dunring the data build process.
