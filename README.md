@@ -78,24 +78,26 @@ Building the router from available (seeded or downloaded and processed) data:
 Prebuilds graph with current production version of OTP and creates zip files
 ready for building the otp-data container.
 
-The final step is router deployment
+
+The final step is router deployment:
 
 8. deploy.sh
 
 Builds a data container, starts it, starts a production version of otp and runs
-a simple routing test to verify that the data container looks ok. If test passes
-the fresh data container is pushed Docker Hub.
+a routing tests to verify that the data container looks ok. If tests pass
+the fresh data container is pushed to Dockerhub.
 
 Normally when the application is running (as a container) the index.js is used.
-It runs the data updating process on schedule specified as cron pattern.
+It runs the data updating process on a schedule specified as a cron pattern. Data build can be executed immediately
+by attaching to the builder container with bash 'docker exec -i -t <dockerid> /bin/bash' and then
+exexuting the command 'node index.js once'. The end result of the build is 3 docker containers uploaded into dockerhub.
+Digitransit-deployer detects the changes and restarts OTP instances, so that new data becomes in use.
 
-The end result of a data build is a docker container uploaded into dockerhub, ready to be deployed
-
-Each datacontainer image runs a http server listening to port 8080, serving both a gtfs data bundle and a pre-built graph:
+Each data container image runs a http server listening to port 8080, serving both a gtfs data bundle and a pre-built graph:
 - hsl: http://localhost:8080/router-hsl.zip and graph-hsl-<otpversion>.zip
 - waltti: http://localhost:8080/router-waltti.zip and graph-waltti-<otpversion>.zip
 - finland: http://localhost:8080/router-finland.zip and graph-finland-<otpversion>.zip
 
 ### otp-data-tools
-Contains tools for gtfs manipulation, such as One Bus Away gtfs filter...
-these tools are packaged inside docker container and are used dunring the data build process
+Contains tools for gtfs manipulation, such as One Bus Away gtfs filter.
+These tools are packaged inside docker container and are used dunring the data build process.
