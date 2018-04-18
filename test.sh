@@ -10,7 +10,7 @@ DOCKER_IMAGE=$ORG/opentripplanner-data-container-$ROUTER_NAME:test
 function shutdown() {
   echo shutting down
   docker stop otp-data-$ROUTER_NAME || true
-  docker stop otp-$ROUTER_NAME || true
+  docker stop otp-$ROUTER_NAME || true
 }
 
 echo "Making sure there are no old test containers or image available"
