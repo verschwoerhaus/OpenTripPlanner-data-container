@@ -26,7 +26,6 @@ echo "Building data-container image..."
 docker build -t $DOCKER_IMAGE -f Dockerfile.data-container .
 echo -e "\n##### Testing $ROUTER_NAME ($DOCKER_IMAGE)#####\n"
 
-exit 1
 echo "Starting data container..."
 docker run --rm --name otp-data-$ROUTER_NAME $DOCKER_IMAGE > /dev/stdout &
 sleep 5
