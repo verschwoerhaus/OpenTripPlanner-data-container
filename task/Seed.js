@@ -4,6 +4,7 @@ const col = gutil.colors;
 const execSync = require('child_process').execSync;
 const fs = require('fs');
 const JSZip = require('jszip');
+const seedTag = process.env.OLD_TAG || 'latest';
 
 /**
  * Download seed data from previous data containers.
@@ -14,7 +15,7 @@ module.exports = function(configs, regexp){
 
   let toProcess=configs.length;
   configs.forEach(c => {
-    const container = `hsldevcom/opentripplanner-data-container-${c.id}:latest`;
+    const container = `hsldevcom/opentripplanner-data-container-${c.id}:${seedTag}`;
     process.stdout.write(`extracting data from ${container}...\n`);
     const script =
   `docker rmi ${container} || true;

@@ -59,11 +59,17 @@ async function update() {
     start('router:buildGraph').then(() => {
       try {
         process.stdout.write('Executing deploy script.');
-        if (process.env.DOCKER_TAG) {
-          execFileSync('./deploy.sh',[router], {env:{DOCKER_USER:process.env.DOCKER_USER,DOCKER_AUTH:process.env.DOCKER_AUTH,DOCKER_TAG:process.env.DOCKER_TAG}, stdio:[0,1,2]});
-        } else {
-          execFileSync('./deploy.sh',[router], {env:{DOCKER_USER:process.env.DOCKER_USER,DOCKER_AUTH:process.env.DOCKER_AUTH}, stdio:[0,1,2]});
-        }
+        execFileSync('./deploy.sh',[router],
+          {
+            env:
+              {
+                DOCKER_USER:process.env.DOCKER_USER,
+                DOCKER_AUTH:process.env.DOCKER_AUTH,
+                DOCKER_TAG:process.env.DOCKER_TAG,
+                TEST_TAG:process.env.OLD_TAG
+              }, stdio:[0,1,2]
+          }
+        );
         postSlackMessage(`${router} data updated.`);
       } catch (E) {
         postSlackMessage(`${router} data update failed: ` + E.message);

@@ -6,6 +6,7 @@ const gutil = require('gulp-util');
 const col = gutil.colors;
 const {hostDataDir, dataDir, constants} = require('../config');
 const {postSlackMessage} = require('../util');
+const testTag = process.env.OLD_TAG;
 
 /**
  * Builds an OTP graph with gtfs file. If the build is succesful we can trust
@@ -29,7 +30,7 @@ function testGTFS(gtfsFile, quiet=false) {
         const r = fs.createReadStream(gtfsFile);
         r.on('end', () => {
           try {
-            const build = exec(`docker run --rm -v ${hostDataDir}/tmp:/opt/opentripplanner/graphs --entrypoint /bin/bash hsldevcom/opentripplanner:prod  -c "java -Xmx8G -jar otp-shaded.jar --build graphs/${dir} "`,
+            const build = exec(`docker run --rm -v ${hostDataDir}/tmp:/opt/opentripplanner/graphs --entrypoint /bin/bash hsldevcom/opentripplanner:${testTag} -c "java -Xmx8G -jar otp-shaded.jar --build graphs/${dir} "`,
               {maxBuffer:constants.BUFFER_SIZE});
             build.on('exit', function(c){
               if(c===0) {
