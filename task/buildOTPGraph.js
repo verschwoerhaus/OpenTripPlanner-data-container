@@ -5,7 +5,7 @@ const {zipWithGlob} = require('../util');
 const fs = require('fs');
 const {dataDir, hostDataDir, constants} = require('../config.js');
 const {postSlackMessage} = require('../util');
-const graphBuildTag = process.env.OLD_TAG || 'latest';
+const graphBuildTag = process.env.OTP_TAG || 'latest';
 /*
  * node.js wrapper for building OTP graph
  */

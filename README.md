@@ -34,7 +34,8 @@ It is possible to change the behaviour of the data builder by defining environme
 * "DOCKER_USER" defines username for authenticating to docker hub.
 * "DOCKER_AUTH" defines password for authenticating to docker hub.
 * (Optional, default latest and tag based on date) "DOCKER_TAG" defines what will be the updated docker tag of data container images in remote register.
-* (Optional, default latest) "OLD_TAG" defines what version of OTP and data container should be used for seeding, testing and building graph.
+* (Optional, default latest) "OLD_TAG" defines what version of data container should be used for seeding.
+* (Optional, default latest) "OTP_TAG" defines what version of OTP testing and building graphs.
 * (Optional, default ${process.cwd()}/data) "HOST_DATA" defines base path for volume directories.
 * (Optional, default 'finland, waltti, hsl') "ROUTERS" defines which data containers are being built and deployed.
 * (Optional, default ${process.cwd()}/data) "DATA" defines base path for data directories in container's file system.

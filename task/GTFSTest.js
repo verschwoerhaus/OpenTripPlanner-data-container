@@ -6,7 +6,7 @@ const gutil = require('gulp-util');
 const col = gutil.colors;
 const {hostDataDir, dataDir, constants} = require('../config');
 const {postSlackMessage} = require('../util');
-const testTag = process.env.OLD_TAG;
+const testTag = process.env.OTP_TAG || 'latest';
 
 /**
  * Builds an OTP graph with gtfs file. If the build is succesful we can trust
