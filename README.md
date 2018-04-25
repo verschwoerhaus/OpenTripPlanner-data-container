@@ -33,7 +33,8 @@ It is possible to change the behaviour of the data builder by defining environme
 
 * "DOCKER_USER" defines username for authenticating to docker hub.
 * "DOCKER_AUTH" defines password for authenticating to docker hub.
-* (Optional, default latest, prod and tag based on date) "DOCKER_TAG" defines what will be the updated docker tag of data container images in remote register.
+* (Optional, default latest and tag based on date) "DOCKER_TAG" defines what will be the updated docker tag of data container images in remote register.
+* (Optional, default latest) "OLD_TAG" defines what version of OTP and data container should be used for seeding, testing and building graph.
 * (Optional, default ${process.cwd()}/data) "HOST_DATA" defines base path for volume directories.
 * (Optional, default 'finland, waltti, hsl') "ROUTERS" defines which data containers are being built and deployed.
 * (Optional, default ${process.cwd()}/data) "DATA" defines base path for data directories in container's file system.
@@ -75,7 +76,7 @@ Building the router from available (seeded or downloaded and processed) data:
 
 7. router:buildGraph
 
-Prebuilds graph with current production version of OTP and creates zip files
+Prebuilds graph with either current latest version or user defined version (with env variable OLD_TAG) of OTP and creates zip files
 ready for building the otp-data container.
 
 
@@ -83,14 +84,14 @@ The final step is router deployment:
 
 8. deploy.sh
 
-Builds a data container, starts it, starts a production version of otp and runs
+Builds a data container, starts it, starts either latest or user defined version (with env variable OLD_TAG) of otp and runs
 a routing tests to verify that the data container looks ok. If tests pass
 the fresh data container is pushed to Dockerhub.
 
 Normally when the application is running (as a container) the index.js is used.
 It runs the data updating process on a schedule specified as a cron pattern. Data build can be executed immediately
 by attaching to the builder container with bash 'docker exec -i -t <dockerid> /bin/bash' and then
-exexuting the command 'node index.js once'. The end result of the build is 3 docker containers uploaded into dockerhub.
+exexuting the command 'node index.js once'. The end result of the build is 2 docker containers uploaded into dockerhub.
 Digitransit-deployer detects the changes and restarts OTP instances, so that new data becomes in use.
 
 Each data container image runs a http server listening to port 8080, serving both a gtfs data bundle and a pre-built graph:
