@@ -36,7 +36,7 @@ const WALTTI_CONFIG = {
     src('Kajaani','http://dev.hsl.fi/gtfs.waltti/kajaani.zip', false),
     src('KeskiSuomenEly','http://dev.hsl.fi/gtfs.waltti/keski-suomen_ely.zip', false),
     src('Kotka','http://dev.hsl.fi/gtfs.waltti/kotka.zip', false),
-    src('Kouvola','http://dev.hsl.fi/gtfs.waltti/kvl.zip',false),
+    src('Kouvola','http://dev.hsl.fi/gtfs.waltti/kvl.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
     src('Lappeenranta','http://dev.hsl.fi/gtfs.waltti/lappeenranta.zip',false),
     src('Mikkeli','http://dev.hsl.fi/gtfs.waltti/mikkeli.zip',false),
     src('PohjoisPohjanmaanEly','http://dev.hsl.fi/gtfs.waltti/pohjois-pohjanmaan_ely.zip',false),
