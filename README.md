@@ -77,7 +77,7 @@ Building the router from available (seeded or downloaded and processed) data:
 
 7. router:buildGraph
 
-Prebuilds graph with either current latest version or user defined version (with env variable OLD_TAG) of OTP and creates zip files
+Prebuilds graph with either current latest version or user defined version (with env variable OTP_TAG) of OTP and creates zip files
 ready for building the otp-data container.
 
 
@@ -85,7 +85,7 @@ The final step is router deployment:
 
 8. deploy.sh
 
-Builds a data container, starts it, starts either latest or user defined version (with env variable OLD_TAG) of otp and runs
+Builds a data container, starts it, starts either latest or user defined version (with env variable OTP_TAG) of otp and runs
 a routing tests to verify that the data container looks ok. If tests pass
 the fresh data container is pushed to Dockerhub.
 
