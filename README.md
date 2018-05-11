@@ -47,8 +47,9 @@ Seed data can be retrieved with a single gulp command:
 
 1. seed
 
-Downloads previous data containers and extracts osm and gtfs data from there
-and places it in 'data/ready' directory. Old data acts as backup in case fetching/validating new data fails.
+Downloads previous data containers (env variable SEED_TAG can be used to customize which tag is pulled)
+and extracts osm and gtfs data from there and places it in 'data/ready' directory.
+Old data acts as backup in case fetching/validating new data fails.
 
 Currently there is single processing step for OSM data. Because gtfs processing steps require osm data,
 the osm data must be available before running the gtfs:fit stage later below.
