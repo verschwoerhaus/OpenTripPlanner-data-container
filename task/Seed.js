@@ -4,7 +4,7 @@ const col = gutil.colors;
 const execSync = require('child_process').execSync;
 const fs = require('fs');
 const JSZip = require('jszip');
-const seedTag = process.env.OLD_TAG || 'latest';
+const seedTag = process.env.SEED_TAG || 'latest';
 
 /**
  * Download seed data from previous data containers.
