@@ -75,7 +75,7 @@
     {
       "type": "bike-rental",
       "sourceType": "smoove",
-      "url": "http://digitransit-proxy:8080/out/data.foli.fi/citybike-test/smoove",
+      "url": "http://digitransit-proxy:8080/out/data.foli.fi/citybike/smoove",
       "frequencySec": 10
     }
   ]
