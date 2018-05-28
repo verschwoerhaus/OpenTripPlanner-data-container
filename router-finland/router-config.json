@@ -1,5 +1,5 @@
 {
-  "timeouts": [8, 5, 2],
+  "timeouts": [20, 20, 20],
   "routingDefaults": {
     "walkSpeed": 1.3,
     "transferSlack": 120,
