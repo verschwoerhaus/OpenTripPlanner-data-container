@@ -32,22 +32,22 @@ const WALTTI_CONFIG = {
 
   'id':'waltti',
   'src': [
-    src('Hameenlinna','http://dev.hsl.fi/gtfs.waltti/hameenlinna.zip', false),
-    src('Kajaani','http://dev.hsl.fi/gtfs.waltti/kajaani.zip', false),
-    src('KeskiSuomenEly','http://dev.hsl.fi/gtfs.waltti/keski-suomen_ely.zip', false),
-    src('Kotka','http://dev.hsl.fi/gtfs.waltti/kotka.zip', false),
+    src('Hameenlinna','http://dev.hsl.fi/gtfs.waltti/hameenlinna.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
+    src('Kajaani','http://dev.hsl.fi/gtfs.waltti/kajaani.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
+    src('KeskiSuomenEly','http://dev.hsl.fi/gtfs.waltti/keski-suomen_ely.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
+    src('Kotka','http://dev.hsl.fi/gtfs.waltti/kotka.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
     src('Kouvola','http://dev.hsl.fi/gtfs.waltti/kvl.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
-    src('Lappeenranta','http://dev.hsl.fi/gtfs.waltti/lappeenranta.zip',false),
-    src('Mikkeli','http://dev.hsl.fi/gtfs.waltti/mikkeli.zip',false),
-    src('PohjoisPohjanmaanEly','http://dev.hsl.fi/gtfs.waltti/pohjois-pohjanmaan_ely.zip',false),
-    src('IisalmiEly','http://dev.hsl.fi/gtfs.waltti/posely_iisalmi.zip',false),
-    src('MikkeliEly','http://dev.hsl.fi/gtfs.waltti/posely_mikkeli.zip',false),
-    src('Vaasa','http://dev.hsl.fi/gtfs.waltti/vaasa.zip',false),
+    src('Lappeenranta','http://dev.hsl.fi/gtfs.waltti/lappeenranta.zip',false, ['router-waltti/gtfs-rules/waltti.rule']),
+    src('Mikkeli','http://dev.hsl.fi/gtfs.waltti/mikkeli.zip',false, ['router-waltti/gtfs-rules/waltti.rule']),
+    src('PohjoisPohjanmaanEly','http://dev.hsl.fi/gtfs.waltti/pohjois-pohjanmaan_ely.zip',false, ['router-waltti/gtfs-rules/waltti.rule']),
+    src('IisalmiEly','http://dev.hsl.fi/gtfs.waltti/posely_iisalmi.zip',false, ['router-waltti/gtfs-rules/waltti.rule']),
+    src('MikkeliEly','http://dev.hsl.fi/gtfs.waltti/posely_mikkeli.zip',false, ['router-waltti/gtfs-rules/waltti.rule']),
+    src('Vaasa','http://dev.hsl.fi/gtfs.waltti/vaasa.zip',false, ['router-waltti/gtfs-rules/waltti.rule']),
     src('Joensuu', 'http://dev.hsl.fi/gtfs.waltti/joensuu.zip',false, ['router-waltti/gtfs-rules/waltti.rule']),
     src('JoensuuEly', 'http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip',false, ['router-waltti/gtfs-rules/waltti.rule']),
-    src('FOLI', 'http://dev.hsl.fi/gtfs.foli/foli.zip', false),
+    src('FOLI', 'http://dev.hsl.fi/gtfs.foli/foli.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
     src('Lahti', 'http://www.lsl.fi/assets/uploads/google_transit.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
-    src('Kuopio', 'http://dev.hsl.fi/gtfs.waltti/kuopio.zip', false),
+    src('Kuopio', 'http://dev.hsl.fi/gtfs.waltti/kuopio.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
     src('OULU','http://www.transitdata.fi/oulu/google_transit.zip', false),
     src('LINKKI','http://jakoon.jkl.fi/reittiopas/datajkl.zip', false),
     src('tampere', 'http://tampere.fi/ekstrat/ptdata/tamperefeed.zip', false),
@@ -94,7 +94,7 @@ const osm = [
 
 const constants = {
   BUFFER_SIZE:1024*1024*32
-};    
+};
 
 module.exports={
   ALL_CONFIGS: () => ALL_CONFIGS,
