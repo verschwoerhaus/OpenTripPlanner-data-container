@@ -18,10 +18,11 @@ wget https://bootstrap.pypa.io/get-pip.py && \
   pip install future && \
   pip install grequests && \
   pip install unicodecsv && \
+  pip install cffi && \
   pip install utm
 
 mkdir -p one-busaway-gtfs-transformer && \
-  wget -O one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar "http://nexus.onebusaway.org/service/local/artifact/maven/content?r=public&g=org.onebusaway&a=onebusaway-gtfs-transformer-cli&v=1.3.4-SNAPSHOT"
+  wget -O one-busaway-gtfs-transformer/onebusaway-gtfs-transformer-cli.jar "http://nexus.onebusaway.org/service/local/artifact/maven/content?r=public&g=org.onebusaway&a=onebusaway-gtfs-transformer-cli&v=1.3.9"
 
 git clone https://github.com/jswhit/pyproj.git
 cd pyproj
