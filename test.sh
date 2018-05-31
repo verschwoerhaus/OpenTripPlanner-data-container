@@ -85,7 +85,7 @@ for (( c=1; c<=$ITERATIONS; c++ ));do
 done
 
 echo "running otpqa"
-docker run --rm --name otp-data-tool $ORG/otp-data-tool:latest /bin/sh -c "cd OTPQA; python otpprofiler_json.py http://$IP:8080/otp/routers/default $ROUTER_NAME"
+docker run --rm --name otp-data-tools $ORG/otp-data-tools:latest /bin/sh -c "cd OTPQA; python otpprofiler_json.py http://$IP:8080/otp/routers/default $ROUTER_NAME"
 if [ $? == 0 ]; then
   echo "OK"
   shutdown

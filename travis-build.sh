@@ -9,11 +9,12 @@ set +e
 #DOCKER_AUTH
 
 ORG=${ORG:-hsldevcom}
+BUILDER=otp-data-builder
 DOCKER_TAG=${TRAVIS_BUILD_ID:-latest}
-DOCKER_IMAGE=$ORG/otp-data-builder:${DOCKER_TAG}
-DOCKER_IMAGE_LATEST=$ORG/otp-data-builder:latest
+DOCKER_IMAGE=$ORG/$BUILDER:${DOCKER_TAG}
+DOCKER_IMAGE_LATEST=$ORG/$BUILDER:latest
 
-echo Building otp-data-builder: $DOCKER_IMAGE
+echo Building $BUILDER: $DOCKER_IMAGE
 
 docker build  --tag=$DOCKER_IMAGE -f Dockerfile .
 
@@ -26,14 +27,15 @@ fi
 
 echo Build completed
 
-cd otp-data-tools
-
 ORG=${ORG:-hsldevcom}
+TOOLS=otp-data-tools
 DOCKER_TAG=${TRAVIS_BUILD_ID:-latest}
-DOCKER_IMAGE=$ORG/otp-data-tools:${DOCKER_TAG}
-DOCKER_IMAGE_LATEST=$ORG/otp-data-tool:latest
+DOCKER_IMAGE=$ORG/$TOOLS:${DOCKER_TAG}
+DOCKER_IMAGE_LATEST=$ORG/$TOOLS:latest
 
-echo Building otp-data-tools: $DOCKER_IMAGE
+cd $TOOLS
+
+echo Building $TOOLS: $DOCKER_IMAGE
 
 docker build  --tag=$DOCKER_IMAGE -f Dockerfile .
 
