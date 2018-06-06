@@ -9,7 +9,8 @@
     "walkReluctance": 1.75,
     "stairsReluctance": 1.65,
     "walkBoardCost": 540,
-    "compactLegsByReversedSearch": false
+    "compactLegsByReversedSearch": false,
+    "itineraryFiltering": 1.0
   },
 
   "updaters": [

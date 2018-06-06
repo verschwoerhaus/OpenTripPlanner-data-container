@@ -50,6 +50,7 @@ const WALTTI_CONFIG = {
     src('OULU','http://www.transitdata.fi/oulu/google_transit.zip', false),
     src('LINKKI','http://jakoon.jkl.fi/reittiopas/datajkl.zip', false),
     src('tampere', 'http://tampere.fi/ekstrat/ptdata/tamperefeed.zip', false),
+    src('Rovaniemi', 'http://dev.hsl.fi/gtfs.waltti/rovaniemi.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
   ],
   'osm':'finland',
 };
