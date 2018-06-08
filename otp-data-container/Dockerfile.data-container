@@ -15,6 +15,7 @@ EXPOSE 8080
 
 ADD *.zip  /var/www/localhost/htdocs/
 ADD version.txt /var/www/localhost/htdocs/
+ADD build.log /var/www/localhost/htdocs/
 ADD router/connected.csv /var/www/localhost/htdocs/
 ADD router/unconnected.csv /var/www/localhost/htdocs/
 
