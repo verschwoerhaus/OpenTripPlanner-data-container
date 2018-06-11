@@ -26,15 +26,18 @@ const buildGraph = function(config) {
 
     const buildGraph = exec(`docker run -v ${hostDataDir}/build:/opt/opentripplanner/graphs --rm --entrypoint /bin/bash hsldevcom/opentripplanner:${graphBuildTag}  -c "java -Xmx8g -jar otp-shaded.jar --build graphs/${config.id}/router"`,{maxBuffer:constants.BUFFER_SIZE});
     //const buildGraph = exec('ls -la');
+    const buildLog = fs.openSync(`${dataDir}/build/${config.id}/build.log`,'w+');
 
     buildGraph.stdout.on('data', function (data) {
       collectLog(data);
       process.stdout.write(data.toString());
+      fs.writeSync(buildLog,data);
     });
 
     buildGraph.stderr.on('data', function (data) {
       collectLog(data);
       process.stdout.write(col.red(data.toString()));
+      fs.writeSync(buildLog,data);
     });
 
     buildGraph.on('exit', (status) => {
@@ -45,6 +48,8 @@ const buildGraph = function(config) {
         postSlackMessage(`${config.id} build failed: ${status}:${log}`);
         reject('could not build');
       }
+
+      fs.closeSync(buildLog);
     });
   });
   return p;
