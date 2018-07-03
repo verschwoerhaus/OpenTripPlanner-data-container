@@ -18,7 +18,7 @@ echo Building $BUILDER: $DOCKER_IMAGE
 
 docker build  --tag=$DOCKER_IMAGE -f Dockerfile .
 
-if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
+if [ "${TRAVIS_BRANCH}" == "master" ] && [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
   docker login -u $DOCKER_USER -p $DOCKER_AUTH
   docker push $DOCKER_IMAGE
   docker tag $DOCKER_IMAGE $DOCKER_IMAGE_LATEST
@@ -39,7 +39,7 @@ echo Building $TOOLS: $DOCKER_IMAGE
 
 docker build  --tag=$DOCKER_IMAGE -f Dockerfile .
 
-if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
+if [ "${TRAVIS_BRANCH}" == "master" ] && ["${TRAVIS_PULL_REQUEST}" == "false" ]; then
   docker login -u $DOCKER_USER -p $DOCKER_AUTH
   docker push $DOCKER_IMAGE
   docker tag $DOCKER_IMAGE $DOCKER_IMAGE_LATEST
