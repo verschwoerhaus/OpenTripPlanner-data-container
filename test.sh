@@ -6,6 +6,7 @@ ORG=${ORG:-hsldevcom}
 JAVA_OPTS=${JAVA_OPTS:--Xmx7g}
 ROUTER_NAME=${1:-hsl}
 TEST_TAG=${2:-latest}
+TOOLS_TAG=${3:-latest}
 DOCKER_IMAGE=$ORG/opentripplanner-data-container-$ROUTER_NAME:test
 
 function shutdown() {
@@ -85,7 +86,7 @@ for (( c=1; c<=$ITERATIONS; c++ ));do
 done
 
 echo "running otpqa"
-docker run --rm --name otp-data-tools $ORG/otp-data-tools:latest /bin/sh -c "cd OTPQA; python otpprofiler_json.py http://$IP:8080/otp/routers/default $ROUTER_NAME"
+docker run --rm --name otp-data-tools $ORG/otp-data-tools:$TOOLS_TAG /bin/sh -c "cd OTPQA; python otpprofiler_json.py http://$IP:8080/otp/routers/default $ROUTER_NAME"
 if [ $? == 0 ]; then
   echo "OK"
   shutdown

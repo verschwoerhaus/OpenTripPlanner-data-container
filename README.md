@@ -36,6 +36,7 @@ It is possible to change the behaviour of the data builder by defining environme
 * (Optional, default latest and tag based on date) "DOCKER_TAG" defines what will be the updated docker tag of the data container images in the remote container registry.
 * (Optional, default latest) "SEED_TAG" defines what version of data container should be used for seeding.
 * (Optional, default latest) "OTP_TAG" defines what version of OTP is used for testing and building graphs.
+* (Optional, default latest) "TOOLS_TAG" defines what version of otp-data-tools image is used for testing.
 * (Optional, default ${process.cwd()}/data) "HOST_DATA" defines base path for volume directories.
 * (Optional, default 'finland, waltti, hsl') "ROUTERS" defines which data containers are being built and deployed.
 * (Optional, default ${process.cwd()}/data) "DATA" defines base path for data directories in container's file system.
@@ -87,8 +88,8 @@ The final step is router deployment:
 8. deploy.sh
 
 Builds a data container, starts it, starts either latest or user defined version (with env variable OTP_TAG) of otp and runs
-a routing tests to verify that the data container looks ok. If tests pass
-the fresh data container is pushed to Dockerhub.
+routing tests (otp-data-tools latest image is used for it by default, TOOLS_TAG env variable can be used to change that)
+to verify that the data container looks ok. If tests pass the fresh data container is pushed to Dockerhub.
 
 Normally when the application is running (as a container) the index.js is used.
 It runs the data updating process on a schedule specified as a cron pattern. Data build can be executed immediately
