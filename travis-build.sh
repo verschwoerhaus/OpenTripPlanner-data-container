@@ -52,6 +52,8 @@ function imagedeploy {
 
 imagedeploy "otp-data-builder"
 
+cd otp-data-tools
+
 imagedeploy "otp-data-tools"
 
 echo Build completed
