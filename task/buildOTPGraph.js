@@ -1,6 +1,5 @@
-const gutil = require('gulp-util');
 const otpMatching = require('otp-matching');
-const col = gutil.colors;
+const col = require('ansi-colors');
 const {zipWithGlob} = require('../util');
 const fs = require('fs');
 const {dataDir, hostDataDir, constants} = require('../config.js');

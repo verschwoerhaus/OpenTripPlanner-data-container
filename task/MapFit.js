@@ -1,6 +1,5 @@
 const through = require('through2');
-const gutil = require('gulp-util');
-const col = gutil.colors;
+const col = require('ansi-colors');
 const fs = require('fs');
 const path = require('path');
 const cloneable = require('cloneable-readable');

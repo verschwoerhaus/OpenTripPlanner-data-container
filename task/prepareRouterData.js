@@ -1,5 +1,5 @@
 const through = require('through2');
-const gutil = require('gulp-util');
+const Vinyl = require('vinyl');
 const fs = require('fs');
 const cloneable = require('cloneable-readable');
 const {routerDir} = require('../util');
@@ -10,7 +10,7 @@ const {dataDir} = require('../config');
 function createFile(config, fileName, source) {
   const name = `${config.id}/router/${fileName}`;
   process.stdout.write(`copying ${fileName}...\n`);
-  const file = new gutil.File( {path:name, contents: cloneable(fs.createReadStream(source))});
+  const file = new Vinyl( {path:name, contents: cloneable(fs.createReadStream(source))});
   return file;
 }
 

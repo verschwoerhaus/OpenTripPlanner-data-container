@@ -1,6 +1,6 @@
 const through = require('through2');
-const gutil = require('gulp-util');
-const col = gutil.colors;
+const col = require('ansi-colors');
+const Vinyl = require('vinyl');
 const execSync = require('child_process').execSync;
 const fs = require('fs');
 const JSZip = require('jszip');
@@ -35,7 +35,7 @@ module.exports = function(configs, regexp){
         zips.forEach(f => {
           const fileName = f.name.split('/').pop();
           f.async('arraybuffer').then(data => {
-            const file = new gutil.File( {path:fileName, contents: new Buffer(data)} );
+            const file = new Vinyl( {path:fileName, contents: new Buffer(data)} );
             stream.push(file);
             toProcess-=1;
             process.stdout.write(fileName + ' ' + col.green('Seed SUCCESS\n'));
