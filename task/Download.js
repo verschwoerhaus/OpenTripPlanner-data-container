@@ -5,7 +5,7 @@ const Vinyl = require('vinyl');
 const {postSlackMessage} = require('../util');
 
 /**
- * Download external data (gtfs, osm) resources.
+ * Download external data (gtfs, osm, dem) resources.
  */
 module.exports = function(entries){
 

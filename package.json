@@ -34,6 +34,7 @@
     "otp-matching": "^1.0.3",
     "request": "^2.83.0",
     "tempy": "^0.2.1",
+    "through2": "^2.0.3",
     "transform": "^1.1.2",
     "vinyl": "^2.2.0",
     "vinyl-paths": "^2.1.0"

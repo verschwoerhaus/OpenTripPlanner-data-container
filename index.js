@@ -16,6 +16,7 @@ const every = promisify((list, task, cb) => {
 const start = promisify((task, cb) => gulp.start(task,cb));
 
 const updateOSM=['osm:update'];
+const updateDEM=['dem:update'];
 const updateGTFS=['gtfs:dl','gtfs:fit','gtfs:filter','gtfs:id'];
 
 let routers;
@@ -42,6 +43,10 @@ async function update() {
   setCurrentConfig(routers.join(',')); //restore used config
 
   await every(updateOSM, function(task, callback) {
+    start(task).then(() => {callback(null, true);});
+  });
+
+  await every(updateDEM, function(task, callback) {
     start(task).then(() => {callback(null, true);});
   });
 
