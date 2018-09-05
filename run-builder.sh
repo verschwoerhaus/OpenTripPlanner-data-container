@@ -11,6 +11,16 @@ BUILD_INTERVAL=${BUILD_INTERVAL:-1}
 BUILD_INTERVAL_SECONDS=$((($BUILD_INTERVAL - 1)*24*3600))
 #start build at this time (GMT):
 BUILD_TIME=${BUILD_TIME:-23:00:00}
+BUILDER_TYPE=${BUILDER_TYPE:-dev}
+
+# param: message text content
+function post_slack_message {
+    MSG='{"username":"OTP data builder '$BUILDER_TYPE'","text":"'$1'"}'
+
+    if [ -v SLACK_WEBHOOK_URL ]; then
+        curl -X POST -H 'Content-type: application/json' --data $MSG $SLACK_WEBHOOK_URL
+    fi
+}
 
 # run data build loop forever, unless build interval is set to zero
 while true; do
@@ -33,11 +43,9 @@ while true; do
     SUCCESS=$?
 
     if [ $SUCCESS = 143 ]; then
-        echo "** ERROR: Build frozen"
-        if [ -v SLACK_WEBHOOK_URL ]; then
-            curl -X POST -H 'Content-type: application/json' \
-                 --data '{"text":"ERROR: data builder frozen, restarting."}' $SLACK_WEBHOOK_URL
-        fi
+        text='** ERROR: Build frozen, restarting'
+        echo "$text"
+        post_slack_message "$text"
     else
         if [ $SUCCESS -ne 0 ]; then
             echo "** ERROR: Build failed"
@@ -51,11 +59,9 @@ while true; do
         SUCCESS=$?
 
         if [ $SUCCESS = 143 ]; then
-            echo "** ERROR: Second build frozen. Trying again tomorrow."
-            if [ -v SLACK_WEBHOOK_URL ]; then
-                curl -X POST -H 'Content-type: application/json' \
-                 --data '{"text":"Second build frozen. Trying again tomorrow."}' $SLACK_WEBHOOK_URL
-            fi
+            text='** ERROR: Second build frozen. Trying again tomorrow.'
+            echo "$text"
+            post_slack_message "$text"
         else
             if [ $SUCCESS -ne 0 ]; then
                 echo "** ERROR: Second build failed"
