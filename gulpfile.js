@@ -13,6 +13,7 @@ const del = require('del');
 const config = require('./config');
 const {buildOTPGraphTask} = require('./task/buildOTPGraph');
 const hslHackTask= require('./task/hslHackTask');
+const {postSlackMessage} = require('./util');
 
 /**
  * Download and test new osm data
@@ -45,6 +46,7 @@ gulp.task('dem:update', function () {
     .catch((err) => {
       if (err === 'fail') {
         process.stdout.write(col.red("Failing build because of a failed DEM download!\n"));
+        postSlackMessage(`Failing build because of a failed DEM download.`);
         process.exit(1);
       }
     });

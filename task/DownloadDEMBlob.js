@@ -90,7 +90,9 @@ module.exports = function(entries){
                     process.stdout.write(col.red(err));
                     process.stdout.write(col.red(`Failed to move DEM data from ${readyPath}\n`));
                   } else {
-                    process.stdout.write(col.green(`DEM data update process was successful ${readyPath.split('/').pop()}\n`));
+                    process.stdout.write(
+                      col.green(`DEM data update process was successful for ${entry.id}\n`)
+                    );
                   }
                 });
                 resolve();
