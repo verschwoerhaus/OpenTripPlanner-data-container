@@ -1,6 +1,6 @@
 const fs = require('fs');
-const col = require('ansi-colors');
 const gulp = require('gulp');
+const col = require('ansi-colors');
 const dl = require('./task/Download');
 const dlBlob = require('./task/DownloadDEMBlob');
 const {setFeedIdTask} = require('./task/setFeedId');
@@ -40,7 +40,14 @@ gulp.task('dem:update', function () {
   if (!fs.existsSync(demReadyDir)) {
     fs.mkdirSync(demReadyDir);
   }
-  return Promise.all(dlBlob(urls, true, true));
+  const promises = dlBlob(urls, true, true);
+  return Promise.all(promises)
+    .catch((err) => {
+      if (err === 'fail') {
+        process.stdout.write(col.red("Failing build because of a failed DEM download!\n"));
+        process.exit(1);
+      }
+    });
 });
 
 /**

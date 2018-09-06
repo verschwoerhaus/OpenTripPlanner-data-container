@@ -42,37 +42,40 @@ module.exports = function(entries){
       let dataAlreadyExists = false;
       let downloadHash;
       const r = request(entry.url);
-      r.pipe(fs.createWriteStream(filePath));
+
+      const stream = r.pipe(fs.createWriteStream(filePath));
       r.on('response', response => {
-        downloadHash = response.headers['content-md5'];
-        compareHashes(downloadHash, readyPath)
-          .then((resolved) => {
-            if (resolved) {
-              process.stdout.write(col.green(`Local DEM data for ${entry.id} was already up-to-date\n`));
-              dataAlreadyExists = true;
-              // Abort download as remote has same md5 as local copy
-              r.abort();
-            }
-          }).catch((err) => {
-            if (err === 'end') {
-              process.stdout.write(col.green(`${entry.url} hash value differs from local file's hash value\n`));
-              process.stdout.write(col.green(`Downloading new DEM data from ${entry.url}\n`));
-            } else if (err === 'error') {
-              process.stdout.write(col.red(`\nFailed to load local DEM data for ${entry.id}\n`));
-              process.stdout.write(col.green(`Downloading new DEM data from ${entry.url}\n`));
-            } else {
-              process.stdout.write(col.red(err));
-              process.stdout.write(col.red(`\nFailed to load local DEM data for ${entry.id}\n`));
-              process.stdout.write(col.green(`Downloading new DEM data from ${entry.url}\n`));
-            }
-          });
+        if (response.statusCode == 200) {
+          downloadHash = response.headers['content-md5'];
+          compareHashes(downloadHash, readyPath)
+            .then((resolved) => {
+              if (resolved) {
+                process.stdout.write(col.green(`Local DEM data for ${entry.id} was already up-to-date\n`));
+                dataAlreadyExists = true;
+                // Abort download as remote has same md5 as local copy
+                r.abort();
+              }
+            }).catch((err) => {
+              if (err === 'end') {
+                process.stdout.write(col.green(`${entry.url} hash value differs from local file's hash value\n`));
+                process.stdout.write(col.green(`Downloading new DEM data from ${entry.url}\n`));
+              } else if (err === 'error') {
+                process.stdout.write(col.red(`Failed to load local DEM data for ${entry.id}\n`));
+                process.stdout.write(col.green(`Downloading new DEM data from ${entry.url}\n`));
+              } else {
+                process.stdout.write(col.red(err));
+                process.stdout.write(col.red(`Failed to load local DEM data for ${entry.id}\n`));
+                process.stdout.write(col.green(`Downloading new DEM data from ${entry.url}\n`));
+              }
+            });
+        }
       });
       r.on('error', err => {
         process.stdout.write(col.red(err));
-        process.stdout.write(col.green(`\nFailed to load new DEM data for ${entry.id}\n`));
-        reject();
+        process.stdout.write(col.green(`Failed to load new DEM data for ${entry.id}\n`));
+        reject('fail');
       });
-      r.on('end', () => {
+      stream.on('finish', () => {
         // If new file was downloaded, this resolves with the file's path
         // This is also called when request is aborted but new call to resolve shouldn't do anything
         // However, if the file is really small, this could in theory be called before call to abort request
@@ -85,7 +88,7 @@ module.exports = function(entries){
                 fs.rename(path, path.replace('/downloads/', '/ready/'), (err) => {
                   if (err) {
                     process.stdout.write(col.red(err));
-                    process.stdout.write(col.red(`\nFailed to move DEM data from ${readyPath}\n`));
+                    process.stdout.write(col.red(`Failed to move DEM data from ${readyPath}\n`));
                   } else {
                     process.stdout.write(col.green(`DEM data update process was successful ${readyPath.split('/').pop()}\n`));
                   }
@@ -96,11 +99,11 @@ module.exports = function(entries){
               if (err === 'end') {
                 process.stdout.write(col.red(`${entry.url} hash value differs from just downloaded file's hash value\n`));
               } else if (err === 'error') {
-                process.stdout.write(col.red(`\nFailed to load local DEM data for ${entry.id}\n`));
+                process.stdout.write(col.red(`Failed to load local DEM data for ${entry.id}\n`));
               } else {
                 process.stdout.write(col.red(err));
               }
-              reject();
+              reject('fail');
             });
           } else {
             resolve();
