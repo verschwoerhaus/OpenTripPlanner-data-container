@@ -85,7 +85,7 @@ module.exports = function(entries){
             .then((resolved) => {
               if (resolved) {
                 process.stdout.write(col.green(`Downloaded updated DEM data to ${filePath}\n`));
-                fs.rename(path, path.replace('/downloads/', '/ready/'), (err) => {
+                fs.rename(filePath, readyPath, (err) => {
                   if (err) {
                     process.stdout.write(col.red(err));
                     process.stdout.write(col.red(`Failed to move DEM data from ${readyPath}\n`));
