@@ -31,7 +31,7 @@ gulp.task('osm:update', function () {
  */
 gulp.task('dem:update', function () {
   const map = config.ALL_CONFIGS().map(cfg => cfg.dem).reduce((acc, val) => {acc[val] = true; return acc;},{});
-  const urls = Object.keys(map).map(key => config.demMap[key]);
+  const urls = Object.keys(map).map(key => config.demMap[key]).filter((url) => (url !== undefined));
   const demDownloadDir = `${config.dataDir}/downloads/dem/`;
   if (!fs.existsSync(demDownloadDir)) {
     fs.mkdirSync(demDownloadDir);
@@ -40,21 +40,7 @@ gulp.task('dem:update', function () {
   if (!fs.existsSync(demReadyDir)) {
     fs.mkdirSync(demReadyDir);
   }
-  return Promise.all(dlBlob(urls, true, true))
-    .then((paths) => {
-      paths.filter(path => path !== null)
-        .forEach((path) => {
-          process.stdout.write(col.green(`Downloaded updated DEM data to ${path}\n`));
-          fs.rename(path, path.replace('/downloads/', '/ready/'), (err) => {
-            if (err) {
-              process.stdout.write(col.red(err));
-              process.stdout.write(col.red(`\nFailed to move DEM data from ${path}\n`));
-            } else {
-              process.stdout.write(col.green(`Updated DEM data for ${path.split('/').pop()}\n`));
-            }
-          });
-        });
-    });
+  return Promise.all(dlBlob(urls, true, true));
 });
 
 /**
@@ -141,19 +127,12 @@ gulp.task('osm:seed', ['osm:del'], function () {
   return Seed(config.ALL_CONFIGS(),/.pbf/).pipe(gulp.dest(`${config.dataDir}/ready/osm`));
 });
 
-gulp.task('dem:del', () => (del([
-  `${config.dataDir}/ready/dem`])));
-
-gulp.task('dem:seed', ['dem:del'], function () {
-  return Seed(config.ALL_CONFIGS(),/.tif/).pipe(gulp.dest(`${config.dataDir}/ready/dem`));
-});
-
 /**
  * Seed GTFS & OSM data with data from previous data-containes to allow
  * continuous flow of data into production when one or more updated data files
  * are broken.
  */
-gulp.task('seed', ['osm:seed','gtfs:seed', 'dem:seed']);
+gulp.task('seed', ['osm:seed','gtfs:seed']);
 
 gulp.task('router:del',() => (del([
   `${config.dataDir}/build`])));

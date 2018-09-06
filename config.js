@@ -27,7 +27,6 @@ const FINLAND_CONFIG = {
     src('OULU','http://www.transitdata.fi/oulu/google_transit.zip', false),
   ],
   'osm':'finland',
-  'dem':'hsl',
 };
 
 const WALTTI_CONFIG = {
