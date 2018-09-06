@@ -46,7 +46,7 @@ module.exports = function(entries){
       r.on('response', response => {
         downloadHash = response.headers['content-md5'];
         compareHashes(downloadHash, readyPath)
-          .then((resolved, rejected) => {
+          .then((resolved) => {
             if (resolved) {
               process.stdout.write(col.green(`Local DEM data for ${entry.id} was already up-to-date\n`));
               dataAlreadyExists = true;
@@ -79,7 +79,7 @@ module.exports = function(entries){
         // but that situation shouldn't happen with DEM data sizes.
         if (!dataAlreadyExists) {
           compareHashes(downloadHash, filePath)
-            .then((resolved, rejected) => {
+            .then((resolved) => {
               if (resolved) {
                 process.stdout.write(col.green(`Downloaded updated DEM data to ${filePath}\n`));
                 fs.rename(path, path.replace('/downloads/', '/ready/'), (err) => {
@@ -91,15 +91,15 @@ module.exports = function(entries){
                   }
                 });
                 resolve();
-              } else if (rejected === 'error') {
-                process.stdout.write(col.red(`\nFailed to load local DEM data for ${entry.id}\n`));
-                reject();
-              } else {
-                process.stdout.write(col.red(`${entry.url} hash value differs from just downloaded file's hash value\n`));
-                reject();
               }
             }).catch((err) => {
-              process.stdout.write(col.red(err));
+              if (err === 'end') {
+                process.stdout.write(col.red(`${entry.url} hash value differs from just downloaded file's hash value\n`));
+              } else if (err === 'error') {
+                process.stdout.write(col.red(`\nFailed to load local DEM data for ${entry.id}\n`));
+              } else {
+                process.stdout.write(col.red(err));
+              }
               reject();
             });
           } else {
