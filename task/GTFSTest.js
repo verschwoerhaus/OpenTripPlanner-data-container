@@ -16,7 +16,7 @@ function testGTFS(gtfsFile, quiet=false) {
 
   const p = new Promise((resolve, reject) => {
     if(!fs.existsSync(gtfsFile)) {
-      process.stdout.write(gtfsFile + ' does not exist!');
+      process.stdout.write(gtfsFile + ' does not exist!\n');
       p.reject();
     } else {
       if(!fs.existsSync(`${dataDir}/tmp`)) {
@@ -38,7 +38,7 @@ function testGTFS(gtfsFile, quiet=false) {
               } else {
                 const log = lastLog.join('');
                 process.stdout.write(gtfsFile + ' ' + col.red(`Test FAILED (${c})\n`));
-                process.stdout.write(gtfsFile + ': ' + col.red(lastLog.join('')));
+                process.stdout.write(gtfsFile + ': ' + col.red(lastLog.join('')) + '\n');
                 postSlackMessage(`${gtfsFile} test failed: ${log}`);
                 resolve(false);
               }
@@ -64,8 +64,8 @@ function testGTFS(gtfsFile, quiet=false) {
             });
           } catch(e) {
             const log = lastLog.join('');
-            process.stdout.write(gtfsFile + ' ' + col.red(`Test FAILED (${e})`));
-            process.stdout.write(gtfsFile + ': ' + col.red(log));
+            process.stdout.write(gtfsFile + ' ' + col.red(`Test FAILED (${e})\n`));
+            process.stdout.write(gtfsFile + ': ' + col.red(log) + '\n');
             postSlackMessage(`${gtfsFile} test failed: ${log}`);
             fse.removeSync(folder);
             reject(e);

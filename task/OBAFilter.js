@@ -48,7 +48,7 @@ function OBAFilter(src, dst, rule) {
         const log = lastLog.join('');
         postSlackMessage(`Running command ${cmd} on ${src} failed: ${log}.`);
         process.stdout.write(`Running command ${cmd} failed: ${log}.\n`);
-        process.stdout.write(`${src} ${log}`);
+        process.stdout.write(`${src} ${log}\n`);
         resolve(false);
       }
     });
@@ -96,7 +96,7 @@ module.exports= {
               });
             } else {
               if(fs.lstatSync(dstDir).isDirectory()) {
-                process.stdout.write(col.yellow(`deleting ${dstDir}`));
+                process.stdout.write(col.yellow(`deleting ${dstDir}\n`));
                 fs.removeSync(dstDir);
               }
               hasFailures=true;
