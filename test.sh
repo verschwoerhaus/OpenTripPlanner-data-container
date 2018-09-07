@@ -24,7 +24,6 @@ docker stop otp-data-hsl || true
 docker stop otp-hsl || true
 docker rmi $DOCKER_IMAGE || true
 cd data/build/$ROUTER_NAME
-rm router-$ROUTER_NAME.zip
 echo "Building data-container image..."
 docker build -t $DOCKER_IMAGE -f Dockerfile.data-container .
 echo -e "\n##### Testing $ROUTER_NAME ($DOCKER_IMAGE)#####\n"
