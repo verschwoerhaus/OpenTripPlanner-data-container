@@ -40,7 +40,7 @@ else
   sleep 5
 fi
 echo "Getting otp ip.."
-timeout=$(($(date +%s) + 120))
+timeout=$(($(date +%s) + 480))
 until IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' otp-$ROUTER_NAME) || [[ $(date +%s) -gt $timeout ]]; do sleep 1;done;
 
 if [ "$IP" == "" ]; then
