@@ -1,4 +1,5 @@
 const fs = require('fs');
+const {execSync}= require('child_process');
 const gulp = require('gulp');
 const col = require('ansi-colors');
 const dl = require('./task/Download');
@@ -35,11 +36,11 @@ gulp.task('dem:update', function () {
   const urls = Object.keys(map).map(key => config.demMap[key]).filter((url) => (url !== undefined));
   const demDownloadDir = `${config.dataDir}/downloads/dem/`;
   if (!fs.existsSync(demDownloadDir)) {
-    fs.mkdirSync(demDownloadDir);
+    execSync(`mkdir -p ${demDownloadDir}`);
   }
   const demReadyDir = `${config.dataDir}/ready/dem/`;
   if (!fs.existsSync(demReadyDir)) {
-    fs.mkdirSync(demReadyDir);
+    execSync(`mkdir -p ${demReadyDir}`);
   }
   const promises = dlBlob(urls, true, true);
   return Promise.all(promises)
