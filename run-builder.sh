@@ -11,6 +11,9 @@ BUILD_INTERVAL=${BUILD_INTERVAL:-1}
 BUILD_INTERVAL_SECONDS=$((($BUILD_INTERVAL - 1)*24*3600))
 #start build at this time (GMT):
 BUILD_TIME=${BUILD_TIME:-23:00:00}
+#option to launch build automatically at early hours
+#as a mitigation to crashed builds. zero value disables this feature
+AUTO_REBUILD_HOUR=${AUTO_REBUILD_HOUR:-6}
 BUILDER_TYPE=${BUILDER_TYPE:-dev}
 
 # param: message text content
@@ -22,9 +25,18 @@ function post_slack_message {
     fi
 }
 
+# build should be started immediately if service starts before 06:00
+# because that is considered as a restart after a service failure
+HOUR=$(date +%H)
+if [[ "$HOUR" -lt "$AUTO_REBUILD_HOUR" ]]; then
+    BUILD_AT_LAUNCH=1
+else
+    BUILD_AT_LAUNCH=0
+fi
+
 # run data build loop forever, unless build interval is set to zero
 while true; do
-    if [[ "$BUILD_INTERVAL" -gt 0 ]]; then
+    if [[ "$BUILD_INTERVAL" -gt 0 ]] && [[ "$BUILD_AT_LAUNCH" -eq 0 ]]; then
         SLEEP=$(($(date -u -d $BUILD_TIME +%s) - $(date -u +%s) + 1))
         if [[ "$SLEEP" -le 0 ]]; then
             #today's build time is gone, start counting from tomorrow
@@ -35,6 +47,8 @@ while true; do
         echo "** Sleeping $SLEEP seconds until the next build"
         sleep $SLEEP
     fi
+
+    BUILD_AT_LAUNCH=0 #reset
 
     echo "** Launching OTP data builder"
 
