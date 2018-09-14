@@ -87,17 +87,24 @@ module.exports = function(entries){
                 process.stdout.write(col.green(`Downloaded updated DEM data to ${filePath}\n`));
                 fs.rename(filePath, readyPath, (err) => {
                   if (err) {
+                    if (fs.existsSync(filePath)) {
+                      fs.unlinkSync(filePath);
+                    }
                     process.stdout.write(col.red(err));
                     process.stdout.write(col.red(`Failed to move DEM data from ${readyPath}\n`));
+                    reject('fail');
                   } else {
                     process.stdout.write(
                       col.green(`DEM data update process was successful for ${entry.id}\n`)
                     );
+                    resolve();
                   }
                 });
-                resolve();
               }
             }).catch((err) => {
+              if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+              }
               if (err === 'end') {
                 process.stdout.write(col.red(`${entry.url} hash value differs from just downloaded file's hash value\n`));
               } else if (err === 'error') {
@@ -108,6 +115,9 @@ module.exports = function(entries){
               reject('fail');
             });
           } else {
+            if (fs.existsSync(filePath)) {
+              fs.unlinkSync(filePath);
+            }
             resolve();
           }
         });

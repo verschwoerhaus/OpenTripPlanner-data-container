@@ -4,7 +4,7 @@
 set +e
 
 #How long the build can last before it is considered frozen (default 3 hours)
-MAX_TIME=${MAX_TIME:-10800}
+MAX_TIME=${MAX_TIME:-28800}
 #how often data is built (default once a day)
 BUILD_INTERVAL=${BUILD_INTERVAL:-1}
 #Substract one day, because first wait hours are computed before each build
