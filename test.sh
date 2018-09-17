@@ -22,7 +22,7 @@ docker stop otp-data-waltti || true
 docker stop otp-waltti || true
 docker stop otp-data-hsl || true
 docker stop otp-hsl || true
-docker rmi $DOCKER_IMAGE || true
+docker rmi --force $DOCKER_IMAGE || true
 cd data/build/$ROUTER_NAME
 echo "Building data-container image..."
 docker build -t $DOCKER_IMAGE -f Dockerfile.data-container .
