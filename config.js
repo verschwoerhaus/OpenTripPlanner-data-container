@@ -95,8 +95,8 @@ const osm = [
 ];
 
 const dem = [
-  {id:'waltti',url: 'https://elevdata.blob.core.windows.net/elevation/waltti/waltti-elevation-model.tif'},
-  {id:'hsl', url: 'https://elevdata.blob.core.windows.net/elevation/hsl/hsl-elevation-model.tif'}
+  {id:'waltti',url: 'https://elevdata.blob.core.windows.net/elevation/waltti/waltti-10m-elevation-model.tif'},
+  {id:'hsl', url: 'https://elevdata.blob.core.windows.net/elevation/hsl/hsl-10m-elevation-model.tif'}
 ];
 
 const constants = {
