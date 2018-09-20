@@ -137,19 +137,24 @@ gulp.task('osm:seed', ['osm:del'], function () {
   return Seed(config.ALL_CONFIGS(),/.pbf/).pipe(gulp.dest(`${config.dataDir}/ready/osm`));
 });
 
-gulp.task('dem:del', () => (del([
-  `${config.dataDir}/ready/dem`])));
-
-gulp.task('dem:seed', ['dem:del'], function () {
-  return Seed(config.ALL_CONFIGS(),/.tif/).pipe(gulp.dest(`${config.dataDir}/ready/dem`));
-});
+/**
+ * TODO: ADD THE FOLLOWING LINES WHEN TIF FILES EXIST IN DATA CONTAINERS.
+ *
+ * gulp.task('dem:del', () => (del([
+ *   `${config.dataDir}/ready/dem`])));
+ *
+ * gulp.task('dem:seed', ['dem:del'], function () {
+ *   return Seed(config.ALL_CONFIGS(),/.tif/).pipe(gulp.dest(`${config.dataDir}/ready/dem`));
+ * });
+ */
 
 /**
- * Seed GTFS, DEM & OSM data with data from previous data-containes to allow
+ * Seed GTFS & OSM data with data from previous data-containes to allow
  * continuous flow of data into production when one or more updated data files
  * are broken.
  */
-gulp.task('seed', ['dem:seed','osm:seed','gtfs:seed']);
+// TODO add dem:seed here when its seeding can be enabled
+gulp.task('seed', ['osm:seed','gtfs:seed']);
 
 gulp.task('router:del',() => (del([
   `${config.dataDir}/build`])));

@@ -27,7 +27,10 @@ module.exports = function(configs, regexp){
     execSync(script);
     const file = `router-${c.id}.zip`;
     fs.readFile(file, function(err, data) {
-      if (err) throw err;
+      if (err) {
+        process.stdout.write(err);
+        throw err;
+      }
       JSZip.loadAsync(data).then(function (zip) {
         const zips = zip.file(regexp);
         toProcess+=zips.length;
