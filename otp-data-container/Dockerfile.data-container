@@ -19,4 +19,4 @@ ADD build.log /var/www/localhost/htdocs/
 ADD router/connected.csv /var/www/localhost/htdocs/
 ADD router/unconnected.csv /var/www/localhost/htdocs/
 
-CMD /bin/ash -c "cd var/www/localhost/htdocs/;unzip router*.zip;rm *.tif;cp router-*/* .;rm -r \$(find ./ -type d|grep router);cd -;/usr/sbin/startlighttpd"
+CMD /bin/ash -c "cd var/www/localhost/htdocs/;unzip router*.zip;cp router-*/* .;rm -r \$(find ./ -type d|grep router);cd -;/usr/sbin/startlighttpd"
