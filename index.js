@@ -15,6 +15,7 @@ const every = promisify((list, task, cb) => {
 
 const start = promisify((task, cb) => gulp.start(task,cb));
 
+const updateDEM=['dem:update'];
 const updateOSM=['osm:update'];
 const updateGTFS=['gtfs:dl','gtfs:fit','gtfs:filter','gtfs:id'];
 
@@ -26,13 +27,13 @@ if (process.env.ROUTERS) {
 }
 
 start('seed').then(() => {
-  process.stdout.write('Seeded.');
+  process.stdout.write('Seeded.\n');
   if(process.argv.length==3 && process.argv[2]==='once') {
-    process.stdout.write('Running update once.');
+    process.stdout.write('Running update once.\n');
     update();
   } else {
     const cronPattern = process.env.CRON || '0 0 3 * * *';
-    process.stdout.write(`Starting timer with pattern: ${cronPattern}`);
+    process.stdout.write(`Starting timer with pattern: ${cronPattern}\n`);
     new CronJob(cronPattern, update, null, true, 'Europe/Helsinki');
   }
 });
@@ -40,6 +41,10 @@ start('seed').then(() => {
 async function update() {
   postSlackMessage('Starting data build');
   setCurrentConfig(routers.join(',')); //restore used config
+
+  await every(updateDEM, function(task, callback) {
+    start(task).then(() => {callback(null, true);});
+  });
 
   await every(updateOSM, function(task, callback) {
     start(task).then(() => {callback(null, true);});
@@ -58,7 +63,7 @@ async function update() {
     setCurrentConfig(router);
     start('router:buildGraph').then(() => {
       try {
-        process.stdout.write('Executing deploy script.');
+        process.stdout.write('Executing deploy script.\n');
         execFileSync('./deploy.sh',[router],
           {
             env:

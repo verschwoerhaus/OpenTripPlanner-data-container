@@ -2,8 +2,7 @@ const JSZip = require('jszip');
 const fs = require('fs');
 const converter = require('json-2-csv');
 const through = require('through2');
-const gutil = require('gulp-util');
-const col = gutil.colors;
+const col = require('ansi-colors');
 const cloneable = require('cloneable-readable');
 
 function createFeedInfo(zip, file, csv, cb) {
