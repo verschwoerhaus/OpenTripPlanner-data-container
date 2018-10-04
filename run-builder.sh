@@ -27,7 +27,7 @@ function post_slack_message {
 
 # build should be started immediately if service starts before 06:00
 # because that is considered as a restart after a service failure
-HOUR=$(date +%H)
+HOUR=$(date +%-H)
 if [[ "$HOUR" -lt "$AUTO_REBUILD_HOUR" ]]; then
     BUILD_AT_LAUNCH=1
 else
