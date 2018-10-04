@@ -26,7 +26,7 @@ function setFeedId (file, id, cb) {
 ${id}-fake-name,${id}-fake-url,${id}-fake-lang,${id}\n`
 
         createFeedInfo(zip, file, csv, () => {
-          cb('created')
+          cb('created') // eslint-disable-line
         })
       } else {
         // callback function for csv2json converter
@@ -37,11 +37,13 @@ ${id}-fake-name,${id}-fake-url,${id}-fake-lang,${id}\n`
           }
 
           // callback function for json2csv converter
+          /* eslint-disable */
           const json2csvcallback = function (err, csv) {
             createFeedInfo(zip, file, csv, () => {
               cb('edited')
             })
           }
+          /* eslint-enable */
           if (json.length > 0) {
             // no id or id is wrong
             if (json[0]['feed_id'] === undefined || json[0]['feed_id'] !== id) {
@@ -49,7 +51,7 @@ ${id}-fake-name,${id}-fake-url,${id}-fake-lang,${id}\n`
               converter.json2csv(json, json2csvcallback)
             } else {
               // id was already ok
-              cb('nop')
+              cb('nop') // eslint-disable-line
             }
           }
         }

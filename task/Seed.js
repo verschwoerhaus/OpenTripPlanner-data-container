@@ -34,7 +34,7 @@ module.exports = function (configs, regexp) {
         zips.forEach(f => {
           const fileName = f.name.split('/').pop()
           f.async('arraybuffer').then(data => {
-            const file = new gutil.File({ path: fileName, contents: new Buffer(data) })
+            const file = new gutil.File({ path: fileName, contents: Buffer.from(data) })
             stream.push(file)
             toProcess -= 1
             process.stdout.write(fileName + ' ' + col.green('Seed SUCCESS\n'))

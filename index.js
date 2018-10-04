@@ -27,13 +27,13 @@ if (process.env.ROUTERS) {
 
 start('seed').then(() => {
   process.stdout.write('Seeded.')
-  if (process.argv.length == 3 && process.argv[2] === 'once') {
+  if (process.argv.length === 3 && process.argv[2] === 'once') {
     process.stdout.write('Running update once.')
     update()
   } else {
     const cronPattern = process.env.CRON || '0 0 3 * * *'
     process.stdout.write(`Starting timer with pattern: ${cronPattern}`)
-    new CronJob(cronPattern, update, null, true, 'Europe/Helsinki')
+    new CronJob(cronPattern, update, null, true, 'Europe/Helsinki') // eslint-disable-line
   }
 })
 

@@ -19,7 +19,7 @@ const FINLAND_CONFIG = {
   'id': 'finland',
   'src': [
     src('HSL', 'http://dev.hsl.fi/gtfs/hsl.zip', false),
-    src('MATKA', 'http://dev.hsl.fi/gtfs.matka/matka.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-finland/gtfs-rules/matka.rule', 'router-finland/gtfs-rules/matka-id.rule' ]),
+    src('MATKA', 'http://dev.hsl.fi/gtfs.matka/matka.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-finland/gtfs-rules/matka.rule', 'router-finland/gtfs-rules/matka-id.rule']),
     src('tampere', 'http://tampere.fi/ekstrat/ptdata/tamperefeed.zip', false),
     src('LINKKI', 'http://jakoon.jkl.fi/reittiopas/datajkl.zip', false),
     src('lautta', 'http://lautta.net/db/gtfs/gtfs.zip', false),
@@ -59,7 +59,7 @@ let ALL_CONFIGS
 
 const setCurrentConfig = (name) => {
   ALL_CONFIGS = [WALTTI_CONFIG, HSL_CONFIG, FINLAND_CONFIG].reduce((acc, nxt) => {
-    if ((name && name.split(',').indexOf(nxt.id) != -1) ||
+    if ((name && name.split(',').indexOf(nxt.id) !== -1) ||
       name === undefined) {
       acc.push(nxt)
     }
@@ -75,7 +75,7 @@ if (process.env.ROUTERS) {
 }
 
 // add config to every source
-ALL_CONFIGS.forEach(cfg => cfg.src.forEach(src => src.config = cfg))
+ALL_CONFIGS.forEach(cfg => cfg.src.forEach(src => { src.config = cfg }))
 
 // create id->src-entry map
 const configMap = ALL_CONFIGS.map(cfg => cfg.src)
@@ -102,7 +102,7 @@ module.exports = {
   osm,
   osmUrls: osm.map(e => e.url),
   osmMap: osm.reduce((acc, val) => { acc[val.id] = val; return acc }, {}),
-  dataToolImage: `hsldevcom/otp-data-tools:${process.env.TOOLS_TAG || 'latest'}`,
+  dataToolImage: `hsldevcom/otp-data-tools:${process.env.TOOLS_TAG || 'latest'}`,
   dataDir: process.env.DATA || `${process.cwd()}/data`,
   hostDataDir: process.env.HOST_DATA || `${process.cwd()}/data`,
   setCurrentConfig: setCurrentConfig,

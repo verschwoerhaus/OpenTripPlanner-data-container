@@ -14,7 +14,7 @@ module.exports = function (entries) {
 
   const incProcessed = () => {
     downloadCount += 1
-    if (downloadCount != entries.length) {
+    if (downloadCount !== entries.length) {
       downloadIgnoreErrors(entries[downloadCount])
     } else {
       stream.end()
@@ -31,7 +31,7 @@ module.exports = function (entries) {
       }
       const name = entry.url.split('/').pop()
       const fileExt = name.split('.').pop()
-      const file = new gutil.File({ path: `${entry.id !== undefined ? (entry.id + '.' + fileExt) : name}`, contents: new Buffer(body) })
+      const file = new gutil.File({ path: `${entry.id !== undefined ? (entry.id + '.' + fileExt) : name}`, contents: Buffer.from(body) })
       stream.push(file)
 
       process.stdout.write(entry.url + ' ' + col.green('Download SUCCESS\n'))

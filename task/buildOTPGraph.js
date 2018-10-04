@@ -45,7 +45,7 @@ const buildGraph = function (config) {
       } else {
         const log = lastLog.join('')
         postSlackMessage(`${config.id} build failed: ${status}:${log}`)
-        reject('could not build')
+        reject('could not build') // eslint-disable-line
       }
 
       fs.closeSync(buildLog)
