@@ -32,15 +32,15 @@ const zipWithGlob = (zipFile, glob, zipDir, cb) => {
 
 const postSlackMessage = (message) => {
   if (webhook === null) {
-    process.stdout.write(`Not sending to slack: ${message}`)
+    process.stdout.write(`Not sending to slack: ${message}\n`)
     return
   }
 
-  process.stdout.write(`Sending to slack: ${message}`)
+  process.stdout.write(`Sending to slack: ${message}\n`)
 
   webhook.send(message, function (err) {
     if (err) {
-      process.stdout.write(`ERROR sending to slack: ${err}`)
+      process.stdout.write(`ERROR sending to slack: ${err}\n`)
     }
   })
 }

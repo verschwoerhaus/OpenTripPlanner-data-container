@@ -1,7 +1,7 @@
 const through = require('through2')
-const gutil = require('gulp-util')
 const request = require('request')
-const col = gutil.colors
+const col = require('ansi-colors')
+const Vinyl = require('vinyl')
 const { postSlackMessage } = require('../util')
 
 /**
@@ -31,7 +31,7 @@ module.exports = function (entries) {
       }
       const name = entry.url.split('/').pop()
       const fileExt = name.split('.').pop()
-      const file = new gutil.File({ path: `${entry.id !== undefined ? (entry.id + '.' + fileExt) : name}`, contents: Buffer.from(body) })
+      const file = new Vinyl({ path: `${entry.id !== undefined ? (entry.id + '.' + fileExt) : name}`, contents: Buffer.from(body) })
       stream.push(file)
 
       process.stdout.write(entry.url + ' ' + col.green('Download SUCCESS\n'))

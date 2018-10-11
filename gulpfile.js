@@ -1,5 +1,9 @@
+const fs = require('fs')
+const { execSync } = require('child_process')
 const gulp = require('gulp')
+const col = require('ansi-colors')
 const dl = require('./task/Download')
+const dlBlob = require('./task/DownloadDEMBlob')
 const { setFeedIdTask } = require('./task/setFeedId')
 const { OBAFilterTask } = require('./task/OBAFilter')
 const { fitGTFSTask } = require('./task/MapFit')
@@ -10,6 +14,7 @@ const del = require('del')
 const config = require('./config')
 const { buildOTPGraphTask } = require('./task/buildOTPGraph')
 const hslHackTask = require('./task/hslHackTask')
+const { postSlackMessage } = require('./util')
 
 /**
  * Download and test new osm data
@@ -21,6 +26,31 @@ gulp.task('osm:update', function () {
     .pipe(gulp.dest(`${config.dataDir}/downloads/osm`))
     .pipe(testGTFSFile())
     .pipe(gulp.dest(`${config.dataDir}/ready/osm`))
+})
+
+/**
+ * Download and test new dem data
+ */
+gulp.task('dem:update', function () {
+  const map = config.ALL_CONFIGS().map(cfg => cfg.dem).reduce((acc, val) => { acc[val] = true; return acc }, {})
+  const urls = Object.keys(map).map(key => config.demMap[key]).filter((url) => (url !== undefined))
+  const demDownloadDir = `${config.dataDir}/downloads/dem/`
+  if (!fs.existsSync(demDownloadDir)) {
+    execSync(`mkdir -p ${demDownloadDir}`)
+  }
+  const demReadyDir = `${config.dataDir}/ready/dem/`
+  if (!fs.existsSync(demReadyDir)) {
+    execSync(`mkdir -p ${demReadyDir}`)
+  }
+  const promises = dlBlob(urls, true, true)
+  return Promise.all(promises)
+    .catch((err) => {
+      if (err === 'fail') {
+        process.stdout.write(col.red('Failing build because of a failed DEM download!\n'))
+        postSlackMessage(`Failing build because of a failed DEM download.`)
+        process.exit(1)
+      }
+    })
 })
 
 /**
@@ -108,10 +138,22 @@ gulp.task('osm:seed', ['osm:del'], function () {
 })
 
 /**
+ * TODO: ADD THE FOLLOWING LINES WHEN TIF FILES EXIST IN DATA CONTAINERS.
+ *
+ * gulp.task('dem:del', () => (del([
+ *   `${config.dataDir}/ready/dem`])));
+ *
+ * gulp.task('dem:seed', ['dem:del'], function () {
+ *   return Seed(config.ALL_CONFIGS(),/.tif/).pipe(gulp.dest(`${config.dataDir}/ready/dem`));
+ * });
+ */
+
+/**
  * Seed GTFS & OSM data with data from previous data-containes to allow
  * continuous flow of data into production when one or more updated data files
  * are broken.
  */
+// TODO add dem:seed here when its seeding can be enabled
 gulp.task('seed', ['osm:seed', 'gtfs:seed'])
 
 gulp.task('router:del', () => (del([

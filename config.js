@@ -12,7 +12,8 @@ const HSL_CONFIG = {
   'src': [
     src('HSL', 'http://dev.hsl.fi/gtfs/hsl.zip', false)
   ],
-  'osm': 'hsl'
+  'osm': 'hsl',
+  'dem': 'hsl'
 }
 
 const FINLAND_CONFIG = {
@@ -52,7 +53,8 @@ const WALTTI_CONFIG = {
     src('tampere', 'http://tampere.fi/ekstrat/ptdata/tamperefeed.zip', false),
     src('Rovaniemi', 'http://dev.hsl.fi/gtfs.waltti/rovaniemi.zip', false, ['router-waltti/gtfs-rules/waltti.rule'])
   ],
-  'osm': 'finland'
+  'osm': 'finland',
+  'dem': 'waltti'
 }
 
 let ALL_CONFIGS
@@ -92,6 +94,11 @@ const osm = [
   { id: 'hsl', url: 'http://dev.hsl.fi/osm.hsl/hsl.osm.pbf' }
 ]
 
+const dem = [
+  { id: 'waltti', url: 'https://elevdata.blob.core.windows.net/elevation/waltti/waltti-10m-elevation-model.tif' },
+  { id: 'hsl', url: 'https://elevdata.blob.core.windows.net/elevation/hsl/hsl-10m-elevation-model.tif' }
+]
+
 const constants = {
   BUFFER_SIZE: 1024 * 1024 * 32
 }
@@ -100,8 +107,9 @@ module.exports = {
   ALL_CONFIGS: () => ALL_CONFIGS,
   configMap,
   osm,
-  osmUrls: osm.map(e => e.url),
   osmMap: osm.reduce((acc, val) => { acc[val.id] = val; return acc }, {}),
+  dem,
+  demMap: dem.reduce((acc, val) => { acc[val.id] = val; return acc }, {}),
   dataToolImage: `hsldevcom/otp-data-tools:${process.env.TOOLS_TAG || 'latest'}`,
   dataDir: process.env.DATA || `${process.cwd()}/data`,
   hostDataDir: process.env.HOST_DATA || `${process.cwd()}/data`,

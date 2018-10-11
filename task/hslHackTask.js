@@ -1,6 +1,5 @@
 const exec = require('child_process').exec
-const gutil = require('gulp-util')
-const col = gutil.colors
+const col = require('ansi-colors')
 const fs = require('fs')
 const { dataToolImage, hostDataDir, constants } = require('../config.js')
 

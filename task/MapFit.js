@@ -1,6 +1,5 @@
 const through = require('through2')
-const gutil = require('gulp-util')
-const col = gutil.colors
+const col = require('ansi-colors')
 const fs = require('fs')
 const path = require('path')
 const cloneable = require('cloneable-readable')
@@ -43,7 +42,7 @@ const run = function (cmd, osmExtract, src, dst) {
         const log = lastLog.join('')
         postSlackMessage(`Running command ${cmd} on ${src} failed: ${log}.`)
         process.stdout.write(`Running command ${cmd} failed:\n`)
-        process.stdout.write(`${src} ${log}`)
+        process.stdout.write(`${src} ${log}\n`)
         resolve(false)
       }
     })
