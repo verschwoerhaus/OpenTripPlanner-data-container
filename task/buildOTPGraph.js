@@ -1,6 +1,5 @@
-const gutil = require('gulp-util');
 const otpMatching = require('otp-matching');
-const col = gutil.colors;
+const col = require('ansi-colors');
 const {zipWithGlob} = require('../util');
 const fs = require('fs');
 const {dataDir, hostDataDir, constants} = require('../config.js');
@@ -65,7 +64,9 @@ module.exports= {
           //create zip file for the source data
           //include all gtfs + osm + router- + build configs
           zipWithGlob(`${dataDir}/build/${config.id}/router-${config.id}.zip`,
-            [`${dataDir}/build/${config.id}/router/*.zip`, `${dataDir}/build/${config.id}/router/*.json`,`${dataDir}/build/${config.id}/router/${config.osm}.pbf`],
+            [`${dataDir}/build/${config.id}/router/*.zip`, `${dataDir}/build/${config.id}/router/*.json`,
+            `${dataDir}/build/${config.id}/router/${config.osm}.pbf`,
+            `${dataDir}/build/${config.id}/router/${config.dem}.tif`],
             `router-${config.id}`,
             (err) => {
               if(err) {

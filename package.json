@@ -18,6 +18,7 @@
   "homepage": "https://github.com/HSLdevcom/OpenTripPlanner-data-container#readme",
   "dependencies": {
     "@slack/client": "^3.10.0",
+    "ansi-colors": "^3.0.5",
     "adm-zip": "^0.4.11",
     "async": "^2.5.0",
     "cloneable-readable": "^1.0.0",
@@ -33,6 +34,9 @@
     "otp-matching": "^1.0.3",
     "request": "^2.88.0",
     "tempy": "^0.2.1",
+    "through2": "^2.0.3",
+    "transform": "^1.1.2",
+    "vinyl": "^2.2.0",
     "vinyl-paths": "^2.1.0"
   },
   "devDependencies": {
