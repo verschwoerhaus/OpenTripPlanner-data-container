@@ -7,9 +7,13 @@ branches:
     - /^greenkeeper/.*$/
 
 services: docker
-install: true
 
-language: C
+language: node
+node_js:
+  - "8"
+cache:
+  directories:
+    - node_modules
 
 script:
   - npm run test
