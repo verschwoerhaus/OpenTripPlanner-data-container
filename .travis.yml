@@ -8,7 +8,7 @@ branches:
 
 services: docker
 
-language: node
+language: node_js
 node_js:
   - "8"
 cache:
