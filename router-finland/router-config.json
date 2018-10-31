@@ -15,10 +15,17 @@
 
   "updaters": [
     {
+      "type": "MQTT-gtfs-rt-updater",
+      "url": "tcp://mqtt.hsl.fi",
+      "topic": "gtfsrt/v1/fi/hsl/tu",
+      "feedId": "HSL",
+      "fuzzyTripMatching": true
+    },
+    {
       "type": "stop-time-updater",
       "frequencySec": 60,
       "sourceType": "gtfs-http",
-      "url": "http://siri2gtfsrt:8080/HSL",
+      "url": "http://raildigitraffic2gtfsrt:8080/hsl/0/1/0/1",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },
@@ -27,14 +34,6 @@
       "frequencySec": 30,
       "url": "http://hslalert:8080/",
       "feedId": "HSL",
-      "fuzzyTripMatching": true
-    },
-    {
-      "type": "stop-time-updater",
-      "frequencySec": 60,
-      "sourceType": "gtfs-http",
-      "url": "http://siri2gtfsrt:8080/JOLI",
-      "feedId": "JOLI",
       "fuzzyTripMatching": true
     },
     {

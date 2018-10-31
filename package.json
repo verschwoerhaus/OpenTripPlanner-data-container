@@ -4,7 +4,7 @@
   "description": "[![Build](https://api.travis-ci.org/HSLdevcom/OpenTripPlanner-data-container.svg?branch=master)](https://travis-ci.org/HSLdevcom/OpenTripPlanner-data-container)",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "standard"
+    "test": "node_modules/.bin/standard"
   },
   "repository": {
     "type": "git",
