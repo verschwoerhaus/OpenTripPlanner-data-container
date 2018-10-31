@@ -11,6 +11,8 @@ DOCKER_TAG="ci-${TRAVIS_COMMIT}"
 #DOCKER_USER=
 #DOCKER_AUTH=
 
+export DOCKER_API_VERSION=1.23
+
 function tagandpush {
   docker tag $ORG/$1:$3$DOCKER_TAG $ORG/$1:$2
   docker push $ORG/$1:$2
