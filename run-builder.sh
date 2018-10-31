@@ -16,6 +16,8 @@ BUILD_TIME=${BUILD_TIME:-23:00:00}
 AUTO_REBUILD_HOUR=${AUTO_REBUILD_HOUR:-6}
 BUILDER_TYPE=${BUILDER_TYPE:-dev}
 
+export DOCKER_API_VERSION=1.23
+
 # param: message text content
 function post_slack_message {
     MSG='{"username":"OTP data builder '$BUILDER_TYPE'","text":"'$1'"}'
