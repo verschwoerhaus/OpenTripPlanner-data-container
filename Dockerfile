@@ -8,8 +8,8 @@ RUN apk add --update --no-cache \
 
 WORKDIR /opt/otp-data-builder
 
-ADD https://download.docker.com/linux/static/stable/x86_64/docker-18.06.1-ce.tgz /opt/otp-data-builder
-RUN cd /opt/otp-data-builder ; tar xzf docker-18.06.1-ce.tgz ; cp docker/docker /usr/bin/docker ; rm -rf docker*
+ADD https://get.docker.com/builds/Linux/x86_64/docker-1.11.2.tgz /opt/otp-data-builder
+RUN cd /opt/otp-data-builder ; tar xzf docker-1.11.2.tgz ; cp docker/docker /usr/bin/docker ; rm -rf docker*
 
 ADD package-lock.json package.json *.js *.sh  gulpfile.js /opt/otp-data-builder/
 
