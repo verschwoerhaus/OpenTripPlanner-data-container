@@ -19,7 +19,6 @@ const buildGraph = function (config) {
     }
   }
   const p = new Promise((resolve, reject) => {
-
     const version = execSync(`docker pull hsldevcom/opentripplanner:prod;docker run --rm --entrypoint /bin/bash hsldevcom/opentripplanner:${graphBuildTag}  -c "java -jar otp-shaded.jar --version"`)
     const commit = version.toString().match(/commit: ([0-9a-f]+)/)[1]
 
