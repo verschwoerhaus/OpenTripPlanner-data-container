@@ -30,6 +30,13 @@
       "fuzzyTripMatching": true
     },
     {
+      "type": "real-time-alerts",
+      "frequencySec": 30,
+      "url": "http://hslalert:8080/",
+      "feedId": "HSL",
+      "fuzzyTripMatching": true
+    },
+    {
       "type": "bike-rental",
       "sourceType": "smoove",
       "url": "http://digitransit-proxy:8080/out/helsinki-fi.smoove.pro/api-public/stations",
