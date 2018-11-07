@@ -3,6 +3,8 @@
 #build errors should not stop the continuous build loop
 set +e
 
+export DOCKER_API_VERSION="1.23"
+
 #How long the build can last before it is considered frozen (default 5 hours)
 MAX_TIME=${MAX_TIME:-18000}
 #how often data is built (default once a day)
@@ -15,8 +17,6 @@ BUILD_TIME=${BUILD_TIME:-23:00:00}
 #as a mitigation to crashed builds. zero value disables this feature
 AUTO_REBUILD_HOUR=${AUTO_REBUILD_HOUR:-6}
 BUILDER_TYPE=${BUILDER_TYPE:-dev}
-
-export DOCKER_API_VERSION=1.23
 
 # param: message text content
 function post_slack_message {
