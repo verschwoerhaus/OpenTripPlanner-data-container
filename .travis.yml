@@ -16,5 +16,4 @@ cache:
     - node_modules
 
 script:
-  - npm run test
-  - ./travis-build.sh
+  - npm run test && ./travis-build.sh
