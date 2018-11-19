@@ -76,7 +76,7 @@ if (process.env.ROUTERS) {
   setCurrentConfig()
 }
 
-// EXTRA_SRC format should be {"id": {"url": "http://data.foli.fi/gtfs/gtfs.zip",  "fit": false, "rules": ["router-waltti/gtfs-rules/waltti.rule"]}}
+// EXTRA_SRC format should be {"FOLI": {"url": "http://data.foli.fi/gtfs/gtfs.zip",  "fit": false, "rules": ["router-waltti/gtfs-rules/waltti.rule"]}}
 // but you can only define, for example, new url and the other key value pairs will remain the same as they are defined in this file
 const extraSrc = process.env.EXTRA_SRC || {}
 
