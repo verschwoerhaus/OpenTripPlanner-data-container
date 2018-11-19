@@ -21,7 +21,7 @@ const FINLAND_CONFIG = {
   'src': [
     src('HSL', 'http://dev.hsl.fi/gtfs/hsl.zip', false),
     src('MATKA', 'http://dev.hsl.fi/gtfs.matka/matka.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-finland/gtfs-rules/matka.rule', 'router-finland/gtfs-rules/matka-id.rule']),
-    src('tampere', 'http://tampere.fi/ekstrat/ptdata/tamperefeed.zip', false),
+    src('tampere', 'http://www.tampere.fi/ekstrat/ptdata/tamperefeed_deprecated.zip', false),
     src('LINKKI', 'http://jakoon.jkl.fi/reittiopas/datajkl.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
     src('lautta', 'http://lautta.net/db/gtfs/gtfs.zip', false),
     src('OULU', 'http://www.transitdata.fi/oulu/google_transit.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash')
@@ -50,7 +50,7 @@ const WALTTI_CONFIG = {
     src('Kuopio', 'http://dev.hsl.fi/gtfs.waltti/kuopio.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule']),
     src('OULU', 'http://www.transitdata.fi/oulu/google_transit.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
     src('LINKKI', 'http://jakoon.jkl.fi/reittiopas/datajkl.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
-    src('tampere', 'http://tampere.fi/ekstrat/ptdata/tamperefeed.zip', false),
+    src('tampere', 'http://www.tampere.fi/ekstrat/ptdata/tamperefeed_deprecated.zip', false),
     src('Rovaniemi', 'http://dev.hsl.fi/gtfs.waltti/rovaniemi.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule'])
   ],
   'osm': 'finland',
