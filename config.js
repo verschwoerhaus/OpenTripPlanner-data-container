@@ -76,8 +76,17 @@ if (process.env.ROUTERS) {
   setCurrentConfig()
 }
 
-// add config to every source
-ALL_CONFIGS.forEach(cfg => cfg.src.forEach(src => { src.config = cfg }))
+// EXTRA_SRC format should be {"FOLI": {"url": "http://data.foli.fi/gtfs/gtfs.zip",  "fit": false, "rules": ["router-waltti/gtfs-rules/waltti.rule"]}}
+// but you can only define, for example, new url and the other key value pairs will remain the same as they are defined in this file
+const extraSrc = process.env.EXTRA_SRC || {}
+
+// add config to every source and override config values if they are defined in extraSrc
+ALL_CONFIGS.forEach(cfg => cfg.src.forEach((src, index) => {
+  if (extraSrc[src.id]) {
+    this[index] = { ...src, ...extraSrc[src.id] }
+  }
+  this[index].config = cfg
+}, cfg.src))
 
 // create id->src-entry map
 const configMap = ALL_CONFIGS.map(cfg => cfg.src)
