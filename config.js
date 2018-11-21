@@ -81,12 +81,17 @@ if (process.env.ROUTERS) {
 const extraSrc = process.env.EXTRA_SRC || {}
 
 // add config to every source and override config values if they are defined in extraSrc
-ALL_CONFIGS.forEach(cfg => cfg.src.forEach((src, index) => {
-  if (extraSrc[src.id]) {
-    this[index] = Object.assign({}, src, extraSrc[src.id])
+for (let i = 0; i < ALL_CONFIGS.length; i++) {
+  const cfg = ALL_CONFIGS[i]
+  const cfgSrc = cfg.src
+  for (let j = 0; j < cfg.src.length; j++) {
+    const src = cfgSrc[j]
+    if (extraSrc[src.id]) {
+      cfgSrc[j] = Object.assign({}, src, extraSrc[src.id])
+    }
+    cfgSrc[j].config = cfg
   }
-  this[index].config = cfg
-}, cfg.src))
+}
 
 // create id->src-entry map
 const configMap = ALL_CONFIGS.map(cfg => cfg.src)
