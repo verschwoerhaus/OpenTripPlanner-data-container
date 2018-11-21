@@ -83,7 +83,7 @@ const extraSrc = process.env.EXTRA_SRC || {}
 // add config to every source and override config values if they are defined in extraSrc
 ALL_CONFIGS.forEach(cfg => cfg.src.forEach((src, index) => {
   if (extraSrc[src.id]) {
-    this[index] = { ...src, ...extraSrc[src.id] }
+    this[index] = Object.assign({}, src, extraSrc[src.id])
   }
   this[index].config = cfg
 }, cfg.src))
