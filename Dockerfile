@@ -1,4 +1,4 @@
-FROM       node:8.1-alpine
+FROM       node:8-alpine
 MAINTAINER Digitransit version: 0.1
 
 RUN apk add --update --no-cache \
