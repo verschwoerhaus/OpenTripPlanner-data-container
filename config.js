@@ -78,7 +78,7 @@ if (process.env.ROUTERS) {
 
 // EXTRA_SRC format should be {"FOLI": {"url": "http://data.foli.fi/gtfs/gtfs.zip",  "fit": false, "rules": ["router-waltti/gtfs-rules/waltti.rule"]}}
 // but you can only define, for example, new url and the other key value pairs will remain the same as they are defined in this file
-const extraSrc = process.env.EXTRA_SRC || {}
+const extraSrc = process.env.EXTRA_SRC ? JSON.parse(process.env.EXTRA_SRC) : {}
 
 // add config to every source and override config values if they are defined in extraSrc
 for (let i = 0; i < ALL_CONFIGS.length; i++) {
@@ -87,7 +87,7 @@ for (let i = 0; i < ALL_CONFIGS.length; i++) {
   for (let j = 0; j < cfg.src.length; j++) {
     const src = cfgSrc[j]
     if (extraSrc[src.id]) {
-      cfgSrc[j] = Object.assign({}, src, extraSrc[src.id])
+      cfgSrc[j] = { ...src, ...extraSrc[src.id] }
     }
     cfgSrc[j].config = cfg
   }
