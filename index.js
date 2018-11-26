@@ -36,6 +36,9 @@ start('seed').then(() => {
     process.stdout.write(`Starting timer with pattern: ${cronPattern}\n`)
     new CronJob(cronPattern, update, null, true, 'Europe/Helsinki') // eslint-disable-line
   }
+}).catch((err) => {
+  process.stdout.write(err + '\n')
+  process.exit(1)
 })
 
 async function update () {
