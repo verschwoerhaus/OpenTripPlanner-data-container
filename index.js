@@ -86,9 +86,6 @@ async function update () {
         postSlackMessage(`${router} data update failed: ` + E.message)
       }
       callback(null, true)
-    }).catch((err) => {
-      process.stdout.write(err + '\n')
-      process.exit(1)
     })
   })
 
