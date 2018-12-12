@@ -21,7 +21,7 @@ const FINLAND_CONFIG = {
   'src': [
     src('HSL', 'https://gtfsdata.blob.core.windows.net/hsl/hsl.zip', false),
     src('MATKA', 'http://dev.hsl.fi/gtfs.matka/matka.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-finland/gtfs-rules/matka.rule', 'router-finland/gtfs-rules/matka-id.rule']),
-    src('tampere', 'http://tampere.fi/ekstrat/ptdata/tamperefeed.zip', false),
+    src('tampere', 'http://www.tampere.fi/ekstrat/ptdata/tamperefeed_deprecated.zip', false),
     src('LINKKI', 'http://jakoon.jkl.fi/reittiopas/datajkl.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
     src('lautta', 'http://lautta.net/db/gtfs/gtfs.zip', false),
     src('OULU', 'http://www.transitdata.fi/oulu/google_transit.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash')
@@ -50,7 +50,7 @@ const WALTTI_CONFIG = {
     src('Kuopio', 'http://dev.hsl.fi/gtfs.waltti/kuopio.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule']),
     src('OULU', 'http://www.transitdata.fi/oulu/google_transit.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
     src('LINKKI', 'http://jakoon.jkl.fi/reittiopas/datajkl.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
-    src('tampere', 'http://tampere.fi/ekstrat/ptdata/tamperefeed.zip', false),
+    src('tampere', 'http://www.tampere.fi/ekstrat/ptdata/tamperefeed_deprecated.zip', false),
     src('Rovaniemi', 'http://dev.hsl.fi/gtfs.waltti/rovaniemi.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule'])
   ],
   'osm': 'finland',
@@ -76,8 +76,22 @@ if (process.env.ROUTERS) {
   setCurrentConfig()
 }
 
-// add config to every source
-ALL_CONFIGS.forEach(cfg => cfg.src.forEach(src => { src.config = cfg }))
+// EXTRA_SRC format should be {"FOLI": {"url": "http://data.foli.fi/gtfs/gtfs.zip",  "fit": false, "rules": ["router-waltti/gtfs-rules/waltti.rule"]}}
+// but you can only define, for example, new url and the other key value pairs will remain the same as they are defined in this file
+const extraSrc = process.env.EXTRA_SRC !== undefined ? JSON.parse(process.env.EXTRA_SRC) : {}
+
+// add config to every source and override config values if they are defined in extraSrc
+for (let i = 0; i < ALL_CONFIGS.length; i++) {
+  const cfg = ALL_CONFIGS[i]
+  const cfgSrc = cfg.src
+  for (let j = 0; j < cfg.src.length; j++) {
+    const src = cfgSrc[j]
+    if (extraSrc[src.id]) {
+      cfgSrc[j] = { ...src, ...extraSrc[src.id] }
+    }
+    cfgSrc[j].config = cfg
+  }
+}
 
 // create id->src-entry map
 const configMap = ALL_CONFIGS.map(cfg => cfg.src)
