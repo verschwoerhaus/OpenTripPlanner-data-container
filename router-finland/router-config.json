@@ -87,6 +87,13 @@
       "url": "http://digitransit-proxy:8080/out/tre.mattersoft.fi/api/gtfsrealtime/v1.0/feed/servicealert",
       "feedId": "tampere",
       "fuzzyTripMatching": false
+    },
+    {
+      "type": "real-time-alerts",
+      "frequencySec": 30,
+      "url": "http://digitransit-proxy:8080/out/linkki.mattersoft.fi/api/gtfsrealtime/v1.0/feed/servicealert",
+      "feedId": "LINKKI",
+      "fuzzyTripMatching": false
     }
   ],
   "boardTimes": {
