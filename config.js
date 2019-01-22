@@ -47,7 +47,7 @@ const WALTTI_CONFIG = {
     src('JoensuuEly', 'http://dev.hsl.fi/gtfs.waltti/posely_joensuu.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule']),
     src('FOLI', 'http://data.foli.fi/gtfs/gtfs.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
     src('Lahti', 'http://www.lsl.fi/assets/uploads/google_transit.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule']),
-    src('Kuopio', 'http://dev.hsl.fi/gtfs.waltti/kuopio.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule']),
+    src('Kuopio', 'http://karttapalvelu.kuopio.fi/google_transit/google_transit.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule']),
     src('OULU', 'http://www.transitdata.fi/oulu/google_transit.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
     src('LINKKI', 'http://jakoon.jkl.fi/reittiopas/datajkl.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
     src('tampere', 'http://www.tampere.fi/ekstrat/ptdata/tamperefeed_deprecated.zip', false),
