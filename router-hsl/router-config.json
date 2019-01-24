@@ -21,7 +21,7 @@
     {
       "type": "MQTT-gtfs-rt-updater",
       "url": "tcp://mqtt.hsl.fi",
-      "topic": "gtfsrt/v1/fi/hsl/tu",
+      "topic": "gtfsrt/dev/fi/hsl/tu",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },
@@ -36,7 +36,7 @@
     {
       "type": "real-time-alerts",
       "frequencySec": 30,
-      "url": "http://hslalert:8080/",
+      "url": "https://markustemporarystorage.blob.core.windows.net/gtfs-realtime/service-alerts",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },
