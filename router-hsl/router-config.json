@@ -36,7 +36,7 @@
     {
       "type": "real-time-alerts",
       "frequencySec": 30,
-      "url": "https://markustemporarystorage.blob.core.windows.net/gtfs-realtime/service-alerts",
+      "url": "https://dev-api.digitransit.fi/realtime/service-alerts/v2/hsl",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },

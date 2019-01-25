@@ -20,6 +20,13 @@
       "fuzzyTripMatching": true
     },
     {
+      "type": "real-time-alerts",
+      "frequencySec": 30,
+      "url": "https://foli-beta.nanona.fi/gtfs-rt",
+      "feedId": "FOLI",
+      "fuzzyTripMatching": true
+    },    
+    {
       "type": "stop-time-updater",
       "frequencySec": 60,
       "sourceType": "gtfs-http",
