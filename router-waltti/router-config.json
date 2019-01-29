@@ -22,7 +22,7 @@
     {
       "type": "real-time-alerts",
       "frequencySec": 30,
-      "url": "https://foli-beta.nanona.fi/gtfs-rt",
+      "url": "https://foli-beta.nanona.fi/gtfs-rt/reittiopas",
       "feedId": "FOLI",
       "fuzzyTripMatching": true
     },    
