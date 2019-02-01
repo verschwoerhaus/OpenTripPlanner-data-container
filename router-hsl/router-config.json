@@ -20,8 +20,8 @@
   "updaters": [
     {
       "type": "MQTT-gtfs-rt-updater",
-      "url": "tcp://mqtt.hsl.fi",
-      "topic": "gtfsrt/dev/fi/hsl/tu",
+      "url": "tcp://mqtt.cinfra.fi",
+      "topic": "gtfsrt/v1/fi/hsl/tu",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },
@@ -36,7 +36,7 @@
     {
       "type": "real-time-alerts",
       "frequencySec": 30,
-      "url": "https://dev-api.digitransit.fi/realtime/service-alerts/v2/hsl",
+      "url": "http://hslalert:8080/",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },
