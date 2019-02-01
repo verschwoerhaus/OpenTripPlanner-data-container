@@ -7,6 +7,15 @@
  */
 const src = (id, url, fit, rules) => ({ id, url, fit, rules })
 
+
+const ULM_CONFIG = {
+  'id': 'ulm',
+  'src': [
+    src('SWU', 'https://gtfs.swu.de/daten/SWU.zip', false)
+  ],
+  'osm': 'ulm'
+}
+
 const HSL_CONFIG = {
   'id': 'hsl',
   'src': [
@@ -61,7 +70,7 @@ const WALTTI_CONFIG = {
 let ALL_CONFIGS
 
 const setCurrentConfig = (name) => {
-  ALL_CONFIGS = [WALTTI_CONFIG, HSL_CONFIG, FINLAND_CONFIG].reduce((acc, nxt) => {
+  ALL_CONFIGS = [WALTTI_CONFIG, HSL_CONFIG, FINLAND_CONFIG, ULM_CONFIG].reduce((acc, nxt) => {
     if ((name && name.split(',').indexOf(nxt.id) !== -1) ||
       name === undefined) {
       acc.push(nxt)
@@ -127,7 +136,8 @@ const configMap = ALL_CONFIGS.map(cfg => cfg.src)
 
 const osm = [
   { id: 'finland', url: 'http://dev.hsl.fi/osm.finland/finland.osm.pbf' },
-  { id: 'hsl', url: 'http://dev.hsl.fi/osm.hsl/hsl.osm.pbf' }
+  { id: 'hsl', url: 'http://dev.hsl.fi/osm.hsl/hsl.osm.pbf' },
+  { id: 'ulm', url: 'https://download.geofabrik.de/europe/germany/baden-wuerttemberg/tuebingen-regbez-latest.osm.pbf' }
 ]
 
 const dem = [

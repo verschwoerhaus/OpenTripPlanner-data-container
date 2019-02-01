@@ -22,6 +22,8 @@ docker stop otp-data-waltti || true
 docker stop otp-waltti || true
 docker stop otp-data-hsl || true
 docker stop otp-hsl || true
+docker stop otp-data-ulm || true
+docker stop otp-ulm || true
 docker rmi --force $DOCKER_IMAGE || true
 cd data/build/$ROUTER_NAME
 echo "Building data-container image..."
@@ -30,12 +32,14 @@ echo -e "\n##### Testing $ROUTER_NAME ($DOCKER_IMAGE)#####\n"
 
 echo "Starting data container..."
 docker run --rm --name otp-data-$ROUTER_NAME $DOCKER_IMAGE > /dev/stdout &
-sleep 120
+sleep 30
 echo "Starting otp..."
 if [ -v TEST_TAG ] && [ "$TEST_TAG" != "undefined" ]; then
+  ORG=hsldevcom
   docker run --rm --name otp-$ROUTER_NAME -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS=$JAVA_OPTS -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data-$ROUTER_NAME:otp-data $ORG/opentripplanner:$TEST_TAG > /dev/stdout &
   sleep 5
 else
+  ORG=hsldevcom
   docker run --rm --name otp-$ROUTER_NAME -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS=$JAVA_OPTS -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data-$ROUTER_NAME:otp-data $ORG/opentripplanner:latest > /dev/stdout &
   sleep 5
 fi
@@ -57,6 +61,9 @@ if [ "$ROUTER_NAME" == "hsl" ]; then
 elif [ "$ROUTER_NAME" == "waltti" ]; then
     MAX_WAIT=60
     URL="http://$IP:8080/otp/routers/default/plan?fromPlace=60.44638185995603%2C22.244396209716797&toPlace=60.45053041945487%2C22.313575744628906"
+elif [ "$ROUTER_NAME" == "ulm" ]; then
+    MAX_WAIT=60
+    URL="http://$IP:8080/otp/routers/default/plan?fromPlace=48.39647%2C9.99046&toPlace=48.42282%2C9.95754"
 else
     MAX_WAIT=40
     URL="http://$IP:8080/otp/routers/default/plan?fromPlace=60.19812876015124%2C24.934051036834713&toPlace=60.218630210423306%2C24.807472229003906"
@@ -86,15 +93,21 @@ for (( c=1; c<=$ITERATIONS; c++ ));do
 done
 
 echo "running otpqa"
-docker run --rm --name otp-data-tools $ORG/otp-data-tools:$TOOLS_TAG /bin/sh -c "cd OTPQA; python otpprofiler_json.py http://$IP:8080/otp/routers/default $ROUTER_NAME"
-if [ $? == 0 ]; then
-  echo "OK"
+if [ "$ROUTER_NAME" == "ulm" ]; then
+  echo "skipped otpqa"
   shutdown
   exit 0;
 else
-  echo "ERROR"
-  shutdown
-  exit 1;
+  docker run --rm --name otp-data-tools $ORG/otp-data-tools:$TOOLS_TAG /bin/sh -c "cd OTPQA; python otpprofiler_json.py http://$IP:8080/otp/routers/default $ROUTER_NAME"
+  if [ $? == 0 ]; then
+    echo "OK"
+    shutdown
+    exit 0;
+  else
+    echo "ERROR"
+    shutdown
+    exit 1;
+  fi
 fi
 
 shutdown

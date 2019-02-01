@@ -38,7 +38,8 @@ start('seed').then(() => {
   }
 }).catch((err) => {
   process.stdout.write(err + '\n')
-  process.exit(1)
+  //process.exit(1)
+  update();
 })
 
 async function update () {
@@ -69,15 +70,16 @@ async function update () {
         process.stdout.write('Executing deploy script.\n')
         execFileSync('./deploy.sh', [router],
           {
-            env:
+            env: Object.assign({}, process.env,
               {
-                DOCKER_USER: process.env.DOCKER_USER,
-                DOCKER_AUTH: process.env.DOCKER_AUTH,
-                DOCKER_TAG: process.env.DOCKER_TAG,
+                //DOCKER_USER: process.env.DOCKER_USER,
+                //DOCKER_AUTH: process.env.DOCKER_AUTH,
+                //DOCKER_TAG: process.env.DOCKER_TAG,
+                ORG: process.env.ORG,
                 TEST_TAG: process.env.OTP_TAG || '',
                 TOOLS_TAG: process.env.TOOLS_TAG || '',
-                DOCKER_API_VERSION: process.env.DOCKER_API_VERSION
-              },
+                //DOCKER_API_VERSION: process.env.DOCKER_API_VERSION
+              }),
             stdio: [0, 1, 2]
           }
         )
