@@ -78,20 +78,37 @@ if (process.env.ROUTERS) {
 
 // EXTRA_SRC format should be {"FOLI": {"url": "http://data.foli.fi/gtfs/gtfs.zip",  "fit": false, "rules": ["router-waltti/gtfs-rules/waltti.rule"]}}
 // but you can only define, for example, new url and the other key value pairs will remain the same as they are defined in this file
+// It is also possible to add completely new src by defining object with unused id
 const extraSrc = process.env.EXTRA_SRC !== undefined ? JSON.parse(process.env.EXTRA_SRC) : {}
 
+let usedSrc = []
 // add config to every source and override config values if they are defined in extraSrc
 for (let i = 0; i < ALL_CONFIGS.length; i++) {
   const cfg = ALL_CONFIGS[i]
   const cfgSrc = cfg.src
   for (let j = 0; j < cfg.src.length; j++) {
     const src = cfgSrc[j]
-    if (extraSrc[src.id]) {
+    const id = src.id
+    if (extraSrc[id] && (extraSrc[id].routerId === undefined || extraSrc[id].routerId === cfg.id)) {
       cfgSrc[j] = { ...src, ...extraSrc[src.id] }
+      usedSrc.push(id)
     }
     cfgSrc[j].config = cfg
   }
 }
+
+// Go through extraSrc keys to find keys that don't already exist in src and add those as new src
+Object.keys(extraSrc).forEach((id) => {
+  if (!usedSrc.includes(id)) {
+    const routerId = extraSrc[id].router
+    for (let i = 0; i < ALL_CONFIGS.length; i++) {
+      const cfg = ALL_CONFIGS[i]
+      if (routerId === undefined || routerId === cfg.id) {
+        cfg.src.push(extraSrc[id])
+      }
+    }
+  }
+})
 
 // create id->src-entry map
 const configMap = ALL_CONFIGS.map(cfg => cfg.src)

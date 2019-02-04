@@ -41,7 +41,7 @@ It is possible to change the behaviour of the data builder by defining environme
 * (Optional, default 'finland, waltti, hsl') "ROUTERS" defines which data containers are being built and deployed.
 * (Optional, default ${process.cwd()}/data) "DATA" defines base path for data directories in container's file system.
 * (Optional, default '0 0 3 * * *') "CRON" defines when data build is being run.
-* (Optional, default {}) "EXTRA_SRC" defines gtfs src values that should be overridden. Example format:
+* (Optional, default {}) "EXTRA_SRC" defines gtfs src values that should be overridden or completely new src that should be added with unique id. Example format:
   - '{"FOLI": {"url": "http://data.foli.fi/gtfs/gtfs.zip",  "fit": false, "rules": ["router-waltti/gtfs-rules/waltti.rule"]}}'
 
 #### Data processing steps
