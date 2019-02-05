@@ -76,7 +76,7 @@ if (process.env.ROUTERS) {
   setCurrentConfig()
 }
 
-// EXTRA_SRC format should be {"FOLI": {"url": "http://data.foli.fi/gtfs/gtfs.zip",  "fit": false, "rules": ["router-waltti/gtfs-rules/waltti.rule"]}}
+// EXTRA_SRC format should be {"FOLI": {"url": "http://data.foli.fi/gtfs/gtfs.zip",  "fit": false, "rules": ["router-waltti/gtfs-rules/waltti.rule"], "routers": ["hsl", "finland"]}}
 // but you can only define, for example, new url and the other key value pairs will remain the same as they are defined in this file
 // It is also possible to add completely new src by defining object with unused id
 const extraSrc = process.env.EXTRA_SRC !== undefined ? JSON.parse(process.env.EXTRA_SRC) : {}
@@ -86,12 +86,16 @@ let usedSrc = []
 for (let i = 0; i < ALL_CONFIGS.length; i++) {
   const cfg = ALL_CONFIGS[i]
   const cfgSrc = cfg.src
-  for (let j = 0; j < cfg.src.length; j++) {
+  for (let j = cfgSrc.length - 1; j >= 0; j--) {
     const src = cfgSrc[j]
     const id = src.id
-    if (extraSrc[id] && (extraSrc[id].routerId === undefined || extraSrc[id].routerId === cfg.id)) {
-      cfgSrc[j] = { ...src, ...extraSrc[src.id] }
+    if (extraSrc[id] && extraSrc[id].routers !== undefined && extraSrc[id].routers.includes(cfg.id)) {
       usedSrc.push(id)
+      if (extraSrc[id].remove) {
+        cfgSrc.splice(j, 1)
+        continue
+      }
+      cfgSrc[j] = { ...src, ...extraSrc[src.id] }
     }
     cfgSrc[j].config = cfg
   }
@@ -100,11 +104,11 @@ for (let i = 0; i < ALL_CONFIGS.length; i++) {
 // Go through extraSrc keys to find keys that don't already exist in src and add those as new src
 Object.keys(extraSrc).forEach((id) => {
   if (!usedSrc.includes(id)) {
-    const routerId = extraSrc[id].router
+    const routers = extraSrc[id].routers
     for (let i = 0; i < ALL_CONFIGS.length; i++) {
       const cfg = ALL_CONFIGS[i]
-      if (routerId === undefined || routerId === cfg.id) {
-        cfg.src.push(extraSrc[id])
+      if (routers !== undefined || routers.includes(cfg.id)) {
+        cfg.src.push({ ...extraSrc[id], id })
       }
     }
   }
