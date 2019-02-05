@@ -77,8 +77,8 @@ if (process.env.ROUTERS) {
 }
 
 // EXTRA_SRC format should be {"FOLI": {"url": "http://data.foli.fi/gtfs/gtfs.zip",  "fit": false, "rules": ["router-waltti/gtfs-rules/waltti.rule"], "routers": ["hsl", "finland"]}}
-// but you can only define, for example, new url and the other key value pairs will remain the same as they are defined in this file
-// It is also possible to add completely new src by defining object with unused id
+// but you can only define, for example, new url and the other key value pairs will remain the same as they are defined in this file. "routers" is always a mandatory field.
+// It is also possible to add completely new src by defining object with unused id or to remove a src by defining "remove": true
 const extraSrc = process.env.EXTRA_SRC !== undefined ? JSON.parse(process.env.EXTRA_SRC) : {}
 
 let usedSrc = []
