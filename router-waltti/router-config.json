@@ -21,6 +21,14 @@
       "fuzzyTripMatching": true
     },
     {
+      "id": "foli-alerts",
+      "type": "real-time-alerts",
+      "frequencySec": 30,
+      "url": "http://digitransit-proxy:8080/out/data.foli.fi/gtfs-rt/reittiopas",
+      "feedId": "FOLI",
+      "fuzzyTripMatching": false
+    },
+    {
       "id": "oulu-trip-updates",
       "type": "stop-time-updater",
       "frequencySec": 60,
