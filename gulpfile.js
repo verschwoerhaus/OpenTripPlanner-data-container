@@ -141,7 +141,7 @@ gulp.task('dem:seed', gulp.series('dem:del', function () {
  * continuous flow of data into production when one or more updated data files
  * are broken.
  */
-gulp.task('seed', gulp.parallel('dem:seed', 'osm:seed', 'gtfs:seed'))
+gulp.task('seed', gulp.series('dem:seed', 'osm:seed', 'gtfs:seed'))
 
 gulp.task('router:del', () => del([`${config.dataDir}/build`]))
 
