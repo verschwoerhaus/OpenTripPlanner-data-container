@@ -53,6 +53,10 @@ gulp.task('dem:update', function () {
     })
 })
 
+gulp.task('del:filter', () => del([`${config.dataDir}/filter`]))
+
+gulp.task('del:id', () => del([`${config.dataDir}/id`]))
+
 /**
  * download and test new gtfs data:
  * clear download & stage dir
@@ -88,6 +92,10 @@ gulp.task('gtfs:id', function () {
     .pipe(gulp.dest(`${config.dataDir}/ready/gtfs`))
 })
 
+gulp.task('hslHack', function () {
+  return hslHackTask()
+})
+
 // Run MapFit on gtfs files (based on config) and moves files to directory
 // 'filter'
 gulp.task('gtfs:fit', gulp.series('del:filter', 'hslHack', function () {
@@ -96,10 +104,6 @@ gulp.task('gtfs:fit', gulp.series('del:filter', 'hslHack', function () {
     // .pipe(vinylPaths(del))
     .pipe(gulp.dest(`${config.dataDir}/filter/gtfs`))
 }))
-
-gulp.task('hslHack', function () {
-  return hslHackTask()
-})
 
 gulp.task('copyRouterConfig', function () {
   return gulp.src(['router-*/**']).pipe(
@@ -114,14 +118,6 @@ gulp.task('gtfs:filter', gulp.series('copyRouterConfig', function () {
     // .pipe(vinylPaths(del))
     .pipe(gulp.dest(`${config.dataDir}/id/gtfs`))
 }))
-
-gulp.task('del:ready', () => del([`${config.dataDir}/ready`]))
-
-gulp.task('del:filter', () => del([`${config.dataDir}/filter`]))
-
-gulp.task('del:fit', () => del([`${config.dataDir}/fit`]))
-
-gulp.task('del:id', () => del([`${config.dataDir}/id`]))
 
 gulp.task('gtfs:del', () => del([`${config.dataDir}/ready/gtfs`]))
 
