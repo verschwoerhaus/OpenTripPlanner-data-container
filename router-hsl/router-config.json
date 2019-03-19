@@ -17,6 +17,7 @@
       "carParkCarLegWeight": 2,
       "itineraryFiltering": 2.0
   },
+  "routePreferenceSettings": "HSL",
   "updaters": [
     {
       "id": "hsl-trip-updates",
