@@ -64,6 +64,14 @@
       "fuzzyTripMatching": false
     },
     {
+      "id": "joensuu-alerts",
+      "type": "real-time-alerts",
+      "frequencySec": 30,
+      "url": "http://digitransit-proxy:8080/out/jojo.mattersoft.fi/api/gtfsrealtime/v1.0/feed/servicealert",
+      "feedId": "Joensuu",
+      "fuzzyTripMatching": false
+    },
+    {
       "id": "lappeenranta-trip-updates",
       "type": "stop-time-updater",
       "frequencySec": 60,
