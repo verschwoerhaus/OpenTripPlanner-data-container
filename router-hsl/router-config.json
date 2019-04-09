@@ -40,7 +40,7 @@
       "id": "hsl-alerts",
       "type": "real-time-alerts",
       "frequencySec": 30,
-      "url": "http://hslalert:8080/",
+      "url": "https://dev-api.digitransit.fi/realtime/service-alerts/v2/hsl",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },
