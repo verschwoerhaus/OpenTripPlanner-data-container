@@ -64,13 +64,6 @@
       "sourceType": "hsl-parkandride",
       "url": "http://digitransit-proxy:8080/out/p.hsl.fi/api/v1/facilities.json?limit=-1",
       "frequencySec": 600
-    },
-    {
-      "id": "samocat-bike-rental",
-      "type": "bike-rental",
-      "sourceType": "samocat",
-      "url": "http://digitransit-proxy:8080/out/finagent.samocat.net/api/stations_info/",
-      "frequencySec": 10
     }
   ]
 }
