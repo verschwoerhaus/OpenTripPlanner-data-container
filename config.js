@@ -25,7 +25,7 @@ const FINLAND_CONFIG = {
     src('tampere', 'http://www.tampere.fi/ekstrat/ptdata/tamperefeed_deprecated.zip', false),
     src('LINKKI', 'http://jakoon.jkl.fi/reittiopas/datajkl.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
     src('lautta', 'http://lautta.net/db/gtfs/gtfs.zip', false),
-    src('OULU', 'http://www.transitdata.fi/oulu/google_transit.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash')
+    src('OULU', 'https://assets.oulunliikenne.fi/gtfs_google/google_transit.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash')
   ],
   'osm': 'finland'
 }
@@ -49,7 +49,7 @@ const WALTTI_CONFIG = {
     src('FOLI', 'http://data.foli.fi/gtfs/gtfs.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
     src('Lahti', 'http://www.lsl.fi/assets/uploads/google_transit.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule']),
     src('Kuopio', 'http://karttapalvelu.kuopio.fi/google_transit/google_transit.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
-    src('OULU', 'http://www.transitdata.fi/oulu/google_transit.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
+    src('OULU', 'https://assets.oulunliikenne.fi/gtfs_google/google_transit.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
     src('LINKKI', 'http://jakoon.jkl.fi/reittiopas/datajkl.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
     src('tampere', 'http://www.tampere.fi/ekstrat/ptdata/tamperefeed_deprecated.zip', false),
     src('Rovaniemi', 'http://dev.hsl.fi/gtfs.waltti/rovaniemi.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule'])
