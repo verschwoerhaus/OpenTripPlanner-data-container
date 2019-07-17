@@ -108,7 +108,7 @@ Object.keys(extraSrc).forEach((id) => {
     const routers = extraSrc[id].routers
     for (let i = 0; i < ALL_CONFIGS.length; i++) {
       const cfg = ALL_CONFIGS[i]
-      if (routers !== undefined || routers.includes(cfg.id)) {
+      if (routers === undefined || routers.includes(cfg.id)) {
         cfg.src.push({ ...extraSrc[id], id })
       }
     }
