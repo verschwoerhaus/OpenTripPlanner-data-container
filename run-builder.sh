@@ -36,6 +36,10 @@ else
     BUILD_AT_LAUNCH=0
 fi
 
+if [ -n "$MESOS_CONTAINER_NAME"  ]; then
+  echo "search marathon.l4lb.thisdcos.directory" >> /etc/resolv.conf
+fi
+
 # run data build loop forever, unless build interval is set to zero
 while true; do
     if [[ "$BUILD_INTERVAL" -gt 0 ]] && [[ "$BUILD_AT_LAUNCH" -eq 0 ]]; then
