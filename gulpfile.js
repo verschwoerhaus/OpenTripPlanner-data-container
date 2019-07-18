@@ -33,6 +33,9 @@ gulp.task('osm:update', function () {
 gulp.task('dem:update', function () {
   const map = config.ALL_CONFIGS().map(cfg => cfg.dem).reduce((acc, val) => { acc[val] = true; return acc }, {})
   const urls = Object.keys(map).map(key => config.demMap[key]).filter((url) => (url !== undefined))
+  if (urls.length === 0) {
+    return Promise.resolve()
+  }
   const demDownloadDir = `${config.dataDir}/downloads/dem/`
   if (!fs.existsSync(demDownloadDir)) {
     execSync(`mkdir -p ${demDownloadDir}`)
