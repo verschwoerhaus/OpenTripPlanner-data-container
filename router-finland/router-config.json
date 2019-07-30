@@ -133,7 +133,7 @@
       "id": "oulu-bike-rental",
       "type": "bike-rental",
       "sourceType": "next-bike",
-      "url": "http://digitransit-proxy:8080/out/poland.nextbike.net/maps/nextbike-official.json?domains=fo",
+      "url": "http://digitransit-proxy:8080/out/poland.nextbike.net/maps/nextbike-official.xml?domains=fo",
       "frequencySec": 10,
       "network": "oulu"
     }
