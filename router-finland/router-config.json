@@ -120,6 +120,14 @@
       "network": "vantaa",
       "url": "http://digitransit-proxy:8080/out/en-api.sharingos.com/v1/open_api/index.ashx?t=station_list",
       "frequencySec": 10
+    },
+    {
+      "id": "oulu-bike-rental",
+      "type": "bike-rental",
+      "sourceType": "next-bike",
+      "url": "http://digitransit-proxy:8080/out/poland.nextbike.net/maps/nextbike-official.json?domains=fo",
+      "frequencySec": 10,
+      "network": "oulu"
     }
   ],
   "boardTimes": {
