@@ -126,8 +126,8 @@ const configMap = ALL_CONFIGS.map(cfg => cfg.src)
   }, {})
 
 const osm = [
-  { id: 'finland', url: 'http://dev.hsl.fi/osm.finland/finland.osm.pbf' },
-  { id: 'hsl', url: 'http://dev.hsl.fi/osm.hsl/hsl.osm.pbf' }
+  { id: 'finland', url: 'https://karttapalvelu.storage.hsldev.com/finland.osm/finland.osm.pbf' },
+  { id: 'hsl', url: 'https://karttapalvelu.storage.hsldev.com/hsl.osm/hsl.osm.pbf' }
 ]
 
 const dem = [
