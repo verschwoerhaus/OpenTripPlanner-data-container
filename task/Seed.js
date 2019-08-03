@@ -19,9 +19,8 @@ module.exports = function (configs, regexp) {
     try {
       execSync(`docker image inspect ${container}`)
     } catch (err) {
-      process.stdout.write(`Image ${container} is unknown`)
-      process.stdout.write(err)
-      throw err
+      process.stdout.write(`Image ${container} is unknown\n`)
+      return stream.end()
     }
     const script =
   `docker rmi --force ${container} || true;
