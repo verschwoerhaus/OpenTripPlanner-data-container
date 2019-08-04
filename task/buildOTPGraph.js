@@ -4,7 +4,7 @@ const fs = require('fs')
 const { dataDir, hostDataDir, constants } = require('../config.js')
 const { postSlackMessage } = require('../util')
 const graphBuildTag = process.env.OTP_TAG || 'latest'
-const org = process.env.ORG || 'hsldevcom'
+const org = process.env.OTP_ORG || 'hsldevcom'
 /*
  * node.js wrapper for building OTP graph
  */
@@ -21,6 +21,8 @@ const buildGraph = function (config) {
   const p = new Promise((resolve, reject) => {
     const version = execSync(`docker pull ${org}/opentripplanner:${graphBuildTag};docker run --rm --entrypoint /bin/bash ${org}/opentripplanner:${graphBuildTag}  -c "java -jar otp-shaded.jar --version"`)
     const commit = version.toString().match(/commit: ([0-9a-f]+)/)[1]
+
+    process.stdout.write(`building graph ${config.id} with ${org}/opentripplanner:${graphBuildTag}, commit: ${commit}\n`)
 
     const buildGraph = exec(`docker run -v ${hostDataDir}/build:/opt/opentripplanner/graphs --rm --entrypoint /bin/bash ${org}/opentripplanner:${graphBuildTag}  -c "java -Xmx8g -jar otp-shaded.jar --build graphs/${config.id}/router"`, { maxBuffer: constants.BUFFER_SIZE })
     // const buildGraph = exec('ls -la');
