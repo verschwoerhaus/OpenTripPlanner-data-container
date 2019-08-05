@@ -11,7 +11,7 @@ const src = (id, url, fit, rules) => ({ id, url, fit, rules })
 const ULM_CONFIG = {
   'id': 'ulm',
   'src': [
-    src('SWU', 'https://gtfs.swu.de/daten/SWU.zip', false)
+    src('SWU', 'https://github.com/UlmApi/swu-gtfs-community/releases/download/20190410-community-shapes/20190410-community-shapes.zip', false)
   ],
   'osm': 'ulm'
 }
@@ -137,7 +137,7 @@ const configMap = ALL_CONFIGS.map(cfg => cfg.src)
 const osm = [
   { id: 'finland', url: 'http://dev.hsl.fi/osm.finland/finland.osm.pbf' },
   { id: 'hsl', url: 'http://dev.hsl.fi/osm.hsl/hsl.osm.pbf' },
-  { id: 'ulm', url: 'https://download.geofabrik.de/europe/germany/baden-wuerttemberg/tuebingen-regbez-latest.osm.pbf' }
+  { id: 'ulm', url: 'https://s3.eu-central-1.amazonaws.com/gtfseditor/osm/tuebingen-schwaben-merge.pbf' },
 ]
 
 const dem = [
