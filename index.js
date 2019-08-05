@@ -26,21 +26,25 @@ if (process.env.ROUTERS) {
   routers = ['finland', 'waltti', 'hsl']
 }
 
-start('seed').then(() => {
-  process.stdout.write('Seeded.\n')
-  if (process.argv.length === 3 && process.argv[2] === 'once') {
-    process.stdout.write('Running update once.\n')
-    update()
-  } else {
-    const cronPattern = process.env.CRON || '0 0 3 * * *'
-    process.stdout.write(`Starting timer with pattern: ${cronPattern}\n`)
-    new CronJob(cronPattern, update, null, true, 'Europe/Helsinki') // eslint-disable-line
-  }
-}).catch((err) => {
-  process.stdout.write(err + '\n')
-  //process.exit(1)
+if (!!process.env.SKIP_SEED) {
   update();
-})
+} else {
+  start('seed').then(() => {
+    process.stdout.write('Seeded.\n')
+    if (process.argv.length === 3 && process.argv[2] === 'once') {
+      process.stdout.write('Running update once.\n')
+      update()
+    } else {
+      const cronPattern = process.env.CRON || '0 0 3 * * *'
+      process.stdout.write(`Starting timer with pattern: ${cronPattern}\n`)
+      new CronJob(cronPattern, update, null, true, 'Europe/Helsinki') // eslint-disable-line
+    }
+  }).catch((err) => {
+    process.stdout.write(err + '\n')
+    //process.exit(1)
+    update();
+  })
+}
 
 async function update () {
   postSlackMessage('Starting data build')
