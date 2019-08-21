@@ -22,8 +22,8 @@
     {
       "id": "hsl-trip-updates",
       "type": "MQTT-gtfs-rt-updater",
-      "url": "tcp://cmqttdev.cinfra.fi",
-      "topic": "gtfsrt/dev/fi/hsl/tu",
+      "url": "tcp://mqtt.cinfra.fi",
+      "topic": "gtfsrt/v2/fi/hsl/tu",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },
