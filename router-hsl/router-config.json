@@ -22,17 +22,8 @@
     {
       "id": "hsl-trip-updates",
       "type": "MQTT-gtfs-rt-updater",
-      "url": "tcp://mqtt.cinfra.fi",
-      "topic": "gtfsrt/v2/fi/hsl/tu",
-      "feedId": "HSL",
-      "fuzzyTripMatching": true
-    },
-    {
-      "id": "hsl-rail-trip-updates",
-      "type": "stop-time-updater",
-      "frequencySec": 60,
-      "sourceType": "gtfs-http",
-      "url": "http://raildigitraffic2gtfsrt:8080/hsl/0/1/0/1",
+      "url": "tcp://cmqttdev.cinfra.fi",
+      "topic": "gtfsrt/dev/fi/hsl/tu",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },
