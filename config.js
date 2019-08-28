@@ -34,7 +34,7 @@ const WALTTI_CONFIG = {
 
   'id': 'waltti',
   'src': [
-    src('Hameenlinna', 'https://gtfsdatav2.blob.core.windows.net/gtfsdata-blob/hameenlinna.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule']),
+    src('Hameenlinna', 'https://gtfsdatav2.blob.core.windows.net/gtfsdata-blob/hameenlinna.zip', false, ['router-waltti/gtfs-rules/waltti.rule']),
     src('Kajaani', 'https://gtfsdatav2.blob.core.windows.net/gtfsdata-blob/kajaani.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule']),
     src('Kotka', 'https://gtfsdatav2.blob.core.windows.net/gtfsdata-blob/kotka.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule']),
     src('Kouvola', 'https://gtfsdatav2.blob.core.windows.net/gtfsdata-blob/kouvola.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-waltti/gtfs-rules/waltti.rule']),
