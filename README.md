@@ -47,6 +47,7 @@ It is possible to change the behaviour of the data builder by defining environme
 * (Optional, default {}) "EXTRA_UPDATERS" defines router-config.json updater values that should be overridden or completely new updater that should be added with unique id. "routers" is always a mandatory field. Example format:
   - `{"turku-alerts": {"type": "real-time-alerts", "frequencySec": 30, "url": "https://foli-beta.nanona.fi/gtfs-rt/reittiopas", "feedId": "FOLI", "fuzzyTripMatching": true, "routers": ["waltti"]}}`
   - You can remove a src by including "remove": true, `{"turku-alerts": {"remove": true, "routers": ["waltti"]}`
+* (Optional, default 1.23) "DOCKER_API_VERSION" defines what docker API version is used in docker commands.
 
 #### Data processing steps
 
