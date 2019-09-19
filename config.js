@@ -23,7 +23,7 @@ const FINLAND_CONFIG = {
     src('HSL', 'http://dev.hsl.fi/gtfs/hsl.zip', false),
     src('MATKA', 'https://gtfsdatav2.blob.core.windows.net/gtfsdata-blob/matka.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash', ['router-finland/gtfs-rules/matka.rule', 'router-finland/gtfs-rules/matka-id.rule']),
     src('tampere', 'http://www.tampere.fi/ekstrat/ptdata/tamperefeed_deprecated.zip', false),
-    src('LINKKI', 'http://jakoon.jkl.fi/reittiopas/datajkl.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
+    src('LINKKI', 'https://tvv.fra1.digitaloceanspaces.com/209.zip', 'gtfs_shape_mapfit/fit_gtfs_stops.bash'),
     src('lautta', 'http://lautta.net/db/gtfs/gtfs.zip', false),
     src('OULU', 'https://assets.oulunliikenne.fi/gtfs_google/google_transit.zip', false)
   ],
