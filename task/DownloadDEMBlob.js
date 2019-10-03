@@ -1,34 +1,8 @@
-const crypto = require('crypto')
 const fs = require('fs')
 const request = require('request')
 
 const { dataDir } = require('../config')
-
-/**
- * Compare Content-MD5 header md5 hash value to hash value calculated from local a copy of the file.
- */
-const compareHashes = (headerHash, localFilePath) => {
-  return new Promise((resolve, reject) => {
-    let shasum = crypto.createHash('md5')
-    let s = fs.ReadStream(localFilePath)
-    // Download file as it's not found locally
-    s.on('error', function (err) {
-      process.stdout.write(err)
-      reject('error') // eslint-disable-line
-    })
-    s.on('data', function (data) {
-      shasum.update(data)
-    })
-    s.on('end', function () {
-      var fileHash = shasum.digest('base64')
-      if (fileHash === headerHash) {
-        resolve(true)
-      } else {
-        reject('end') // eslint-disable-line
-      }
-    })
-  })
-}
+const { compareHashes } = require('../util')
 
 /**
  * Download DEM files from Azure blob storage.
