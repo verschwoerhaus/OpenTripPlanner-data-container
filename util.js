@@ -52,7 +52,7 @@ const postSlackMessage = (message) => {
 const compareHashes = (headerHash, localFilePath) => {
   return new Promise((resolve, reject) => {
     if (headerHash === undefined) {
-      return resolve(true)
+      return resolve()
     }
     let shasum = crypto.createHash('md5')
     let s = fs.ReadStream(localFilePath)
@@ -67,7 +67,7 @@ const compareHashes = (headerHash, localFilePath) => {
     s.on('end', function () {
       var fileHash = shasum.digest('base64')
       if (fileHash === headerHash) {
-        resolve(true)
+        resolve()
       } else {
         reject('end') // eslint-disable-line
       }
