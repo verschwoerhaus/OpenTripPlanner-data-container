@@ -56,7 +56,6 @@ const compareHashes = (headerHash, localFilePath) => {
     }
     let shasum = crypto.createHash('md5')
     let s = fs.ReadStream(localFilePath)
-    // Download file as it's not found locally
     s.on('error', function (err) {
       process.stdout.write(err)
       reject('error') // eslint-disable-line
