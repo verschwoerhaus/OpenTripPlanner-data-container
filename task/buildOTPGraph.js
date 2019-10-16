@@ -24,7 +24,7 @@ const buildGraph = function (config) {
 
     process.stdout.write(`building graph ${config.id} with ${org}/opentripplanner:${graphBuildTag}, commit: ${commit}\n`)
 
-    const buildGraph = exec(`docker run -v ${hostDataDir}/build:/opt/opentripplanner/graphs --rm --entrypoint /bin/bash ${org}/opentripplanner:${graphBuildTag}  -c "java -Xmx8g -jar otp-shaded.jar --build graphs/${config.id}/router"`, { maxBuffer: constants.BUFFER_SIZE })
+    const buildGraph = exec(`docker run -v ${hostDataDir}/build:/opt/opentripplanner/graphs --rm --entrypoint /bin/bash ${org}/opentripplanner:${graphBuildTag}  -c "java -Xmx10g -jar otp-shaded.jar --build graphs/${config.id}/router"`, { maxBuffer: constants.BUFFER_SIZE })
     // const buildGraph = exec('ls -la');
     const buildLog = fs.openSync(`${dataDir}/build/${config.id}/build.log`, 'w+')
 

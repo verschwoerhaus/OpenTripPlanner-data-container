@@ -3,7 +3,7 @@
 #build errors should not stop the continuous build loop
 set +e
 
-export DOCKER_API_VERSION="1.23"
+export DOCKER_API_VERSION=${DOCKER_API_VERSION:-1.23}
 
 #How long the build can last before it is considered frozen (default 5 hours)
 MAX_TIME=${MAX_TIME:-18000}
@@ -34,6 +34,10 @@ if [[ "$HOUR" -lt "$AUTO_REBUILD_HOUR" ]]; then
     BUILD_AT_LAUNCH=1
 else
     BUILD_AT_LAUNCH=0
+fi
+
+if [ -n "$MESOS_CONTAINER_NAME"  ]; then
+  echo "search marathon.l4lb.thisdcos.directory" >> /etc/resolv.conf
 fi
 
 # run data build loop forever, unless build interval is set to zero
