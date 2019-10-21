@@ -22,7 +22,16 @@ module.exports = function (configs, regexp) {
   docker create --name data-extract-${c.id} ${container};
   docker cp data-extract-${c.id}:var/www/localhost/htdocs/router-${c.id}.zip .;
   docker rm data-extract-${c.id}`
-    execSync(script)
+    try {
+      execSync(script)
+    } catch (e) {
+      process.stdout.write(`extracting skipped, container ${container} doesn't exist\n`)
+      toProcess -= 1
+      if (toProcess === 0) {
+        stream.end()
+      }
+      return
+    }
     const file = `router-${c.id}.zip`
     fs.readFile(file, function (err, data) {
       if (err) {
