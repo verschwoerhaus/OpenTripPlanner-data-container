@@ -155,9 +155,9 @@ gulp.task('router:copy', gulp.series('router:del', function () {
 }))
 
 gulp.task('router:buildGraph', gulp.series('router:copy', function () {
-  gulp.src(['otp-data-container/*', 'otp-data-container/.*'])
-    .pipe(gulp.dest(`${config.dataDir}/build/waltti`))
-    .pipe(gulp.dest(`${config.dataDir}/build/finland`))
-    .pipe(gulp.dest(`${config.dataDir}/build/hsl`))
+  let source = gulp.src(['otp-data-container/*', 'otp-data-container/.*'])
+  config.ALL_CONFIGS().map(cfg => cfg.id).forEach((id) => {
+    source.pipe(gulp.dest(`${config.dataDir}/build/${id}`))
+  });
   return buildOTPGraphTask(config.ALL_CONFIGS())
 }))
