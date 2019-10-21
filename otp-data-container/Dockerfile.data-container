@@ -17,5 +17,6 @@ ADD *.zip  /var/www/localhost/htdocs/
 ADD version.txt /var/www/localhost/htdocs/
 ADD build.log /var/www/localhost/htdocs/
 ADD router/*.csv /var/www/localhost/htdocs/
+ADD test.sh* /var/www/localhost/htdocs/
 
 CMD /bin/ash -c "cd var/www/localhost/htdocs/;unzip router*.zip;cp router-*/* .;rm -r \$(find ./ -type d|grep router);cd -;/usr/sbin/startlighttpd"

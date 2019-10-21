@@ -31,6 +31,7 @@ echo "Starting otp..."
 docker run --rm --name otp-$ROUTER_NAME -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS=$JAVA_OPTS -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data-$ROUTER_NAME:otp-data $ORG/opentripplanner:$TEST_TAG > /dev/stdout &
 echo "Getting otp ip.."
 timeout=$(($(date +%s) + 480))
+until DATACON_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' otp-data-$ROUTER_NAME) || [[ $(date +%s) -gt $timeout ]]; do sleep 1;done;
 until IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' otp-$ROUTER_NAME) || [[ $(date +%s) -gt $timeout ]]; do sleep 1;done;
 
 if [ "$IP" == "" ]; then
@@ -39,18 +40,14 @@ if [ "$IP" == "" ]; then
   exit 1
 fi
 
+echo "Got otp data container ip: $DATACON_IP"
 echo "Got otp ip: $IP"
 
-if [ "$ROUTER_NAME" == "hsl" ]; then
-    MAX_WAIT=30
-    URL="http://$IP:8080/otp/routers/default/plan?fromPlace=60.19812876015124%2C24.934051036834713&toPlace=60.218630210423306%2C24.807472229003906"
-elif [ "$ROUTER_NAME" == "waltti" ]; then
-    MAX_WAIT=60
-    URL="http://$IP:8080/otp/routers/default/plan?fromPlace=60.44638185995603%2C22.244396209716797&toPlace=60.45053041945487%2C22.313575744628906"
-else
-    MAX_WAIT=60
-    URL="http://$IP:8080/otp/routers/default/plan?fromPlace=60.19812876015124%2C24.934051036834713&toPlace=60.218630210423306%2C24.807472229003906"
-fi
+MAX_WAIT=60
+URL="http://$IP:8080/otp/routers/default/plan?fromPlace=60.19812876015124%2C24.934051036834713&toPlace=60.218630210423306%2C24.807472229003906"
+
+# override MAX_WAIT and URL with test.sh in router-*/
+source <(curl -s http://${DATACON_IP}:8080/test.sh)
 
 ITERATIONS=$(($MAX_WAIT * 6))
 echo "max wait (minutes): $MAX_WAIT"

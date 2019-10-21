@@ -1,0 +1,3 @@
+#!/bin/bash
+export MAX_WAIT=30
+export URL="http://$IP:8080/otp/routers/default/plan?fromPlace=60.19812876015124%2C24.934051036834713&toPlace=60.218630210423306%2C24.807472229003906"

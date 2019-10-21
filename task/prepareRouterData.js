@@ -1,5 +1,6 @@
 const through = require('through2')
 const Vinyl = require('vinyl')
+const vfs = require('vinyl-fs');
 const fs = require('fs')
 const cloneable = require('cloneable-readable')
 const { routerDir } = require('../util')
@@ -74,6 +75,9 @@ module.exports = function (configs) {
     config.src.forEach(src => {
       stream.push(createFile(config, gtfsFile(src), `${dataDir}/ready/gtfs/${gtfsFile(src)}`))
     })
+    if (fs.existsSync(`${routerDir(config)}/test.sh`)) {
+      stream.push(createFile(config, '../test.sh', `${routerDir(config)}/test.sh`))
+    }
   })
   stream.end()
 
