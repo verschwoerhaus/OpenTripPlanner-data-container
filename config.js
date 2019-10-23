@@ -7,6 +7,14 @@
  */
 const src = (id, url, fit, rules) => ({ id, url, fit, rules })
 
+const HULM_CONFIG = {
+  'id': 'hulm',
+  'src': [
+    src('DING', 'https://www.nvbw.de/fileadmin/nvbw/open-data/Fahrplandaten_mit_Liniennetz/ding.zip', false),
+  ],
+  'osm': 'ulm'
+}
+
 const HSL_CONFIG = {
   'id': 'hsl',
   'src': [
@@ -61,7 +69,7 @@ const WALTTI_CONFIG = {
 let ALL_CONFIGS
 
 const setCurrentConfig = (name) => {
-  ALL_CONFIGS = [WALTTI_CONFIG, HSL_CONFIG, FINLAND_CONFIG].reduce((acc, nxt) => {
+  ALL_CONFIGS = [WALTTI_CONFIG, HULM_CONFIG, HSL_CONFIG, FINLAND_CONFIG].reduce((acc, nxt) => {
     if ((name && name.split(',').indexOf(nxt.id) !== -1) ||
       name === undefined) {
       acc.push(nxt)
@@ -127,7 +135,8 @@ const configMap = ALL_CONFIGS.map(cfg => cfg.src)
 
 const osm = [
   { id: 'finland', url: 'https://karttapalvelu.storage.hsldev.com/finland.osm/finland.osm.pbf' },
-  { id: 'hsl', url: 'https://karttapalvelu.storage.hsldev.com/hsl.osm/hsl.osm.pbf' }
+  { id: 'hsl', url: 'https://karttapalvelu.storage.hsldev.com/hsl.osm/hsl.osm.pbf' },
+  { id: 'ulm', url: 'https://s3.eu-central-1.amazonaws.com/gtfseditor/osm/tuebingen-schwaben-merge.pbf' },
 ]
 
 const dem = [
