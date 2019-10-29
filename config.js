@@ -7,8 +7,16 @@
  */
 const src = (id, url, fit, rules) => ({ id, url, fit, rules })
 
-const HULM_CONFIG = {
-  'id': 'hulm',
+const ULM_CONFIG = {
+  'id': 'ulm',
+  'src': [
+    src('SWU', 'https://github.com/UlmApi/swu-gtfs-community/releases/download/20190410-community-shapes/20190410-community-shapes.zip', false)
+  ],
+  'osm': 'ulm'
+}
+
+const VSH_CONFIG = {
+  'id': 'vsh',
   'src': [
     src('DING', 'https://www.nvbw.de/fileadmin/nvbw/open-data/Fahrplandaten_mit_Liniennetz/ding.zip', false),
   ],

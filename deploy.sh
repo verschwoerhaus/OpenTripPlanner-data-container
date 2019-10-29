@@ -23,7 +23,7 @@ echo "*** Testing $ROUTER_NAME..."
 echo "*** $ROUTER_NAME tests passed"
 docker login -u $DOCKER_USER -p $DOCKER_AUTH
 
-if [ -v DOCKER_TAG ] && [ "$DOCKER_TAG" != "undefined" ]; then
+if [ -n "$DOCKER_TAG" ] && [ "$DOCKER_TAG" != "undefined" ]; then
     DOCKER_DATE_IMAGE=$DOCKER_IMAGE:$DATE-$DOCKER_TAG
     DOCKER_CUSTOM_IMAGE_TAG=$DOCKER_IMAGE:$DOCKER_TAG
     docker tag $DOCKER_TEST_IMAGE $DOCKER_DATE_IMAGE
