@@ -26,7 +26,9 @@ if (process.env.ROUTERS) {
   routers = ['finland', 'waltti', 'hsl']
 }
 
-/*
+if (!!process.env.SKIP_SEED) {
+  update();
+} else {
 start('seed').then(() => {
   process.stdout.write('Seeded.\n')
   if (process.argv.length === 3 && process.argv[2] === 'once') {
@@ -41,8 +43,7 @@ start('seed').then(() => {
   process.stdout.write(err + '\n')
   process.exit(1)
 })
-*/
-update()
+}
 
 async function update () {
   postSlackMessage('Starting data build')
