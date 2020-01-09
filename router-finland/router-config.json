@@ -23,15 +23,6 @@
       "fuzzyTripMatching": true
     },
     {
-      "id": "hsl-rail-trip-updates",
-      "type": "stop-time-updater",
-      "frequencySec": 60,
-      "sourceType": "gtfs-http",
-      "url": "http://raildigitraffic2gtfsrt:8080/hsl/0/1/0/1",
-      "feedId": "HSL",
-      "fuzzyTripMatching": true
-    },
-    {
       "id": "hsl-alerts",
       "type": "real-time-alerts",
       "frequencySec": 30,
