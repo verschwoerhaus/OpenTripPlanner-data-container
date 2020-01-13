@@ -3,8 +3,6 @@
 #build errors should not stop the continuous build loop
 set +e
 
-export DOCKER_API_VERSION=${DOCKER_API_VERSION:-1.23}
-
 #How long the build can last before it is considered frozen (default 5 hours)
 MAX_TIME=${MAX_TIME:-18000}
 #how often data is built (default once a day)
