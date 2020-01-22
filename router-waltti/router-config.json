@@ -8,7 +8,8 @@
       "walkReluctance": 1.75,
       "stairsReluctance": 1.65,
       "walkBoardCost": 540,
-      "itineraryFiltering": 1.0
+      "itineraryFiltering": 1.0,
+      "maxSlope": 0.125
   },
   "updaters": [
     {
@@ -137,6 +138,15 @@
       "url": "http://digitransit-proxy:8080/out/lsl.mattersoft.fi/api/gtfsrealtime/v1.0/feed/servicealert",
       "feedId": "Lahti",
       "fuzzyTripMatching": false
+    },
+    {
+      "id": "tampere-rail-trip-updates",
+      "type": "stop-time-updater",
+      "frequencySec": 60,
+      "sourceType": "gtfs-http",
+      "url": "http://raildigitraffic2gtfsrt:8080/tampere/0/1/0/1",
+      "feedId": "TampereVR",
+      "fuzzyTripMatching": true
     }
   ]
 }

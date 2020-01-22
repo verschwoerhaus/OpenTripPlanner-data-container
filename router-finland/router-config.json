@@ -10,7 +10,8 @@
     "stairsReluctance": 1.65,
     "walkBoardCost": 540,
     "compactLegsByReversedSearch": false,
-    "itineraryFiltering": 1.0
+    "itineraryFiltering": 1.0,
+    "maxSlope": 0.125
   },
 
   "updaters": [
@@ -19,15 +20,6 @@
       "type": "MQTT-gtfs-rt-updater",
       "url": "tcp://mqtt.cinfra.fi",
       "topic": "gtfsrt/v2/fi/hsl/tu",
-      "feedId": "HSL",
-      "fuzzyTripMatching": true
-    },
-    {
-      "id": "hsl-rail-trip-updates",
-      "type": "stop-time-updater",
-      "frequencySec": 60,
-      "sourceType": "gtfs-http",
-      "url": "http://raildigitraffic2gtfsrt:8080/hsl/0/1/0/1",
       "feedId": "HSL",
       "fuzzyTripMatching": true
     },

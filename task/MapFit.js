@@ -74,34 +74,36 @@ module.exports = {
       if (config.fit === false) {
         process.stdout.write(gtfsFile + ' fit skipped\n')
         callback(null, file)
-      } else {
-        if (!fs.existsSync(osmFile)) {
-          process.stdout.write(`${osmFile} not available, skipping ${gtfsFile}\n`)
-          callback(null, file)
-          return
-        }
-        let script = ''
-        if (config.fit === true) {
-          script = 'gtfs_shape_mapfit/fit_gtfs.bash'
-        } else {
-          script = config.fit
-        }
-        const src = `${relativeFilename}`
-        const dst = `${relativeFilename}-fitted`
-
-        run(script, '/data/ready/osm/finland.pbf', src, dst).then((status) => {
-          if (status === true) {
-            fs.unlinkSync(src)
-            fs.renameSync(dst, src)
-            process.stdout.write(gtfsFile + ' fit SUCCESS\n')
-            file.contents = cloneable(fs.createReadStream(gtfsFile))
-            callback(null, file)
-          } else {
-            process.stdout.write(gtfsFile + ' fit FAILED\n')
-            callback(null, null)
-          }
-        })
+        return
       }
+
+      if (!fs.existsSync(osmFile)) {
+        process.stdout.write(`${osmFile} not available, skipping ${gtfsFile}\n`)
+        callback(null, null)
+        return
+      }
+
+      let script = ''
+      if (config.fit === true) {
+        script = 'gtfs_shape_mapfit/fit_gtfs.bash'
+      } else {
+        script = config.fit
+      }
+      const src = `${relativeFilename}`
+      const dst = `${relativeFilename}-fitted`
+
+      run(script, '/data/ready/osm/finland.pbf', src, dst).then((status) => {
+        if (status === true) {
+          fs.unlinkSync(src)
+          fs.renameSync(dst, src)
+          process.stdout.write(gtfsFile + ' fit SUCCESS\n')
+          file.contents = cloneable(fs.createReadStream(gtfsFile))
+          callback(null, file)
+        } else {
+          process.stdout.write(gtfsFile + ' fit FAILED\n')
+          callback(null, null)
+        }
+      })
     })
   }
 }

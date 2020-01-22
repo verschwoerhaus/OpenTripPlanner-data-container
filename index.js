@@ -81,8 +81,7 @@ async function update () {
                 //DOCKER_TAG: process.env.DOCKER_TAG,
                 ORG: process.env.ORG,
                 TEST_TAG: process.env.OTP_TAG || '',
-                TOOLS_TAG: process.env.TOOLS_TAG || '',
-                //DOCKER_API_VERSION: process.env.DOCKER_API_VERSION
+                TOOLS_TAG: process.env.TOOLS_TAG || ''
               }),
             stdio: [0, 1, 2]
           }

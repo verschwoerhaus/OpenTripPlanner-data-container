@@ -3,8 +3,6 @@
 #build errors should not stop the continuous build loop
 set +e
 
-export DOCKER_API_VERSION=${DOCKER_API_VERSION:-1.23}
-
 #How long the build can last before it is considered frozen (default 5 hours)
 MAX_TIME=${MAX_TIME:-18000}
 #how often data is built (default once a day)
@@ -59,7 +57,7 @@ while true; do
     echo "** Launching OTP data builder"
 
     #note: busybox timeout
-    timeout -t $MAX_TIME node index.js once
+    timeout $MAX_TIME node index.js once
     SUCCESS=$?
 
     if [ $SUCCESS = 143 ]; then
@@ -75,7 +73,7 @@ while true; do
     if [ $SUCCESS -ne 0 ]; then
         # try once more
         echo "** Restarting builder once"
-        timeout -t $MAX_TIME  node index.js once
+        timeout $MAX_TIME  node index.js once
         SUCCESS=$?
 
         if [ $SUCCESS = 143 ]; then
