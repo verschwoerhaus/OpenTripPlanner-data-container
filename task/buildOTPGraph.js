@@ -75,7 +75,7 @@ module.exports = {
             })
         })
         const p2 = new Promise((resolve, reject) => {
-          process.stdout.write('Creating zip file for otp graph\n')
+          process.stdout.write(`Creating zip file for otp graph (commit ${commit})\n`)
           // create zip file for the graph:
           // include  graph.obj + router-config.json
           zipWithGlob(`${dataDir}/build/${config.id}/graph-${config.id}-${commit}.zip`,
