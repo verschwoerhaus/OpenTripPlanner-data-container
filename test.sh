@@ -73,15 +73,21 @@ for (( c=1; c<=$ITERATIONS; c++ ));do
 done
 
 echo "running otpqa"
-docker run --rm --name otp-data-tools $ORG/otp-data-tools:$TOOLS_TAG /bin/sh -c "cd OTPQA; python otpprofiler_json.py http://$IP:8080/otp/routers/default $ROUTER_NAME"
-if [ $? == 0 ]; then
-  echo "OK"
+if [ -n "$SKIP_OTPQA" ] || [ "$ROUTER_NAME" == "ulm" ]; then
+  echo "skipped otpqa"
   shutdown
   exit 0;
 else
-  echo "ERROR"
-  shutdown
-  exit 1;
+  docker run --rm --name otp-data-tools $ORG/otp-data-tools:$TOOLS_TAG /bin/sh -c "cd OTPQA; python otpprofiler_json.py http://$IP:8080/otp/routers/default $ROUTER_NAME"
+  if [ $? == 0 ]; then
+    echo "OK"
+    shutdown
+    exit 0;
+  else
+    echo "ERROR"
+    shutdown
+    exit 1;
+  fi
 fi
 
 shutdown
