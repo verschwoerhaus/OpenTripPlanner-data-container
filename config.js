@@ -19,6 +19,7 @@ const VSH_CONFIG = {
   'id': 'vsh',
   'src': [
     src('DING', 'https://www.nvbw.de/fileadmin/nvbw/open-data/Fahrplandaten_mit_Liniennetz/ding.zip', false),
+    src('FLIX', 'http://gtfs.gis-dev.flix.tech.s3-eu-west-1.amazonaws.com/gtfs_generic_eu.zip', false),
   ],
   'osm': 'ulm'
 }
@@ -144,7 +145,7 @@ const configMap = ALL_CONFIGS.map(cfg => cfg.src)
 const osm = [
   { id: 'finland', url: 'https://karttapalvelu.storage.hsldev.com/finland.osm/finland.osm.pbf' },
   { id: 'hsl', url: 'https://karttapalvelu.storage.hsldev.com/hsl.osm/hsl.osm.pbf' },
-  { id: 'ulm', url: 'https://s3.eu-central-1.amazonaws.com/gtfseditor/osm/tuebingen-schwaben-merge.pbf' },
+  { id: 'ulm', url: 'https://s3.eu-central-1.amazonaws.com/gtfseditor/osm/tuebingen-schwaben-latest.osm.pbf' },
 ]
 
 const dem = [
