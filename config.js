@@ -145,7 +145,7 @@ const configMap = ALL_CONFIGS.map(cfg => cfg.src)
 const osm = [
   { id: 'finland', url: 'https://karttapalvelu.storage.hsldev.com/finland.osm/finland.osm.pbf' },
   { id: 'hsl', url: 'https://karttapalvelu.storage.hsldev.com/hsl.osm/hsl.osm.pbf' },
-  { id: 'ulm', url: 'https://s3.eu-central-1.amazonaws.com/gtfseditor/osm/tuebingen-schwaben-latest.osm.pbf' },
+  { id: 'ulm', url: 'https://rgw1.netways.de/swift/v1/AUTH_66c3085bb69a42ed8991c90e5c1f453e/digitransit/osm/tuebingen-schwaben-latest.osm.pbf' },
 ]
 
 const dem = [
