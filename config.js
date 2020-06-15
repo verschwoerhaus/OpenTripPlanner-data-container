@@ -20,7 +20,7 @@ const VSH_CONFIG = {
   'src': [
     src('DING', 'https://www.nvbw.de/fileadmin/nvbw/open-data/Fahrplandaten_mit_Liniennetz/ding.zip', false),
     src('FLIX', 'http://gtfs.gis-dev.flix.tech.s3-eu-west-1.amazonaws.com/gtfs_generic_eu.zip', false),
-    src('SPNV', 'https://www.nvbw.de/fileadmin/nvbw/open-data/Fahrplandaten_mit_Liniennetz/bwspnv.zip', false),
+    src('SPNV', 'https://www.nvbw.de/fileadmin/nvbw/open-data/Fahrplandaten_ohne_Liniennetz/bwspnv.zip', false),
   ],
   'osm': 'ulm'
 }
