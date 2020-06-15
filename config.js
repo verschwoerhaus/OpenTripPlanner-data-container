@@ -10,7 +10,9 @@ const src = (id, url, fit, rules) => ({ id, url, fit, rules })
 const ULM_CONFIG = {
   'id': 'ulm',
   'src': [
-    src('SWU', 'https://github.com/UlmApi/swu-gtfs-community/releases/download/20190410-community-shapes/20190410-community-shapes.zip', false)
+    // src('SWU', 'https://github.com/UlmApi/swu-gtfs-community/releases/download/20190410-community-shapes/20190410-community-shapes.zip', false)
+    src('DING', 'https://www.nvbw.de/fileadmin/nvbw/open-data/Fahrplandaten_mit_Liniennetz/ding.zip', false),
+    src('FLIX', 'http://gtfs.gis-dev.flix.tech.s3-eu-west-1.amazonaws.com/gtfs_generic_eu.zip', false),
   ],
   'osm': 'ulm'
 }
