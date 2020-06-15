@@ -28,7 +28,7 @@ echo "Starting data container..."
 docker run --rm --name otp-data-$ROUTER_NAME $DOCKER_IMAGE > /dev/stdout &
 sleep 120
 echo "Starting otp..."
-docker run --rm --name otp-$ROUTER_NAME -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS=$JAVA_OPTS -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data-$ROUTER_NAME:otp-data $ORG/opentripplanner:$TEST_TAG > /dev/stdout &
+docker run --rm --name otp-$ROUTER_NAME -e ROUTER_NAME=$ROUTER_NAME -e JAVA_OPTS=$JAVA_OPTS -e ROUTER_DATA_CONTAINER_URL=http://otp-data:8080/ --link otp-data-$ROUTER_NAME:otp-data mfdz/opentripplanner:$TEST_TAG > /dev/stdout &
 echo "Getting otp ip.."
 timeout=$(($(date +%s) + 480))
 until DATACON_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' otp-data-$ROUTER_NAME) || [[ $(date +%s) -gt $timeout ]]; do sleep 1;done;
