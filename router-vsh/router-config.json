@@ -15,7 +15,7 @@
       "id": "openbike-bike-rental",
       "type": "bike-rental",
       "sourceType": "gbfs",
-      "url": "https://api.dev.bike/gbfs/",
+      "url": "https://api.openbike.ulm.dev/gbfs/",
       "frequencySec": 10,
       "network": "openbike"
     }
