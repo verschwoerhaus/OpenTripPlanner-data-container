@@ -159,7 +159,7 @@ const dem = [
 
 const constants = {
   BUFFER_SIZE: 1024 * 1024 * 32,
-  OTP_MEMORY: '8G'
+  OTP_MEMORY: '10G'
 }
 
 module.exports = {
@@ -170,7 +170,7 @@ module.exports = {
   dem,
   demMap: dem.reduce((acc, val) => { acc[val.id] = val; return acc }, {}),
   dataToolImage: `${process.env.ORG || 'hsldevcom'}/otp-data-tools:${process.env.TOOLS_TAG || 'latest'}`,
-  otpImage: `${process.env.ORG || 'hsldevcom'}/opentripplanner:${process.env.OTP_TAG || 'latest'}`,
+  otpImage: `mfdz/opentripplanner:${process.env.OTP_TAG || 'latest'}`,
   dataDir: process.env.DATA || `${process.cwd()}/data`,
   hostDataDir: process.env.HOST_DATA || `${process.cwd()}/data`,
   setCurrentConfig: setCurrentConfig,
